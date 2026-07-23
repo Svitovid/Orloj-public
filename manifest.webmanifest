@@ -1,0 +1,23 @@
+{
+  "name": "Orloj — osobní observatoř času",
+  "short_name": "Orloj",
+  "description": "Osobní observatoř oblohy, času, astrologie a symbolických systémů Pansophia Institute.",
+  "lang": "cs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0a0d13",
+  "icons": [
+    {
+      "src": "./IMG_3491.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./IMG_3492.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-/* Orloj Public v10.1 — app shell network first, external artwork untouched */
-var CACHE = "orloj-public-v10-1";
-var ASSETS = ["./", "./index.html", "./manifest.webmanifest"];
+/* Orloj Public v10.4 — app shell network first, external artwork untouched */
+var CACHE = "orloj-public-v10-4";
+var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
