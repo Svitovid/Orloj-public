@@ -1,5 +1,5 @@
-/* Orloj Public v10.5 — house axes, app shell network first, external artwork untouched */
-var CACHE = "orloj-public-v10-5";
+/* Orloj Public v10.6 — Czech/English calendars, app shell network first */
+var CACHE = "orloj-public-v10-6";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
