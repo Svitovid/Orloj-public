@@ -1,5 +1,5 @@
-/* Orloj Public v10.6.1 — calendar locale fallback fix, app shell network first */
-var CACHE = "orloj-public-v10-6-1";
+/* Orloj Public v10.7 — schema atlas and live sky, app shell network first */
+var CACHE = "orloj-public-v10-7";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
