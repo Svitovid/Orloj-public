@@ -1,5 +1,5 @@
-/* Orloj Public v10.7 — schema atlas and live sky, app shell network first */
-var CACHE = "orloj-public-v10-7";
+/* Orloj Public v10.8 — clarity, sign groups and connected knowledge cards */
+var CACHE = "orloj-public-v10-8";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
