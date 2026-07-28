@@ -1,5 +1,5 @@
-/* Orloj Public v10.8 — clarity, sign groups and connected knowledge cards */
-var CACHE = "orloj-public-v10-8";
+/* Orloj Public v10.8.1 — universal-day calculation fix */
+var CACHE = "orloj-public-v10-8-1";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
