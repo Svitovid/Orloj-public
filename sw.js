@@ -1,5 +1,5 @@
-/* Orloj Public v10.8.3 — Gregorian, Ethiopic, Julian ordering */
-var CACHE = "orloj-public-v10-8-3";
+/* Orloj Public v10.9 — calendar study sheets and universal day */
+var CACHE = "orloj-public-v10-9";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
