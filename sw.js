@@ -1,6 +1,6 @@
-/* Orloj Public v10.9 — calendar study sheets and universal day */
-var CACHE = "orloj-public-v10-9";
-var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
+/* Orloj Public v10.10 — calendar study sheets and Tarot Atlas pilot */
+var CACHE = "orloj-public-v10-10";
+var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
