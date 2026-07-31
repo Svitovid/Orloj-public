@@ -1,5 +1,5 @@
-/* Orloj Public v10.13 — calendar-quarter horizon */
-var CACHE = "orloj-public-v10-13";
+/* Orloj Public v10.15 — current of time */
+var CACHE = "orloj-public-v10-15";
 var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
