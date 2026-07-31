@@ -1,5 +1,5 @@
-/* Orloj Public v10.11 — tarot bridge for numbers */
-var CACHE = "orloj-public-v10-11";
+/* Orloj Public v10.13 — calendar-quarter horizon */
+var CACHE = "orloj-public-v10-13";
 var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
