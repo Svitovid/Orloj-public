@@ -1,5 +1,5 @@
-/* Orloj Public v10.16 — Now */
-var CACHE = "orloj-public-v10-16";
+/* Orloj Public v10.20 — corrected Czech declension and public release */
+var CACHE = "orloj-public-v10-20";
 var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
