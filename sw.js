@@ -1,5 +1,5 @@
-/* Orloj Public v10.20 — corrected Czech declension and public release */
-var CACHE = "orloj-public-v10-20";
+/* Orloj Public v10.22 — compact, event-only time thresholds */
+var CACHE = "orloj-public-v10-22";
 var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
