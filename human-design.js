@@ -1,5 +1,5 @@
 /*
- * Orloj Human Design engine · v1
+ * Orloj Human Design engine · v2
  *
  * Pure calculation and SVG rendering module. It intentionally contains no
  * personal data and performs no network requests. The host application passes
@@ -337,16 +337,53 @@
   }
 
   function derive(personality, design) {
-    var activeGates = [];
-    PLANET_ORDER.forEach(function (planet) {
-      [personality[planet], design[planet]].forEach(function (a) {
-        if (a && activeGates.indexOf(a.gate) < 0) activeGates.push(a.gate);
+    var gateMap = {};
+    function registerActivation(side, planet, activationData) {
+      if (!activationData) return;
+      var gate = activationData.gate, data = GATE_DATA[gate] || ["Brána " + gate, "—"];
+      if (!gateMap[gate]) {
+        gateMap[gate] = {
+          gate: gate,
+          name: data[0],
+          theme: data[1],
+          center: gateCenter(gate),
+          layers: { personality: false, design: false },
+          activations: []
+        };
+      }
+      gateMap[gate].layers[side] = true;
+      gateMap[gate].activations.push({
+        side: side,
+        planet: planet,
+        name: PLANETS[planet].name,
+        glyph: PLANETS[planet].glyph,
+        activation: activationData
       });
+    }
+    PLANET_ORDER.forEach(function (planet) {
+      registerActivation("personality", planet, personality[planet]);
+      registerActivation("design", planet, design[planet]);
     });
-    activeGates.sort(function (a, b) { return a - b; });
+    var activeGates = Object.keys(gateMap).map(Number).sort(function (a, b) { return a - b; });
 
     var channels = CHANNELS.filter(function (channel) {
       return activeGates.indexOf(channel.gates[0]) >= 0 && activeGates.indexOf(channel.gates[1]) >= 0;
+    });
+    var hangingChannels = CHANNELS.filter(function (channel) {
+      var first = activeGates.indexOf(channel.gates[0]) >= 0, second = activeGates.indexOf(channel.gates[1]) >= 0;
+      return first !== second;
+    }).map(function (channel) {
+      var activeGate = activeGates.indexOf(channel.gates[0]) >= 0 ? channel.gates[0] : channel.gates[1];
+      var missingGate = activeGate === channel.gates[0] ? channel.gates[1] : channel.gates[0];
+      return {
+        key: channel.key,
+        name: channel.name,
+        centers: channel.centers,
+        circuit: channel.circuit,
+        activeGate: activeGate,
+        missingGate: missingGate,
+        layers: gateMap[activeGate].layers
+      };
     });
     var defined = [];
     channels.forEach(function (channel) {
@@ -384,7 +421,10 @@
       personality: personality,
       design: design,
       activeGates: activeGates,
+      gateMap: gateMap,
+      activeGateDetails: activeGates.map(function (gate) { return gateMap[gate]; }),
       channels: channels,
+      hangingChannels: hangingChannels,
       definedCenters: defined,
       centerMap: centerMap,
       nearBoundaries: near
@@ -495,14 +535,16 @@
 
   function renderBodygraph(chart) {
     if (!chart) return "";
-    var active = {}, gateLayers = {};
+    var active = {}, gateLayers = chart.gateMap || {};
     chart.channels.forEach(function (channel) { active[channel.key] = true; });
-    PLANET_ORDER.forEach(function (planet) {
-      var personality=chart.personality[planet],design=chart.design[planet];
-      if(personality){if(!gateLayers[personality.gate])gateLayers[personality.gate]={};gateLayers[personality.gate].personality=true;}
-      if(design){if(!gateLayers[design.gate])gateLayers[design.gate]={};gateLayers[design.gate].design=true;}
-    });
-    function gateLayer(gate){var layer=gateLayers[gate];return !layer?null:(layer.personality&&layer.design?"both":layer.personality?"personality":"design");}
+    if (!Object.keys(gateLayers).length) {
+      PLANET_ORDER.forEach(function (planet) {
+        var personality=chart.personality[planet],design=chart.design[planet];
+        if(personality){if(!gateLayers[personality.gate])gateLayers[personality.gate]={layers:{}};gateLayers[personality.gate].layers.personality=true;}
+        if(design){if(!gateLayers[design.gate])gateLayers[design.gate]={layers:{}};gateLayers[design.gate].layers.design=true;}
+      });
+    }
+    function gateLayer(gate){var entry=gateLayers[gate],layer=entry&&(entry.layers||entry);return !layer?null:(layer.personality&&layer.design?"both":layer.personality?"personality":"design");}
     var out = '<svg class="hd-bodygraph" viewBox="0 0 360 610" role="group" aria-labelledby="hd-svg-title hd-svg-desc">' +
       '<title id="hd-svg-title">Bodygraph Human Design</title><desc id="hd-svg-desc">Devět center a třicet šest kanálů. Segmenty rozlišují aktivace osobnosti a designu; barevná centra jsou definována úplnými kanály.</desc>';
     out += '<g class="hd-channel-layer">';

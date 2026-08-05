@@ -77,6 +77,27 @@ test("known structural gate set derives the stable 2/4 emotional MG core", () =>
     chart.definedCenters.slice().sort(),
     ["g", "root", "sacral", "solar", "spleen", "throat"]
   );
+  assert.equal(chart.gateMap[58].name, "Vitalita");
+  assert.equal(chart.gateMap[58].center, "root");
+  assert.ok(chart.activeGateDetails.some((gate) => gate.gate === 18));
+});
+
+test("active gates retain their planetary layers and expose open channel ends", () => {
+  const personality = {};
+  const design = {};
+  HD.PLANET_ORDER.forEach((planet) => {
+    personality[planet] = activation(1, 1);
+    design[planet] = activation(1, 1);
+  });
+  personality.sun = activation(57, 2);
+  const chart = HD.derive(personality, design);
+
+  assert.deepEqual(chart.gateMap[57].layers, { personality: true, design: false });
+  assert.equal(chart.gateMap[57].activations[0].planet, "sun");
+  assert.ok(chart.hangingChannels.some((channel) => (
+    channel.key === "20-57" && channel.activeGate === 57 && channel.missingGate === 20
+  )));
+  assert.ok(chart.hangingChannels.every((channel) => channel.activeGate !== channel.missingGate));
 });
 
 test("design moment is solved at 88 degrees of solar arc", () => {
