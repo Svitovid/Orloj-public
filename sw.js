@@ -1,6 +1,6 @@
-/* Orloj Public v10.22 — compact, event-only time thresholds */
-var CACHE = "orloj-public-v10-22";
-var ASSETS = ["./", "./index.html", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+/* Orloj Public v11.02 — Human Design */
+var CACHE = "orloj-public-v11-02";
+var ASSETS = ["./", "./index.html", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
