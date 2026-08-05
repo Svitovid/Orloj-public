@@ -1,5 +1,5 @@
-/* Orloj Public v11.03 — Human Design */
-var CACHE = "orloj-public-v11-03";
+/* Orloj Public v11.04 — Čtyři čtvrtiny */
+var CACHE = "orloj-public-v11-04";
 var ASSETS = ["./", "./index.html", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
