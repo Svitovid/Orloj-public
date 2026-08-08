@@ -1,6 +1,6 @@
-/* Orloj Public v11.04 — Čtyři čtvrtiny */
-var CACHE = "orloj-public-v11-04";
-var ASSETS = ["./", "./index.html", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+/* Orloj Public v11.06 — Samostatný džjótiš */
+var CACHE = "orloj-public-v11-06";
+var ASSETS = ["./", "./index.html", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(

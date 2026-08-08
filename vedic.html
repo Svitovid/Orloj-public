@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090c12">
+  <meta name="application-name" content="Orloj · Džjótiš v11.06">
+  <meta name="orloj-build" content="public-v11-06">
+  <meta name="description" content="Samostatná védská observatoř Orloje: siderický zvěrokruh, nakšatry, pančánga a Vimšóttarí dašá.">
+  <title>Orloj · Džjótiš</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="vedic-astrology.css?v=public-v11-06">
+  <script>
+  (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
+  </script>
+</head>
+<body>
+<main class="vedic-shell">
+  <header class="vedic-topbar">
+    <a class="vedic-back" href="./?view=map">← Zpět do západního Orloje</a>
+    <span class="vedic-build">samostatná stránka · v11.06</span>
+  </header>
+
+  <section class="vedic-hero" aria-labelledby="vedic-title">
+    <div class="vedic-kicker">Jyotiṣa · světlo času</div>
+    <h1 id="vedic-title">Védská observatoř</h1>
+    <p>Vlastní souřadnicový rámec, vlastní časové techniky a vlastní slovník. Tato stránka nestaví džjótiš proti západní astrologii; dává mu samostatný prostor, aby se oba systémy nemusely míchat do jedné nepřehledné mapy.</p>
+    <div class="vedic-boundary"><span>Lahiri / Čitrapakša</span><span>12 ráši</span><span>27 nakšater</span><span>celoznamenové domy</span><span>bez tropických přepínačů</span></div>
+  </section>
+
+  <nav class="vedic-nav" aria-label="Oddíly védské observatoře">
+    <button class="on" data-vedic-page="sky" type="button">Obloha</button>
+    <button data-vedic-page="natal" type="button">Moje mapa</button>
+    <button data-vedic-page="panchanga" type="button">Pančánga</button>
+    <button data-vedic-page="dasha" type="button">Dašá</button>
+    <button data-vedic-page="study" type="button">Studovna</button>
+  </nav>
+
+  <section class="vedic-page on" data-vedic-panel="sky">
+    <div class="vedic-grid">
+      <article class="vedic-card">
+        <div class="vedic-section-kicker">Siderická obloha</div>
+        <h2>Ráši a nakšatry okamžiku</h2>
+        <p class="vedic-copy">Geocentrické délky planet počítá Astronomy Engine. Od tropické délky se odečítá Lahiriho ajanámša; dvanáct znamení zůstává pravidelnými úseky po 30°.</p>
+        <div class="vedic-controls">
+          <label>Datum<input id="vedic-date" type="date"></label>
+          <label>Čas<input id="vedic-time" type="time" step="60"></label>
+          <button id="vedic-now" type="button">Nyní</button>
+        </div>
+        <div class="vedic-segmented" aria-label="Výpočet měsíčních uzlů">
+          <button class="on" data-node-mode="mean" type="button">Střední uzly</button>
+          <button data-node-mode="true" type="button">Pravé uzly</button>
+        </div>
+        <div class="vedic-wheel-wrap"><div class="vedic-wheel" id="vedic-sky-wheel"></div><div class="vedic-wheel-readout" id="vedic-sky-readout"></div></div>
+      </article>
+      <aside class="vedic-card">
+        <div class="vedic-section-kicker">Navagraha</div>
+        <h2>Devět klasických bodů</h2>
+        <p class="vedic-copy">Uran, Neptun a Pluto zde záměrně nejsou. Stránka zachovává klasický rámec Slunce až Saturnu a osu Ráhu–Kétu.</p>
+        <div class="vedic-planet-list" id="vedic-sky-planets"></div>
+        <div class="vedic-focus" id="vedic-sky-focus"></div>
+      </aside>
+      <article class="vedic-card full">
+        <div class="vedic-section-kicker">Kontrola příspěvku · 8. srpna 2026</div>
+        <h2>Co se skutečně mění mezi oběma systémy?</h2>
+        <p class="vedic-copy" id="vedic-post-summary">Načítám kontrolní výpočet…</p>
+        <div class="vedic-audit">
+          <article><span>Ověřeno</span><p id="vedic-post-verified">—</p></article>
+          <article><span>Zpřesnění</span><p>„Skutečná pevná obloha“ je zkratka. Džjótiš používá siderický zvěrokruh ukotvený zvolenou ajanámšou, stále však dělí kruh na dvanáct stejných znamení; nekopíruje nepravidelné hranice astronomických souhvězdí.</p></article>
+          <article><span>Symbolická vrstva</span><p>Emoční léčení, nervový systém, vyčerpání a „odstraňování karmických vzorců“ nejsou astronomický výsledek. Lze je nabídnout jako současnou interpretační hypotézu či otázku k pozorování, nikoli jako diagnózu toho, co člověk musí cítit.</p></article>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="vedic-page" data-vedic-panel="natal">
+    <article class="vedic-card">
+      <div class="vedic-profile-head"><div><div class="vedic-section-kicker">Osobní džjótiš</div><h2 id="vedic-profile-title">Moje siderická mapa</h2><p class="vedic-profile-meta" id="vedic-profile-meta">Profil se načítá pouze z tohoto zařízení.</p></div><a class="vedic-quiet-link" href="./?view=map">Upravit profil ↗</a></div>
+      <div class="vedic-empty hidden" id="vedic-profile-empty"><h3>Nejprve vytvoř osobní profil</h3><p>Datum, čas a místo narození se nastavují v hlavním Orloji. Tady se pak stejný vstup přepočítá samostatnou metodou džjótiše.</p><a class="vedic-button" href="./?view=map">Nastavit v Orloji</a></div>
+    </article>
+    <div class="vedic-natal-grid hidden" id="vedic-natal-content">
+      <article class="vedic-card"><div class="vedic-wheel-wrap"><div class="vedic-wheel" id="vedic-natal-wheel"></div><div class="vedic-wheel-readout" id="vedic-natal-readout"></div></div><div class="vedic-natal-summary" id="vedic-natal-summary"></div></article>
+      <aside class="vedic-card"><div class="vedic-section-kicker">Ráši · bháva · nakšatra</div><h2>Osobní body</h2><p class="vedic-copy">Domy jsou celoznamenové: znamení siderického Ascendentu tvoří celý 1. dům a další znamení následují po kruhu.</p><div class="vedic-planet-list" id="vedic-natal-planets"></div><div class="vedic-focus" id="vedic-natal-focus"></div></aside>
+    </div>
+  </section>
+
+  <section class="vedic-page" data-vedic-panel="panchanga">
+    <article class="vedic-card">
+      <div class="vedic-section-kicker">Pět článků času</div>
+      <h2>Pančánga zvoleného okamžiku</h2>
+      <p class="vedic-copy">Pančánga není osobnostní profil. Čte strukturu konkrétního času pomocí pěti vzájemně odlišných veličin.</p>
+      <div class="vedic-panchanga" id="vedic-panchanga-grid"></div>
+      <div class="vedic-method-note">Výpočet zde určuje aktivní článek v přesném okamžiku. Tradiční kalendáře často navíc sledují, který článek trvá při místním východu Slunce; pro rituální volbu času proto používej úplnou lokální pančángu.</div>
+    </article>
+  </section>
+
+  <section class="vedic-page" data-vedic-panel="dasha">
+    <article class="vedic-card">
+      <div class="vedic-section-kicker">Vimśottarī daśā</div>
+      <h2>Sto dvacet let planetárních období</h2>
+      <p class="vedic-copy">Počáteční mahádašá vychází z nakšatry narozeného Měsíce a z toho, jaká část této nakšatry při narození zbývala. Nejde o tranzit ani mechanickou předpověď události.</p>
+      <div class="vedic-empty" id="vedic-dasha-empty"><p>Dašá se zobrazí po vytvoření osobního profilu v hlavním Orloji.</p><a class="vedic-button" href="./?view=map">Nastavit profil</a></div>
+      <div class="hidden" id="vedic-dasha-content"><div class="vedic-dasha-now" id="vedic-dasha-now"></div><div class="vedic-dasha-track" id="vedic-dasha-track"></div><div class="vedic-method-note">Tato první vrstva zobrazuje mahádaši. Antardaši, síla planet, jógy a další pravidla patří do pozdější hlubší studovny; samotný název období není hotový výklad.</div></div>
+    </article>
+  </section>
+
+  <section class="vedic-page" data-vedic-panel="study">
+    <article class="vedic-card">
+      <div class="vedic-section-kicker">Studovna džjótiše</div>
+      <h2>Dva systémy, jedna obloha, odlišné otázky</h2>
+      <p class="vedic-copy">Nejprve souřadnice, potom pravidla tradice, nakonec osobní pozorování. Tato posloupnost brání tomu, aby se astronomický výpočet zaměnil za psychologickou jistotu.</p>
+      <table class="vedic-compare-table"><thead><tr><th>Vrstva</th><th>Západní Orloj</th><th>Védská observatoř</th></tr></thead><tbody><tr><td>Počátek zvěrokruhu</td><td>Jarní bod · tropický rámec</td><td>Hvězdný rámec přes Lahiriho ajanámšu</td></tr><tr><td>Jemné členění</td><td>Dekany, domy, aspekty</td><td>27 nakšater a 108 pád</td></tr><tr><td>Domy</td><td>Placidus v západní nativní mapě</td><td>Celoznamenové bhávy</td></tr><tr><td>Čas</td><td>Tranzity, progrese, návraty</td><td>Pančánga a Vimšóttarí dašá</td></tr><tr><td>Uzly</td><td>Osa zatmění v nativu a tranzitech</td><td>Ráhu a Kétu jako součást navagrahy</td></tr></tbody></table>
+      <div class="vedic-study-grid">
+        <article class="vedic-study-card"><span>01 · Souřadnice</span><h3>Ajanámša</h3><p>Úhlový rozdíl mezi tropickým a zvoleným siderickým počátkem. Různé školy používají různé hodnoty; tato stránka výslovně volí Lahiri/Čitrapakša.</p></article>
+        <article class="vedic-study-card"><span>02 · Prostor</span><h3>Ráši a bhávy</h3><p>Ráši jsou dvanáct znamení. V celoznamenovém systému se celé znamení Ascendentu stává prvním domem; úhel Ascendentu v něm zůstává přesným bodem.</p></article>
+        <article class="vedic-study-card"><span>03 · Luna</span><h3>Nakšatry a pády</h3><p>Dvacet sedm lunárních úseků po 13°20′, každý rozdělený na čtyři pády po 3°20′. Nejsou to další znamení, ale paralelní členění ekliptiky.</p></article>
+        <article class="vedic-study-card"><span>04 · Čas</span><h3>Pančánga a dašá</h3><p>Pančánga popisuje kvalitu okamžiku. Dašá odvíjí osobní planetární období z polohy narozeného Měsíce; obě techniky kladou jinou otázku než západní tranzit.</p></article>
+      </div>
+      <div class="vedic-sources"><a href="https://www.astro.com/swisseph/swephprg.htm" target="_blank" rel="noopener noreferrer">Swiss Ephemeris · ajanámša ↗</a><a href="https://www.drikpanchang.com/planet/position/planetary-positions-sidereal.html" target="_blank" rel="noopener noreferrer">Drik Panchang · kontrolní efemerida ↗</a><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine ↗</a></div>
+    </article>
+  </section>
+
+  <footer class="vedic-footer"><b>Orloj · Džjótiš v11.06</b> · samostatná studovna Pansophia Institute · profil narození zůstává pouze v tomto zařízení · výpočty a tradiční symbolika jsou záměrně rozlišeny</footer>
+</main>
+<script src="astronomy-engine.min.js?v=public-v11-06"></script>
+<script src="vedic-astrology.js?v=public-v11-06"></script>
+</body>
+</html>
