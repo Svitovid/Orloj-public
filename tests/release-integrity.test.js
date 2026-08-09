@@ -86,6 +86,7 @@ test("Profile dne is a separate shareable page linked from both calendars", () =
   assert.match(day, /vedic\.html\?view=sky/);
   assert.match(dayScript, /url\.searchParams\.set\("date",state\.dateKey\)/);
   assert.match(dayScript, /getElementById\("day-app"\)/);
+  assert.match(day + timeline + life, /day-profile\.js\?v=public-v11-09-fix1/);
   assert.doesNotMatch(dayScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
 });
 
