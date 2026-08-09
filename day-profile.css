@@ -9,6 +9,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .day-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top)) 4px 14px;border-bottom:1px solid var(--line)}
 .day-back{color:rgba(238,242,247,.72);font-size:11px;font-weight:750;text-decoration:none}
 .day-back:hover{color:var(--ink)}
+.day-toplinks{display:flex;align-items:center;gap:13px}.day-river-link{padding-left:13px;border-left:1px solid var(--line);color:#9fdcf5;font-size:10px;font-weight:720;text-decoration:none}.day-river-link:hover{color:var(--ink)}
 .day-build{color:rgba(238,242,247,.38);font-size:9px;font-weight:760;letter-spacing:.09em;text-transform:uppercase}
 .day-hero{position:relative;overflow:hidden;margin-top:18px;padding:clamp(23px,5vw,46px);border:1px solid rgba(143,216,255,.12);border-radius:30px;background:radial-gradient(430px 230px at 100% 0,rgba(143,216,255,.11),transparent 72%),radial-gradient(260px 170px at 0 100%,rgba(240,201,156,.07),transparent 75%),linear-gradient(145deg,rgba(16,23,35,.98),rgba(8,12,19,.98))}
 .day-hero:after{content:"";position:absolute;width:340px;height:340px;right:-170px;top:-230px;border:1px solid rgba(143,216,255,.10);border-radius:50%;box-shadow:0 0 0 34px rgba(143,216,255,.022),0 0 0 68px rgba(143,216,255,.012);pointer-events:none}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080c12">
+  <meta name="application-name" content="Orloj · Časová řeka v11.08">
+  <meta name="orloj-build" content="public-v11-08">
+  <meta name="description" content="Časová řeka Orloje: týdenní, měsíční a tříměsíční výhled astronomických prahů, západních aspektů a volitelných osobních tranzitů.">
+  <title>Orloj · Časová řeka</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="timeline.css?v=public-v11-08">
+  <script>
+  (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
+  </script>
+</head>
+<body>
+<main class="river-shell" id="river-app">
+  <header class="river-topbar">
+    <a href="./?view=now">← Zpět do Orloje</a>
+    <span>Časová řeka · v11.08</span>
+  </header>
+
+  <section class="river-hero" aria-labelledby="river-title">
+    <div class="river-kicker">Výhled · změna · souvislost</div>
+    <h1 id="river-title">Časová řeka</h1>
+    <p>Profil dne ukazuje jediný řez. Tato mapa sleduje, jak se prahy skládají do období: kdy vliv vstupuje do pracovního orbu, kdy vrcholí a kdy odeznívá.</p>
+    <div class="river-controls" aria-label="Rozsah časové řeky">
+      <button id="river-prev" type="button" aria-label="Předchozí období">‹</button>
+      <label><span>Začátek</span><input id="river-start" type="date"></label>
+      <button id="river-next" type="button" aria-label="Následující období">›</button>
+      <div class="river-segmented" aria-label="Délka výhledu">
+        <button data-range="week" type="button">Týden</button>
+        <button data-range="month" type="button">Měsíc</button>
+        <button class="on" data-range="quarter" type="button">3 měsíce</button>
+      </div>
+      <button class="quiet" id="river-today" type="button">Od dneška</button>
+      <button class="quiet" id="river-share" type="button">Sdílet výhled</button>
+    </div>
+    <div class="river-method-strip"><span><b id="river-period">—</b></span><span id="river-timezone">časové pásmo —</span><span><b>profil</b> nikdy není v URL</span></div>
+  </section>
+
+  <section class="river-status" id="river-status" aria-live="polite">
+    <div class="river-spinner" aria-hidden="true"></div><div><b>Počítám skutečné prahy období…</b><span>Polohy, stanice a aspektová okna vznikají lokálně v prohlížeči.</span></div>
+  </section>
+
+  <div id="river-content" hidden>
+    <section class="river-summary" aria-label="Souhrn období">
+      <article><span>Astronomické prahy</span><b id="river-threshold-count">—</b><small>fáze, zatmění, sezony, ingrese a stanice</small></article>
+      <article><span>Aspektová okna</span><b id="river-aspect-count">—</b><small>vzniká → vrcholí → odeznívá</small></article>
+      <article><span>Osobní tranzity</span><b id="river-personal-count">—</b><small id="river-personal-summary">pouze z místního profilu</small></article>
+      <article class="mode"><span>Hustota zobrazení</span><div class="river-segmented"><button class="on" data-mode="simple" type="button">Jednoduše</button><button data-mode="study" type="button">Studijně</button></div><small>Výpočet zůstává stejný; mění se pouze množství zobrazených vrstev.</small></article>
+    </section>
+
+    <section class="river-panel" aria-labelledby="river-map-title">
+      <div class="river-panel-head"><div><div class="river-kicker">Mapa období</div><h2 id="river-map-title">Proud událostí</h2></div><span id="river-visible-count">—</span></div>
+      <p class="river-lead">Body označují přesné okamžiky. Pruhy aspektů ukazují celé pracovní okno; svislá značka uvnitř je vrchol nebo největší přiblížení.</p>
+      <div class="river-map-scroll"><div class="river-map" id="river-map"></div></div>
+      <div class="river-legend"><span class="phase">Lunární fáze</span><span class="eclipse">Zatmění</span><span class="ingress">Ingresy</span><span class="station">Stanice</span><span class="aspect">Aspekty</span><span class="personal">Osobní</span></div>
+    </section>
+
+    <section class="river-panel river-filter-panel" aria-labelledby="river-filter-title">
+      <div class="river-panel-head"><div><div class="river-kicker">Co právě sleduji</div><h2 id="river-filter-title">Filtry</h2></div><button class="river-reset" id="river-reset" type="button">Obnovit výběr</button></div>
+      <div class="river-filter-row"><span>Události</span><div id="river-type-filters"></div></div>
+      <div class="river-filter-row"><span>Planety</span><div id="river-planet-filters"></div></div>
+    </section>
+
+    <section class="river-columns">
+      <article class="river-panel" aria-labelledby="river-universal-title">
+        <div class="river-panel-head"><div><div class="river-kicker">Obecná obloha</div><h2 id="river-universal-title">Události období</h2></div><span>tropický rámec</span></div>
+        <div class="river-stream" id="river-universal"></div>
+        <button class="river-more" id="river-universal-more" type="button" hidden>Zobrazit další</button>
+      </article>
+      <article class="river-panel personal-panel" aria-labelledby="river-personal-title">
+        <div class="river-panel-head"><div><div class="river-kicker">Volitelná osobní vrstva</div><h2 id="river-personal-title">Osobní tranzity</h2></div><span id="river-profile-name">lokální profil</span></div>
+        <p class="river-lead">Tranzitní planety jsou porovnány s nativními planetami, Ascendentem a MC. Tato vrstva je od obecné oblohy záměrně oddělená.</p>
+        <div class="river-stream" id="river-personal"></div>
+        <button class="river-more" id="river-personal-more" type="button" hidden>Zobrazit další</button>
+      </article>
+    </section>
+
+    <section class="river-method" aria-labelledby="river-method-title">
+      <div class="river-kicker">Jak řeku číst</div><h2 id="river-method-title">Vzniká → vrcholí → odeznívá</h2>
+      <div><article><b>Událost</b><p>Fáze, zatmění, ingrese, stanice a sezony mají přesný okamžik.</p></article><article><b>Interval</b><p>Aspekt je zobrazen od vstupu do pracovního orbu po jeho opuštění.</p></article><article><b>Vrchol</b><p>Středová značka je přesný aspekt nebo největší dosažené přiblížení.</p></article><article><b>Pozorování</b><p>Kliknutím otevřeš Profil dne a můžeš porovnat mapu s vlastní zkušeností.</p></article></div>
+      <p>Časová řeka zobrazuje výpočet a tradiční astrologickou gramatiku, ne jistou předpověď událostí. Džjótiš zůstává ve své samostatné observatoři.</p>
+    </section>
+  </div>
+
+  <footer class="river-footer"><b>Orloj · Časová řeka v11.08</b> · osobní observatoř času · připravuje Pansophia Institute · osobní údaje zůstávají v zařízení</footer>
+</main>
+<script src="astronomy-engine.min.js?v=public-v11-08"></script>
+<script src="day-profile.js?v=public-v11-08"></script>
+<script src="timeline.js?v=public-v11-08"></script>
+</body>
+</html>

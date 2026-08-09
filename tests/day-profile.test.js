@@ -90,3 +90,49 @@ test("personal resonance uses local birth data without placing it in the URL", (
   assert.ok(result.hits.length > 0);
   result.hits.forEach((hit) => assert.ok(hit.orb >= 0));
 });
+
+test("calendar ranges preserve month ends and daylight-saving boundaries", () => {
+  assert.equal(Day.addMonthsDateKey("2026-01-31", 1), "2026-02-28");
+  assert.equal(Day.addMonthsDateKey("2024-01-31", 1), "2024-02-29");
+  assert.equal(Day.addMonthsDateKey("2026-11-30", 3), "2027-02-28");
+  const bounds = Day.rangeBounds("2026-08-09", "2026-11-09", "Europe/Prague");
+  assert.equal(bounds.start, Day.zonedLocalToUtc("2026-08-09", "00:00", "Europe/Prague"));
+  assert.equal(bounds.end, Day.zonedLocalToUtc("2026-11-09", "00:00", "Europe/Prague"));
+  assert.equal(bounds.days, 92 + 1/24);
+});
+
+test("quarter range finds eclipse, phase, ingress, station and season events", () => {
+  const result = Day.rangeEvents(Astronomy, "2026-08-09", "2026-11-09", "Europe/Prague", null, {stepHours:6});
+  assert.ok(result.events.some((event) => event.kind === "eclipse" && event.eclipseType === "solar"));
+  assert.ok(result.events.some((event) => event.kind === "eclipse" && event.eclipseType === "lunar"));
+  assert.equal(result.events.filter((event) => event.kind === "phase").length, 12);
+  assert.ok(result.events.some((event) => event.kind === "season"));
+  assert.ok(result.events.some((event) => event.kind === "ingress"));
+  assert.ok(result.events.some((event) => event.kind === "station"));
+  result.events.forEach((event) => assert.ok(event.at >= result.bounds.start && event.at < result.bounds.end));
+});
+
+test("aspect windows expose start, peak and end without escaping the range", () => {
+  const bounds = Day.rangeBounds("2026-08-09", "2026-08-23", "Europe/Prague");
+  const windows = Day.aspectWindows(Astronomy, bounds, {stepHours:6});
+  assert.ok(windows.length > 0);
+  assert.ok(windows.some((event) => event.exact));
+  windows.forEach((event) => {
+    assert.ok(event.start >= bounds.start);
+    assert.ok(event.end <= bounds.end);
+    assert.ok(event.start <= event.at && event.at < event.end);
+    assert.ok(event.peakAt != null);
+  });
+});
+
+test("personal transit windows stay separate and require a valid local profile", () => {
+  const bounds = Day.rangeBounds("2026-08-09", "2026-08-23", "Europe/Prague");
+  assert.deepEqual(Day.personalTransitWindows(Astronomy, bounds, null), []);
+  const windows = Day.personalTransitWindows(Astronomy, bounds, profile, {stepHours:6});
+  assert.ok(windows.length > 0);
+  windows.forEach((event) => {
+    assert.equal(event.kind, "personal");
+    assert.ok(event.start >= bounds.start && event.end <= bounds.end);
+    assert.ok(event.start <= event.at && event.at < event.end);
+  });
+});

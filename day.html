@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#090d14">
-  <meta name="application-name" content="Orloj · Profil dne v11.07">
-  <meta name="orloj-build" content="public-v11-07">
+  <meta name="application-name" content="Orloj · Profil dne v11.08">
+  <meta name="orloj-build" content="public-v11-08">
   <meta name="description" content="Profil zvoleného dne v Orloji: obloha, přesné časové prahy, západní aspekty, osobní rezonance, numerologie a kalendáře.">
   <title>Orloj · Profil dne</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="day-profile.css?v=public-v11-07">
+  <link rel="stylesheet" href="day-profile.css?v=public-v11-08">
   <script>
   (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
   </script>
@@ -17,8 +17,8 @@
 <body>
 <main class="day-shell" id="day-app">
   <header class="day-topbar">
-    <a class="day-back" id="day-back" href="./?view=numero#num-calendar-card">← Zpět do Orloje</a>
-    <span class="day-build" id="day-build">Profil dne · v11.07</span>
+    <div class="day-toplinks"><a class="day-back" id="day-back" href="./?view=numero#num-calendar-card">← Zpět do Orloje</a><a class="day-river-link" id="day-river-link" href="timeline.html">Časová řeka →</a></div>
+    <span class="day-build" id="day-build">Profil dne · v11.08</span>
   </header>
 
   <section class="day-hero" aria-labelledby="day-title">
@@ -119,9 +119,9 @@
     <div class="day-sources"><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine · výpočtové jádro ↗</a><span>Kalendáře · Intl/ICU</span><span>Profil narození · pouze localStorage</span></div>
   </section>
 
-  <footer class="day-footer"><b>Orloj · Profil dne v11.07</b> · osobní observatoř času · připravuje Pansophia Institute · osobní údaje zůstávají v zařízení</footer>
+  <footer class="day-footer"><b>Orloj · Profil dne v11.08</b> · osobní observatoř času · připravuje Pansophia Institute · osobní údaje zůstávají v zařízení</footer>
 </main>
-<script src="astronomy-engine.min.js?v=public-v11-07"></script>
-<script src="day-profile.js?v=public-v11-07"></script>
+<script src="astronomy-engine.min.js?v=public-v11-08"></script>
+<script src="day-profile.js?v=public-v11-08"></script>
 </body>
 </html>
