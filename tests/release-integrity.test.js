@@ -24,9 +24,15 @@ test("release identifiers are consistently v11.09", () => {
   assert.match(timeline, /name="orloj-build" content="public-v11-09"/);
   assert.match(life, /name="orloj-build" content="public-v11-09"/);
   assert.match(index, /Orloj · Public v11\.09 · Životní kronika/);
-  assert.match(index, /sw\.js\?v=public-v11-09/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-09"/);
+  assert.match(index, /sw\.js\?v=public-v11-09-week-of-month/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-09-week-of-month"/);
   assert.doesNotMatch(index + vedic + day + timeline + life + worker, /public-v11-08|orloj-public-v11-08/);
+});
+
+test("daily rhythm joins the day of year with the Monday-based week of month", () => {
+  assert.match(index, /Den roku · týden měsíce/);
+  assert.match(index, /function weekOfMonthNumber\(date\)/);
+  assert.match(index, /dayOfYearNumber\(civil\)\+"\. den · "\+weekOfMonthNumber\(civil\)\+"\. týden"/);
 });
 
 test("Human Design assets and route are wired before the main application", () => {
