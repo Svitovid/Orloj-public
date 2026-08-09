@@ -27,6 +27,16 @@ test("civil day bounds respect Prague daylight-saving transitions", () => {
   assert.equal(Day.dayBounds("2026-08-09", "Europe/Prague").hours, 24);
 });
 
+test("day profile exposes ordinal day, ISO week and traditional weekday ruler", () => {
+  assert.equal(Day.dayOfYear("2026-08-09"), 221);
+  assert.equal(Day.isoWeek("2026-08-09"), 32);
+  assert.equal(Day.dayRuler("2026-08-09").name, "Slunce");
+  assert.equal(Day.dayOfYear("2024-12-31"), 366);
+  assert.equal(Day.isoWeek("2021-01-01"), 53);
+  assert.equal(Day.isoWeek("2021-01-04"), 1);
+  assert.equal(Day.dayRuler("2026-08-10").name, "Měsíc");
+});
+
 test("August 8 noon snapshot keeps the tropical Sun in Leo", () => {
   const moment = new Date(Day.zonedLocalToUtc("2026-08-08", "12:00", "Europe/Prague"));
   const snapshot = Day.snapshot(Astronomy, moment);

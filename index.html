@@ -2199,7 +2199,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     <div class="today-metric-label">Rytmus dne</div>
     <div class="today-stat-list">
       <div><span>Týden roku</span><b id="today-week">—</b></div>
-      <div><span>Den roku · týden měsíce</span><b id="today-year-day">—</b></div>
+      <div><span>Den roku</span><b id="today-year-day">—</b></div>
     </div>
     <div class="today-date-sum" id="today-date-sum">—</div>
   </article>
@@ -4205,7 +4205,6 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   }
   function isoWeekNumber(date){var d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));var day=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()+4-day);var y0=new Date(Date.UTC(d.getUTCFullYear(),0,1));return Math.ceil((((d-y0)/86400000)+1)/7);}
   function dayOfYearNumber(date){var start=new Date(date.getFullYear(),0,0);return Math.floor((date-start)/86400000);}
-  function weekOfMonthNumber(date){var first=new Date(date.getFullYear(),date.getMonth(),1),mondayOffset=(first.getDay()+6)%7;return Math.floor((mondayOffset+date.getDate()-1)/7)+1;}
   function universalDaySummary(date){var p=universalDayParts(date),sum=p.month+p.day+p.year,root=reduceNum(sum);return p.month+" + "+p.day+" + "+p.year+" = "+sum+" → "+root;}
 
   // ---------- Práh času: one clear sign when the rhythm changes ----------
@@ -4314,7 +4313,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     document.getElementById("today-calendar-ethiopic").textContent=ethDate.unsupported?"Nedostupné":ethDate.numeric;
     document.getElementById("today-calendar-julian").textContent=julDate.unsupported?"Nedostupné":julParts.day+". "+julMonths[julParts.month-1]+" "+julParts.year;
     document.getElementById("today-week").textContent=String(isoWeekNumber(civil));
-    document.getElementById("today-year-day").textContent=dayOfYearNumber(civil)+". den · "+weekOfMonthNumber(civil)+". týden";
+    document.getElementById("today-year-day").textContent=String(dayOfYearNumber(civil));
     document.getElementById("today-date-sum").textContent="Univerzální den · "+universalDaySummary(civil);
     var focusData=NUMBER_DEEP[String(PROFILE_READY?pdRoot:udRoot)];
     document.getElementById("today-theme-value").textContent=(PROFILE_READY?"Osobní den ":"Univerzální den ")+(PROFILE_READY?pdRoot:udRoot);
@@ -6440,7 +6439,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async function () {
     try {
-      var cacheFlag = "orloj-public-v11-09-week-of-month";
+      var cacheFlag = "orloj-public-v11-09-day-calendar-rhythm";
       if (!localStorage.getItem(cacheFlag) && "caches" in window) {
         var keys = await caches.keys();
         await Promise.all(keys.map(function (key) { return caches.delete(key); }));
@@ -6452,7 +6451,7 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
         window.location.reload();
       });
-      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-09-week-of-month", {
+      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-09-day-calendar-rhythm", {
         updateViaCache: "none"
       });
       await registration.update();

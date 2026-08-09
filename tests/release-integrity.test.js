@@ -24,15 +24,19 @@ test("release identifiers are consistently v11.09", () => {
   assert.match(timeline, /name="orloj-build" content="public-v11-09"/);
   assert.match(life, /name="orloj-build" content="public-v11-09"/);
   assert.match(index, /Orloj · Public v11\.09 · Životní kronika/);
-  assert.match(index, /sw\.js\?v=public-v11-09-week-of-month/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-09-week-of-month"/);
+  assert.match(index, /sw\.js\?v=public-v11-09-day-calendar-rhythm/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-09-day-calendar-rhythm"/);
   assert.doesNotMatch(index + vedic + day + timeline + life + worker, /public-v11-08|orloj-public-v11-08/);
 });
 
-test("daily rhythm joins the day of year with the Monday-based week of month", () => {
-  assert.match(index, /Den roku · týden měsíce/);
-  assert.match(index, /function weekOfMonthNumber\(date\)/);
-  assert.match(index, /dayOfYearNumber\(civil\)\+"\. den · "\+weekOfMonthNumber\(civil\)\+"\. týden"/);
+test("day profile shows ordinal day, ISO week and the traditional ruling planet", () => {
+  assert.match(day, /id="day-year-day"/);
+  assert.match(day, /id="day-year-week"/);
+  assert.match(day, /Tradice · vládnoucí planeta dne/);
+  assert.match(dayScript, /D\.dayOfYear\(state\.dateKey\)\+"\. den roku"/);
+  assert.match(dayScript, /D\.isoWeek\(state\.dateKey\)\+"\. týden roku · ISO 8601"/);
+  assert.match(dayScript, /chaldejský rytmus/);
+  assert.doesNotMatch(index + day + dayScript, /týden měsíce|weekOfMonthNumber/);
 });
 
 test("Human Design assets and route are wired before the main application", () => {
@@ -92,7 +96,8 @@ test("Profile dne is a separate shareable page linked from both calendars", () =
   assert.match(day, /vedic\.html\?view=sky/);
   assert.match(dayScript, /url\.searchParams\.set\("date",state\.dateKey\)/);
   assert.match(dayScript, /getElementById\("day-app"\)/);
-  assert.match(day + timeline + life, /day-profile\.js\?v=public-v11-09-fix1/);
+  assert.match(day, /day-profile\.js\?v=public-v11-09-day-calendar-rhythm/);
+  assert.match(timeline + life, /day-profile\.js\?v=public-v11-09-fix1/);
   assert.doesNotMatch(dayScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
 });
 
