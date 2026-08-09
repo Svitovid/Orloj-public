@@ -154,7 +154,7 @@
 
 (function(){
   "use strict";
-  if(typeof window==="undefined"||!window.document||!window.OrlojDay)return;
+  if(typeof window==="undefined"||!window.document||!window.OrlojDay||!window.document.getElementById("day-app"))return;
   var D=window.OrlojDay,A=window.Astronomy,PROFILE_KEY="orloj-public-profile-v1",OBSERVER_KEY="orloj-public-observer-v1",state={dateKey:null,timezone:null,observer:null,profile:null};
   function $(id){return document.getElementById(id);}
   function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
