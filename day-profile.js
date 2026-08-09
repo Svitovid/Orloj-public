@@ -1,0 +1,186 @@
+(function(root,factory){
+  var api=factory();
+  if(typeof module==="object"&&module.exports)module.exports=api;
+  else root.OrlojDay=api;
+})(typeof self!=="undefined"?self:this,function(){
+  "use strict";
+
+  var DAY=86400000,DEG=Math.PI/180;
+  var SIGNS=["Beran","Býk","Blíženci","Rak","Lev","Panna","Váhy","Štír","Střelec","Kozoroh","Vodnář","Ryby"];
+  var SIGN_GLYPHS=["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+  var BODY_META=[
+    {id:"sun",astro:"Sun",name:"Slunce",glyph:"☉",color:"#f8c56b"},
+    {id:"moon",astro:"Moon",name:"Měsíc",glyph:"☽",color:"#d8e5ff"},
+    {id:"mercury",astro:"Mercury",name:"Merkur",glyph:"☿",color:"#8fd8ff"},
+    {id:"venus",astro:"Venus",name:"Venuše",glyph:"♀",color:"#f4a8c7"},
+    {id:"mars",astro:"Mars",name:"Mars",glyph:"♂",color:"#ff806e"},
+    {id:"jupiter",astro:"Jupiter",name:"Jupiter",glyph:"♃",color:"#f0a36c"},
+    {id:"saturn",astro:"Saturn",name:"Saturn",glyph:"♄",color:"#c8b68b"},
+    {id:"uranus",astro:"Uranus",name:"Uran",glyph:"♅",color:"#75dfd4"},
+    {id:"neptune",astro:"Neptune",name:"Neptun",glyph:"♆",color:"#7aa7ff"},
+    {id:"pluto",astro:"Pluto",name:"Pluto",glyph:"♇",color:"#b49cff"}
+  ];
+  var ASPECTS=[
+    {name:"Konjunkce",glyph:"☌",angle:0,orb:8,type:"neutral",color:"#f8c56b"},
+    {name:"Sextil",glyph:"⚹",angle:60,orb:4,type:"soft",color:"#75dfd4"},
+    {name:"Kvadratura",glyph:"□",angle:90,orb:6,type:"hard",color:"#ff8a76"},
+    {name:"Trigon",glyph:"△",angle:120,orb:6,type:"soft",color:"#75dfd4"},
+    {name:"Opozice",glyph:"☍",angle:180,orb:8,type:"hard",color:"#ff8a76"}
+  ];
+  var DAY_RULERS=[
+    {name:"Slunce",glyph:"☉",color:"#f8c56b",theme:"vitalita, střed a viditelnost"},
+    {name:"Měsíc",glyph:"☽",color:"#d8e5ff",theme:"péče, citlivost a vnitřní rytmus"},
+    {name:"Mars",glyph:"♂",color:"#ff806e",theme:"akce, odvaha a jasný řez"},
+    {name:"Merkur",glyph:"☿",color:"#8fd8ff",theme:"slovo, učení a výměna"},
+    {name:"Jupiter",glyph:"♃",color:"#f0a36c",theme:"růst, důvěra a širší perspektiva"},
+    {name:"Venuše",glyph:"♀",color:"#f4a8c7",theme:"vztahy, krása a vyrovnání"},
+    {name:"Saturn",glyph:"♄",color:"#c8b68b",theme:"řád, odpovědnost a dokončení"}
+  ];
+  var NUMBER_THEMES={
+    1:{title:"První krok",keys:"směr · iniciativa · rozhodnutí",question:"Co dnes potřebuji opravdu zahájit?"},
+    2:{title:"Vztah a zrání",keys:"spolupráce · vnímavost · trpělivost",question:"Čemu mám dát prostor, aniž bych ztratil vlastní střed?"},
+    3:{title:"Tvůrčí výraz",keys:"slovo · obraz · sdílení",question:"Co chce být vyjádřeno, ne jen promýšleno?"},
+    4:{title:"Stavba základu",keys:"řád · práce · trvání",question:"Který konkrétní krok dnes zpevní celek?"},
+    5:{title:"Pohyb a změna",keys:"zkušenost · svoboda · pružnost",question:"Která změna je živá a která je jen útěkem?"},
+    6:{title:"Péče a odpovědnost",keys:"vztah · domov · harmonie",question:"O co peču z lásky a o co ze strachu?"},
+    7:{title:"Hloubka a revize",keys:"studium · ticho · rozlišení",question:"Co potřebuji poznat místo rychlého vysvětlení?"},
+    8:{title:"Výsledek a moc",keys:"správa · důsledek · sklizeň",question:"Jak dnes naložím s mocí a zdroji odpovědně?"},
+    9:{title:"Dokončení",keys:"soucit · předání · uvolnění",question:"Co už mohu s vděčností dokončit a pustit?"},
+    11:{title:"Citlivý vhled",keys:"inspirace · napětí · sdělení",question:"Jak převedu citlivost do jasného a užitečného kroku?"},
+    22:{title:"Velká stavba",keys:"vize · systém · uskutečnění",question:"Který malý ověřitelný krok dnes ponese velkou vizi?"},
+    33:{title:"Učení a služba",keys:"soucit · předávání · hranice",question:"Jak mohu pomoci tak, aby rostl druhý i já?"}
+  };
+
+  function rev(value){return((value%360)+360)%360;}
+  function signed(value){return((value+540)%360)-180;}
+  function pad(value){return String(value).padStart(2,"0");}
+  function metaById(id){for(var i=0;i<BODY_META.length;i++)if(BODY_META[i].id===id)return BODY_META[i];return null;}
+  function validTimeZone(tz){try{new Intl.DateTimeFormat("en-US",{timeZone:tz}).format(new Date());return true;}catch(e){return false;}}
+  function parseDateKey(key){
+    var match=String(key||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return null;
+    var year=Number(match[1]),month=Number(match[2]),day=Number(match[3]),date=new Date(Date.UTC(year,month-1,day,12));
+    if(date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)return null;
+    return{year:year,month:month,day:day,key:match[0]};
+  }
+  function shiftDateKey(key,amount){var p=parseDateKey(key);if(!p)return null;var d=new Date(Date.UTC(p.year,p.month-1,p.day+amount,12));return d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate());}
+  function dateKeyAt(date,tz){var p=localPartsAt(date,tz);return p.year+"-"+pad(p.month)+"-"+pad(p.day);}
+  function civilDate(key){var p=parseDateKey(key);return p?new Date(Date.UTC(p.year,p.month-1,p.day,12)):null;}
+  function localPartsAt(date,tz){var out={},fmt=new Intl.DateTimeFormat("en-CA",{timeZone:tz,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"});fmt.formatToParts(date).forEach(function(part){if(part.type!=="literal")out[part.type]=Number(part.value);});return out;}
+  function zonedLocalToUtc(dateKey,time,tz){
+    if(!parseDateKey(dateKey)||!validTimeZone(tz))throw new Error("Neplatné datum nebo časové pásmo.");
+    var d=dateKey.split("-").map(Number),t=String(time||"12:00").split(":").map(Number),target=Date.UTC(d[0],d[1]-1,d[2],t[0],t[1]||0,t[2]||0),guess=target;
+    for(var i=0;i<5;i++){var p=localPartsAt(new Date(guess),tz),shown=Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute,p.second||0);guess+=target-shown;}
+    return guess;
+  }
+  function dayBounds(key,tz){var next=shiftDateKey(key,1),start=zonedLocalToUtc(key,"00:00",tz),end=zonedLocalToUtc(next,"00:00",tz);return{start:start,end:end,hours:(end-start)/3600000,dateKey:key,timezone:tz};}
+  function longitude(A,meta,date){if(!A||typeof A.GeoVector!=="function")throw new Error("Astronomy Engine není dostupný.");var vector=A.GeoVector(meta.astro,date,true),ecliptic=A.Ecliptic(vector);return rev(ecliptic.elon);}
+  function longitudeById(A,id,date){var meta=metaById(id);if(!meta)throw new Error("Neznámé těleso: "+id);return longitude(A,meta,date);}
+  function motion(A,meta,date){var span=3*3600000,a=longitude(A,meta,new Date(date.getTime()-span)),b=longitude(A,meta,new Date(date.getTime()+span));return signed(b-a)/(2*span/DAY);}
+  function signAt(lon){var value=rev(lon),index=Math.floor(value/30);return{index:index,name:SIGNS[index],glyph:SIGN_GLYPHS[index],degree:value-index*30};}
+  function fmtDeg(value){var degree=Math.floor(value),minute=Math.round((value-degree)*60);if(minute===60){degree++;minute=0;}return degree+"°"+pad(minute)+"′";}
+  function snapshot(A,date){return BODY_META.map(function(meta){var lon=longitude(A,meta,date),sign=signAt(lon),speed=motion(A,meta,date);return{id:meta.id,name:meta.name,glyph:meta.glyph,color:meta.color,lon:lon,sign:sign,speed:speed,retro:speed<0};});}
+  function angularSeparation(a,b){return Math.abs(signed(a-b));}
+  function aspects(points){
+    var result=[];
+    for(var i=0;i<points.length;i++)for(var j=i+1;j<points.length;j++){
+      var distance=angularSeparation(points[i].lon,points[j].lon),best=null;
+      for(var k=0;k<ASPECTS.length;k++){var def=ASPECTS[k],orb=Math.abs(distance-def.angle);if(orb<=def.orb&&(!best||orb<best.orb))best={a:points[i],b:points[j],name:def.name,glyph:def.glyph,angle:def.angle,orb:orb,type:def.type,color:def.color};}
+      if(best)result.push(best);
+    }
+    result.sort(function(a,b){return a.orb-b.orb;});return result;
+  }
+  function moonPhase(A,date){var angle=rev(A.MoonPhase(date)),illumination=(1-Math.cos(angle*DEG))/2,names=["Nov","Dorůstající srpek","První čtvrť","Dorůstající Měsíc","Úplněk","Couvající Měsíc","Poslední čtvrť","Couvající srpek"],index=Math.floor((angle+22.5)/45)%8;return{angle:angle,illumination:illumination,age:angle/360*29.530588853,name:names[index],waxing:angle<180};}
+  function within(at,bounds){return at>=bounds.start&&at<bounds.end;}
+  function phaseEvents(A,bounds){var defs=[[0,"Nov","☉☽"],[90,"První čtvrť","◐"],[180,"Úplněk","☽"],[270,"Poslední čtvrť","◑"]],days=(bounds.end-bounds.start)/DAY+.02,out=[];defs.forEach(function(def){var found=A.SearchMoonPhase(def[0],new Date(bounds.start-60000),days+.01);if(found&&within(found.date.getTime(),bounds))out.push({kind:"phase",at:found.date.getTime(),title:def[1],glyph:def[2],detail:"Přesná elongace Slunce a Měsíce · "+def[0]+"°",layer:"astronomie",phaseAngle:def[0]});});return out;}
+  function eclipseEvents(A,bounds){
+    var out=[],start=new Date(bounds.start-3*DAY),solar=A.SearchGlobalSolarEclipse(start),lunar=A.SearchLunarEclipse(start),solarNames={total:"Úplné zatmění Slunce",annular:"Prstencové zatmění Slunce",partial:"Částečné zatmění Slunce",hybrid:"Hybridní zatmění Slunce"},lunarNames={total:"Úplné zatmění Měsíce",partial:"Částečné zatmění Měsíce",penumbral:"Polostínové zatmění Měsíce"};
+    if(solar&&solar.peak&&within(solar.peak.date.getTime(),bounds))out.push({kind:"eclipse",at:solar.peak.date.getTime(),title:solarNames[solar.kind]||"Zatmění Slunce",glyph:"☉",detail:"Maximum globálního průběhu · zakrytí "+Math.round((solar.obscuration==null?1:solar.obscuration)*100)+" % · místní viditelnost se liší",layer:"astronomie",eclipseType:"solar",classification:solar.kind});
+    if(lunar&&lunar.peak&&within(lunar.peak.date.getTime(),bounds))out.push({kind:"eclipse",at:lunar.peak.date.getTime(),title:lunarNames[lunar.kind]||"Zatmění Měsíce",glyph:"☽",detail:"Maximum zatmění · zakrytí "+Math.round((lunar.obscuration||0)*100)+" % · místní viditelnost závisí na obzoru",layer:"astronomie",eclipseType:"lunar",classification:lunar.kind});
+    return out;
+  }
+  function seasonEvents(A,bounds,key){var p=parseDateKey(key),out=[],names=[["mar_equinox","Jarní rovnodennost"],["jun_solstice","Letní slunovrat"],["sep_equinox","Podzimní rovnodennost"],["dec_solstice","Zimní slunovrat"]];[p.year-1,p.year,p.year+1].forEach(function(year){var seasons=A.Seasons(year);names.forEach(function(def){var event=seasons[def[0]];if(event&&within(event.date.getTime(),bounds))out.push({kind:"season",at:event.date.getTime(),title:def[1],glyph:"☉",detail:"Slunce překračuje hlavní bod tropického roku.",layer:"astronomie"});});});return out;}
+  function ingressEvents(A,bounds){
+    var out=[],step=2*3600000;
+    BODY_META.forEach(function(meta){var prev=bounds.start,prevSign=Math.floor(longitude(A,meta,new Date(prev))/30);for(var t=bounds.start+step;t<=bounds.end;t+=step){var at=Math.min(t,bounds.end),lon=longitude(A,meta,new Date(at)),sign=Math.floor(lon/30);if(sign!==prevSign){var lo=prev,hi=at,from=prevSign;for(var n=0;n<34;n++){var mid=(lo+hi)/2,midSign=Math.floor(longitude(A,meta,new Date(mid))/30);if(midSign===from)lo=mid;else hi=mid;}var after=signAt(longitude(A,meta,new Date(hi+1000))),before=signAt(longitude(A,meta,new Date(hi-1000)));if(within(hi,bounds))out.push({kind:"ingress",at:hi,title:meta.name+" vstupuje do znamení "+after.name,glyph:meta.glyph,detail:before.name+" → "+after.name+" · tropický zvěrokruh",layer:"souřadnice",body:meta.id,from:before.index,to:after.index});}prev=at;prevSign=sign;} });return out;
+  }
+  function stationEvents(A,bounds){
+    var out=[],step=3*3600000;
+    BODY_META.filter(function(meta){return meta.id!=="sun"&&meta.id!=="moon";}).forEach(function(meta){var prev=bounds.start,prevRate=motion(A,meta,new Date(prev));for(var t=bounds.start+step;t<=bounds.end;t+=step){var at=Math.min(t,bounds.end),rateNow=motion(A,meta,new Date(at));if((prevRate<0)!==(rateNow<0)){var lo=prev,hi=at,signBefore=prevRate<0;for(var n=0;n<32;n++){var mid=(lo+hi)/2;if((motion(A,meta,new Date(mid))<0)===signBefore)lo=mid;else hi=mid;}if(within(hi,bounds)){var toDirect=motion(A,meta,new Date(hi+60000))>=0,pos=signAt(longitude(A,meta,new Date(hi)));out.push({kind:"station",at:hi,title:meta.name+" se obrací "+(toDirect?"do přímého pohybu":"retrográdně"),glyph:meta.glyph,detail:pos.name+" "+fmtDeg(pos.degree)+" · geocentrická stanice",layer:"astronomie",body:meta.id,toDirect:toDirect});}}prev=at;prevRate=rateNow;}});return out;
+  }
+  function aspectValue(A,a,b,angle,at){var sep=angularSeparation(longitudeById(A,a,new Date(at)),longitudeById(A,b,new Date(at)));return sep-angle;}
+  function bisectAspect(A,a,b,angle,lo,hi){var flo=aspectValue(A,a,b,angle,lo);for(var i=0;i<34;i++){var mid=(lo+hi)/2,fmid=aspectValue(A,a,b,angle,mid);if((flo<=0&&fmid>=0)||(flo>=0&&fmid<=0))hi=mid;else{lo=mid;flo=fmid;}}return(lo+hi)/2;}
+  function refineAspectMinimum(A,a,b,angle,lo,hi){for(var i=0;i<30;i++){var x1=lo+(hi-lo)/3,x2=hi-(hi-lo)/3,e1=Math.abs(aspectValue(A,a,b,angle,x1)),e2=Math.abs(aspectValue(A,a,b,angle,x2));if(e1<=e2)hi=x2;else lo=x1;}return(lo+hi)/2;}
+  function exactAspectEvents(A,bounds){
+    var out=[],step=2*3600000,start=bounds.start-step,end=bounds.end+step;
+    for(var i=0;i<BODY_META.length;i++)for(var j=i+1;j<BODY_META.length;j++)ASPECTS.forEach(function(def){var samples=[];for(var t=start;t<=end;t+=step)samples.push({t:t,f:aspectValue(A,BODY_META[i].id,BODY_META[j].id,def.angle,t)});for(var k=1;k<samples.length;k++){var a=samples[k-1],b=samples[k],root=null;if(def.angle!==0&&def.angle!==180&&Math.abs(a.f-b.f)<90&&((a.f<=0&&b.f>=0)||(a.f>=0&&b.f<=0)))root=bisectAspect(A,BODY_META[i].id,BODY_META[j].id,def.angle,a.t,b.t);if(root&&within(root,bounds))out.push({kind:"aspect",at:root,title:BODY_META[i].name+" "+def.name.toLowerCase()+" "+BODY_META[j].name,glyph:def.glyph,detail:"Přesný geocentrický aspekt · "+def.angle+"°",layer:"astrologická gramatika",a:BODY_META[i].id,b:BODY_META[j].id,aspect:def});}
+      if(def.angle===0||def.angle===180){for(var m=1;m<samples.length-1;m++){var prev=Math.abs(samples[m-1].f),cur=Math.abs(samples[m].f),next=Math.abs(samples[m+1].f);if(cur<=prev&&cur<=next&&cur<3){var exact=refineAspectMinimum(A,BODY_META[i].id,BODY_META[j].id,def.angle,samples[m-1].t,samples[m+1].t),error=Math.abs(aspectValue(A,BODY_META[i].id,BODY_META[j].id,def.angle,exact));if(error<.015&&within(exact,bounds))out.push({kind:"aspect",at:exact,title:BODY_META[i].name+" "+def.name.toLowerCase()+" "+BODY_META[j].name,glyph:def.glyph,detail:"Přesný geocentrický aspekt · "+def.angle+"°",layer:"astrologická gramatika",a:BODY_META[i].id,b:BODY_META[j].id,aspect:def});}}
+      }
+    });
+    out.sort(function(a,b){return a.at-b.at;});var unique=[];out.forEach(function(event){var duplicate=unique.some(function(item){return item.a===event.a&&item.b===event.b&&item.aspect.angle===event.aspect.angle&&Math.abs(item.at-event.at)<60000;});if(!duplicate)unique.push(event);});return unique;
+  }
+  function dailyEvents(A,key,tz){var bounds=dayBounds(key,tz),events=[].concat(eclipseEvents(A,bounds),phaseEvents(A,bounds),seasonEvents(A,bounds,key),ingressEvents(A,bounds),stationEvents(A,bounds),exactAspectEvents(A,bounds));events.sort(function(a,b){return a.at-b.at;});return{bounds:bounds,events:events};}
+  function julianDay(date){return date.getTime()/DAY+2440587.5;}
+  function angles(utc,lat,lon){var date=new Date(utc),JD=julianDay(date),T=(JD-2451545)/36525,GMST=rev(280.46061837+360.98564736629*(JD-2451545)+.000387933*T*T-T*T*T/38710000),RAMC=rev(GMST+lon),eps=23.439291-.0130042*T-1.64e-7*T*T+5.04e-7*T*T*T,rad=function(x){return x*DEG;},deg=function(x){return x/DEG;},lonFromRA=function(a){return rev(deg(Math.atan2(Math.sin(rad(a)),Math.cos(rad(a))*Math.cos(rad(eps)))));},mc=lonFromRA(RAMC),candidate=rev(deg(Math.atan2(-Math.cos(rad(RAMC)),Math.sin(rad(RAMC))*Math.cos(rad(eps))+Math.tan(rad(lat))*Math.sin(rad(eps))))),asc=(rev(candidate-mc)>0&&rev(candidate-mc)<180)?candidate:rev(candidate+180);return{asc:asc,mc:mc};}
+  function validProfile(profile){return !!(profile&&parseDateKey(profile.date)&&/^\d{2}:\d{2}/.test(profile.time||"")&&isFinite(profile.lat)&&isFinite(profile.lon)&&validTimeZone(profile.timezone));}
+  function natalChart(A,profile){if(!validProfile(profile))return null;var utc=zonedLocalToUtc(profile.date,profile.time,profile.timezone),points=snapshot(A,new Date(utc)),axis=angles(utc,Number(profile.lat),Number(profile.lon));points.push({id:"asc",name:"Ascendent",glyph:"AC",color:"#bdebd4",lon:axis.asc,sign:signAt(axis.asc),speed:0,retro:false});points.push({id:"mc",name:"Medium Coeli",glyph:"MC",color:"#d8c48a",lon:axis.mc,sign:signAt(axis.mc),speed:0,retro:false});return{utc:utc,points:points,axis:axis,profile:profile};}
+  function personalResonance(A,date,profile){
+    var natal=natalChart(A,profile);if(!natal)return{profile:null,natal:null,hits:[]};var transiting=snapshot(A,date),orbs={sun:2.5,moon:2,mercury:2.2,venus:2.2,mars:2.5,jupiter:2.5,saturn:2.5,uranus:2,neptune:2,pluto:2},hits=[];
+    transiting.forEach(function(t){natal.points.forEach(function(n){var distance=angularSeparation(t.lon,n.lon),best=null;ASPECTS.forEach(function(def){var orb=Math.abs(distance-def.angle),limit=Math.min(def.orb,orbs[t.id]||2.5);if(orb<=limit&&(!best||orb<best.orb))best={transit:t,natal:n,name:def.name,glyph:def.glyph,angle:def.angle,orb:orb,type:def.type,color:def.color};});if(best){var before=angularSeparation(longitudeById(A,t.id,new Date(date.getTime()-3*3600000)),n.lon),after=angularSeparation(longitudeById(A,t.id,new Date(date.getTime()+3*3600000)),n.lon),beforeOrb=Math.abs(before-best.angle),afterOrb=Math.abs(after-best.angle);best.phase=afterOrb<beforeOrb?"přibližuje se":"vzdaluje se";hits.push(best);}});});hits.sort(function(a,b){return a.orb-b.orb;});return{profile:profile,natal:natal,hits:hits};
+  }
+  function digitSum(value){return String(Math.abs(Number(value))).split("").reduce(function(sum,n){return sum+Number(n);},0);}
+  function reduceMaster(value){var n=Number(value);while(n>9&&n!==11&&n!==22&&n!==33)n=digitSum(n);return n;}
+  function rootNumber(value){var n=Number(value);while(n>9)n=digitSum(n);return n;}
+  function numberLabel(raw){var reduced=reduceMaster(raw),root=rootNumber(raw);if(raw===reduced)return(reduced===11||reduced===22||reduced===33)?reduced+"/"+root:String(reduced);return raw+"/"+reduced;}
+  function personalYearRaw(birth,date){var after=date.month>birth.month||(date.month===birth.month&&date.day>=birth.day),reference=after?date.year:date.year-1;return digitSum(birth.month)+digitSum(birth.day)+digitSum(reference);}
+  function numerology(key,profile){var date=parseDateKey(key),universalRaw=digitSum(date.month)+digitSum(date.day)+digitSum(date.year),result={universal:{raw:universalRaw,value:reduceMaster(universalRaw),label:numberLabel(universalRaw),theme:NUMBER_THEMES[reduceMaster(universalRaw)]}};if(validProfile(profile)){var birth=parseDateKey(profile.date),yearRaw=personalYearRaw(birth,date),personalYear=reduceMaster(yearRaw),monthRaw=personalYear+reduceMaster(date.month),personalMonth=reduceMaster(monthRaw),dayRaw=personalMonth+reduceMaster(date.day),personalDay=reduceMaster(dayRaw);result.personal={yearRaw:yearRaw,year:personalYear,monthRaw:monthRaw,month:personalMonth,dayRaw:dayRaw,day:personalDay,label:numberLabel(dayRaw),theme:NUMBER_THEMES[personalDay]};}return result;}
+  function gregorianToJdn(year,month,day){var a=Math.floor((14-month)/12),y=year+4800-a,m=month+12*a-3;return day+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;}
+  function julianDate(key){var p=parseDateKey(key),j=gregorianToJdn(p.year,p.month,p.day),c=j+32082,d=Math.floor((4*c+3)/1461),e=c-Math.floor(1461*d/4),m=Math.floor((5*e+2)/153),day=e-Math.floor((153*m+2)/5)+1,month=m+3-12*Math.floor(m/10),year=d-4800+Math.floor(m/10);return{day:day,month:month,year:year};}
+  function intlCalendar(key,calendar,locale){var date=civilDate(key),fmt=new Intl.DateTimeFormat((locale||"cs-CZ")+"-u-ca-"+calendar,{timeZone:"UTC",weekday:"long",day:"numeric",month:"long",year:"numeric"});if(fmt.resolvedOptions().calendar!==calendar)throw new Error("Kalendář není dostupný.");return{long:fmt.format(date),calendar:calendar};}
+  function calendars(key){var p=parseDateKey(key),julian=julianDate(key),months=["leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"],gregorian=intlCalendar(key,"gregory","cs-CZ"),ethiopic;try{ethiopic=intlCalendar(key,"ethiopic","cs-CZ");}catch(e){ethiopic={long:"Tento kalendář není v prohlížeči dostupný.",calendar:"ethiopic",unsupported:true};}return{gregorian:{long:gregorian.long,numeric:p.day+" / "+p.month+" / "+p.year},ethiopic:ethiopic,julian:{long:julian.day+". "+months[julian.month-1]+" "+julian.year,numeric:julian.day+" / "+julian.month+" / "+julian.year}};}
+  function dayRuler(key){var date=civilDate(key);return DAY_RULERS[date.getUTCDay()];}
+
+  return{DAY:DAY,SIGNS:SIGNS,SIGN_GLYPHS:SIGN_GLYPHS,BODY_META:BODY_META,ASPECTS:ASPECTS,DAY_RULERS:DAY_RULERS,NUMBER_THEMES:NUMBER_THEMES,rev:rev,signed:signed,validTimeZone:validTimeZone,parseDateKey:parseDateKey,shiftDateKey:shiftDateKey,dateKeyAt:dateKeyAt,civilDate:civilDate,localPartsAt:localPartsAt,zonedLocalToUtc:zonedLocalToUtc,dayBounds:dayBounds,longitude:longitude,longitudeById:longitudeById,motion:motion,signAt:signAt,fmtDeg:fmtDeg,snapshot:snapshot,angularSeparation:angularSeparation,aspects:aspects,moonPhase:moonPhase,phaseEvents:phaseEvents,eclipseEvents:eclipseEvents,seasonEvents:seasonEvents,ingressEvents:ingressEvents,stationEvents:stationEvents,exactAspectEvents:exactAspectEvents,dailyEvents:dailyEvents,angles:angles,validProfile:validProfile,natalChart:natalChart,personalResonance:personalResonance,digitSum:digitSum,reduceMaster:reduceMaster,rootNumber:rootNumber,numberLabel:numberLabel,numerology:numerology,julianDate:julianDate,intlCalendar:intlCalendar,calendars:calendars,dayRuler:dayRuler};
+});
+
+(function(){
+  "use strict";
+  if(typeof window==="undefined"||!window.document||!window.OrlojDay)return;
+  var D=window.OrlojDay,A=window.Astronomy,PROFILE_KEY="orloj-public-profile-v1",OBSERVER_KEY="orloj-public-observer-v1",state={dateKey:null,timezone:null,observer:null,profile:null};
+  function $(id){return document.getElementById(id);}
+  function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function readLocal(key){try{return JSON.parse(localStorage.getItem(key)||"null");}catch(e){return null;}}
+  function loadObserver(){var o=readLocal(OBSERVER_KEY);return o&&o.place&&isFinite(o.lat)&&isFinite(o.lon)&&D.validTimeZone(o.timezone)?o:null;}
+  function loadProfile(){var p=readLocal(PROFILE_KEY);return D.validProfile(p)?p:null;}
+  function resolvedTimezone(){var local=Intl.DateTimeFormat().resolvedOptions().timeZone||"Europe/Prague";return state.observer?state.observer.timezone:(D.validTimeZone(local)?local:"Europe/Prague");}
+  function fmtDate(key){return new Intl.DateTimeFormat("cs-CZ",{timeZone:"UTC",weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(D.civilDate(key));}
+  function fmtTime(at){return new Intl.DateTimeFormat("cs-CZ",{timeZone:state.timezone,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(at));}
+  function polar(angle,radius){var a=(angle-90)*Math.PI/180;return{x:160+Math.cos(a)*radius,y:160+Math.sin(a)*radius};}
+  function spread(points){var placed=[],out={};points.slice().sort(function(a,b){return a.lon-b.lon;}).forEach(function(point){var chosen=null;for(var lane=0;lane<5;lane++){var q=polar(point.lon,91+lane*9),ok=placed.every(function(prev){var dx=q.x-prev.x,dy=q.y-prev.y;return Math.sqrt(dx*dx+dy*dy)>20;});if(ok){chosen={x:q.x,y:q.y,lane:lane};break;}}if(!chosen){var last=polar(point.lon,127);chosen={x:last.x,y:last.y,lane:4};}placed.push(chosen);out[point.id]=chosen;});return out;}
+  function wheel(points,aspectList){var pos=spread(points),light=document.documentElement.dataset.theme==="light",outer=light?"rgba(38,91,119,.26)":"rgba(143,216,255,.2)",line=light?"rgba(30,44,58,.13)":"rgba(235,240,248,.105)",inner=light?"rgba(30,44,58,.08)":"rgba(235,240,248,.07)",labelColor=light?"rgba(30,44,58,.64)":"rgba(235,240,248,.62)",nodeFill=light?"rgba(255,253,249,.98)":"rgba(7,10,16,.98)",centerFill=light?"rgba(38,91,119,.025)":"rgba(143,216,255,.018)",svg='<svg viewBox="0 0 320 320" role="img" aria-label="Tropický kruh planet pro místní poledne"><circle cx="160" cy="160" r="148" fill="none" stroke="'+outer+'"/><circle cx="160" cy="160" r="116" fill="none" stroke="'+inner+'"/><circle cx="160" cy="160" r="72" fill="'+centerFill+'" stroke="'+inner+'"/>';
+    for(var i=0;i<12;i++){var p1=polar(i*30,72),p2=polar(i*30,148),label=polar(i*30+15,134);svg+='<line x1="'+p1.x.toFixed(1)+'" y1="'+p1.y.toFixed(1)+'" x2="'+p2.x.toFixed(1)+'" y2="'+p2.y.toFixed(1)+'" stroke="'+line+'"/><text x="'+label.x.toFixed(1)+'" y="'+label.y.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="'+labelColor+'" font-size="12">'+D.SIGN_GLYPHS[i]+'</text>';}
+    aspectList.slice(0,14).forEach(function(aspect){var a=pos[aspect.a.id],b=pos[aspect.b.id],opacity=Math.max(.13,.72-aspect.orb*.09);if(a&&b)svg+='<line x1="'+a.x.toFixed(1)+'" y1="'+a.y.toFixed(1)+'" x2="'+b.x.toFixed(1)+'" y2="'+b.y.toFixed(1)+'" stroke="'+aspect.color+'" stroke-opacity="'+opacity.toFixed(2)+'" stroke-width=".8"/>';});
+    points.forEach(function(point){var q=pos[point.id],anchor=polar(point.lon,116);if(q.lane)svg+='<line x1="'+anchor.x.toFixed(1)+'" y1="'+anchor.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'" stroke="'+point.color+'" stroke-opacity=".28"/>';svg+='<circle class="day-wheel-point" data-body="'+point.id+'" cx="'+q.x.toFixed(1)+'" cy="'+q.y.toFixed(1)+'" r="9.7" fill="'+nodeFill+'" stroke="'+point.color+'" stroke-width="1.3"/><text x="'+q.x.toFixed(1)+'" y="'+(q.y+.5).toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="'+point.color+'" font-size="12">'+point.glyph+'</text>';});return svg+'</svg>';}
+  function moonDisc(phase,size){var r=size/2-1,c=size/2,rx=(r*Math.abs(1-2*phase.illumination)).toFixed(2),f1=phase.waxing?1:0,f2=phase.waxing?(phase.illumination>.5?1:0):(phase.illumination>.5?0:1),top=c+","+(c-r),bottom=c+","+(c+r),path="M "+top+" A "+r+","+r+" 0 0 "+f1+" "+bottom+" A "+rx+","+r+" 0 0 "+f2+" "+top+" Z";return '<svg viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="#151a23" stroke="rgba(235,240,248,.18)"/><path d="'+path+'" fill="#dfe8ff"/></svg>';}
+  function eventClass(event){return event.kind==="eclipse"?"eclipse":event.kind==="aspect"?event.aspect.type:event.kind;}
+  function eventLayer(event){return event.layer==="astronomie"||event.layer==="souřadnice"?"výpočet":"tradice";}
+  function renderEvents(result){var box=$("day-events"),events=result.events;if(!events.length){box.innerHTML='<div class="day-empty">Uvnitř zvoleného občanského dne nenastává přesný hlavní práh. To neznamená, že je den „prázdný“; pouze nepřekračuje jednu ze sledovaných hranic.</div>';return;}box.innerHTML=events.map(function(event){return '<article class="day-event '+eventClass(event)+'"><time>'+fmtTime(event.at)+'</time><i>'+event.glyph+'</i><div><span class="day-layer '+eventLayer(event)+'">'+event.layer+'</span><b>'+esc(event.title)+'</b><p>'+esc(event.detail)+'</p></div></article>';}).join("");}
+  function renderAspects(list){var box=$("day-aspects"),tight=list.slice(0,10);box.innerHTML=tight.length?tight.map(function(a){return '<article class="day-aspect"><span class="day-aspect-glyph" style="color:'+a.color+'">'+a.a.glyph+' '+a.glyph+' '+a.b.glyph+'</span><div><b>'+a.a.name+' · '+a.name.toLowerCase()+' · '+a.b.name+'</b><small>orb '+a.orb.toFixed(2)+'° · poloha v místní poledne</small></div></article>';}).join(""):'<div class="day-empty">V pracovních orbech není v místní poledne žádný hlavní aspekt.</div>';}
+  function renderPlanets(points){$("day-planets").innerHTML=points.map(function(p){return '<article class="day-planet"><i style="color:'+p.color+'">'+p.glyph+'</i><span><b>'+p.name+'</b><small>'+p.sign.name+' '+D.fmtDeg(p.sign.degree)+'</small></span><em>'+(p.retro?'R':'→')+'</em></article>';}).join("");}
+  function renderPersonal(personal){var box=$("day-personal"),meta=$("day-personal-meta");if(!personal.profile){meta.textContent="Osobní profil není v tomto zařízení vytvořen.";box.innerHTML='<div class="day-empty"><b>Osobní vrstva zůstává prázdná.</b><p>Po zadání data, času a místa narození Orloj porovná tranzity zvoleného dne s nativními planetami, Ascendentem a MC.</p><a class="day-button quiet" href="./?view=map">Vytvořit osobní mapu →</a></div>';return;}meta.textContent=(personal.profile.name||"Můj profil")+" · osobní data zůstávají pouze v tomto zařízení";var hits=personal.hits.slice(0,10);box.innerHTML=hits.length?hits.map(function(hit){return '<article class="day-personal-hit"><span style="color:'+hit.transit.color+'">'+hit.transit.glyph+'</span><i style="color:'+hit.color+'">'+hit.glyph+'</i><span style="color:'+hit.natal.color+'">'+hit.natal.glyph+'</span><div><b>'+hit.transit.name+' · '+hit.name.toLowerCase()+' · nativní '+hit.natal.name+'</b><small>orb '+hit.orb.toFixed(2)+'° · '+hit.phase+'</small></div></article>';}).join("")+'<p class="day-caution">Tato mapa ukazuje geometrickou blízkost tranzitu k nativním bodům. Není pořadníkem důležitosti ani předpovědí události.</p>':'<div class="day-empty">V pracovních orbech není v místní poledne těsný hlavní aspekt k nativní mapě.</div>';}
+  function renderNumbers(data){var universal=data.universal,personal=data.personal,themeU=universal.theme||{},themeP=personal&&personal.theme||{};$("day-universal-number").innerHTML='<span>Univerzální den</span><b>'+universal.label+'</b><small>'+esc(themeU.title||"")+' · '+esc(themeU.keys||"")+'</small><p>'+esc(themeU.question||"")+'</p>';$("day-personal-number").innerHTML=personal?'<span>Osobní den</span><b>'+personal.label+'</b><small>'+esc(themeP.title||"")+' · '+esc(themeP.keys||"")+'</small><p>'+esc(themeP.question||"")+'</p>':'<span>Osobní den</span><b>—</b><small>po vytvoření osobní mapy</small><p>Výpočet se doplní ze stejného lokálního profilu.</p>';}
+  function renderCalendars(data){var items=[["G","Gregoriánský",data.gregorian.long,data.gregorian.numeric,"#8fd8ff"],["፲፫","Etiopský",data.ethiopic.long,"solární kalendář · 13 měsíců","#f0a36c"],["J","Juliánský",data.julian.long,data.julian.numeric,"#bdebd4"]];$("day-calendars").innerHTML=items.map(function(item){return '<article class="day-calendar" style="--cal-accent:'+item[4]+'"><i>'+item[0]+'</i><span>'+item[1]+'</span><b>'+esc(item[2])+'</b><small>'+esc(item[3])+'</small></article>';}).join("");}
+  function setLinks(){var encoded=encodeURIComponent(state.dateKey),vedic=$("day-vedic-link"),back=$("day-back");if(vedic)vedic.href="vedic.html?view=sky&date="+encoded;if(back)back.href="./?view=numero#num-calendar-card";}
+  function updateUrl(){try{var url=new URL(location.href);url.searchParams.set("date",state.dateKey);history.replaceState(null,"",url);}catch(e){}}
+  function render(){
+    if(!A){$("day-app").innerHTML='<div class="day-fatal">Astronomický výpočtový modul se nepodařilo načíst.</div>';return;}
+    var bounds=D.dayBounds(state.dateKey,state.timezone),moment=new Date(D.zonedLocalToUtc(state.dateKey,"12:00",state.timezone)),points=D.snapshot(A,moment),aspectList=D.aspects(points),phase=D.moonPhase(A,moment),sun=points[0],moon=points[1],ruler=D.dayRuler(state.dateKey),events=D.dailyEvents(A,state.dateKey,state.timezone),personal=D.personalResonance(A,moment,state.profile),numbers=D.numerology(state.dateKey,state.profile),calendarData=D.calendars(state.dateKey),dateLabel=fmtDate(state.dateKey);dateLabel=dateLabel.charAt(0).toUpperCase()+dateLabel.slice(1);
+    document.title="Orloj · "+dateLabel;$("day-date").value=state.dateKey;$("day-title").textContent=dateLabel;$("day-context").textContent=(state.observer?state.observer.place:"Místo pozorování není nastavené")+" · "+state.timezone+" · občanský den "+bounds.hours+" h";$("day-build").textContent="Profil dne · v11.07";
+    $("day-moon-disc").innerHTML=moonDisc(phase,96);$("day-moon-title").textContent=phase.name;$("day-moon-copy").textContent="Měsíc "+moon.sign.name+" "+D.fmtDeg(moon.sign.degree)+" · "+Math.round(phase.illumination*100)+" % osvětlení";
+    $("day-sun-value").textContent=sun.sign.name+" "+D.fmtDeg(sun.sign.degree);$("day-ruler-glyph").textContent=ruler.glyph;$("day-ruler-glyph").style.color=ruler.color;$("day-ruler-value").textContent=ruler.name;$("day-ruler-copy").textContent=ruler.theme;$("day-number-value").textContent=numbers.personal?numbers.personal.label:numbers.universal.label;$("day-number-label").textContent=numbers.personal?"osobní den":"univerzální den";
+    $("day-wheel").innerHTML=wheel(points,aspectList);$("day-noon-label").textContent="Mapa pro 12:00 · "+state.timezone;renderPlanets(points);renderAspects(aspectList);renderEvents(events);renderPersonal(personal);renderNumbers(numbers);renderCalendars(calendarData);setLinks();updateUrl();
+  }
+  function chooseDate(key){if(!D.parseDateKey(key))return;state.dateKey=key;render();window.scrollTo({top:0,behavior:"smooth"});}
+  function bind(){$("day-prev").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,-1));});$("day-next").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,1));});$("day-today").addEventListener("click",function(){chooseDate(D.dateKeyAt(new Date(),state.timezone));});$("day-date").addEventListener("change",function(){chooseDate(this.value);});$("day-share").addEventListener("click",function(){var button=this,url=new URL(location.href);url.searchParams.set("date",state.dateKey);var done=function(){button.textContent="Odkaz zkopírován ✓";setTimeout(function(){button.textContent="Sdílet den";},1800);};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url.toString()).then(done).catch(function(){prompt("Zkopíruj odkaz:",url.toString());});else prompt("Zkopíruj odkaz:",url.toString());});}
+  function init(){state.observer=loadObserver();state.profile=loadProfile();state.timezone=resolvedTimezone();var requested;try{requested=new URL(location.href).searchParams.get("date");}catch(e){}state.dateKey=D.parseDateKey(requested)?requested:D.dateKeyAt(new Date(),state.timezone);bind();render();}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();

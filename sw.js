@@ -1,6 +1,6 @@
-/* Orloj Public v11.06 — Samostatný džjótiš */
-var CACHE = "orloj-public-v11-06";
-var ASSETS = ["./", "./index.html", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+/* Orloj Public v11.07 — Profil dne */
+var CACHE = "orloj-public-v11-07";
+var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
@@ -41,7 +41,12 @@ self.addEventListener("fetch", function(event) {
       .catch(function() {
         return caches.match(event.request).then(function(hit) {
           if (hit) return hit;
-          if (event.request.mode === "navigate") return caches.match("./index.html");
+          if (event.request.mode === "navigate") {
+            if (/\/day\.html$/.test(requestURL.pathname)) return caches.match("./day.html");
+            if (/\/vedic\.html$/.test(requestURL.pathname)) return caches.match("./vedic.html");
+            if (/\/tarot\.html$/.test(requestURL.pathname)) return caches.match("./tarot.html");
+            return caches.match("./index.html");
+          }
           return Response.error();
         });
       })

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090d14">
+  <meta name="application-name" content="Orloj · Profil dne v11.07">
+  <meta name="orloj-build" content="public-v11-07">
+  <meta name="description" content="Profil zvoleného dne v Orloji: obloha, přesné časové prahy, západní aspekty, osobní rezonance, numerologie a kalendáře.">
+  <title>Orloj · Profil dne</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="day-profile.css?v=public-v11-07">
+  <script>
+  (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
+  </script>
+</head>
+<body>
+<main class="day-shell" id="day-app">
+  <header class="day-topbar">
+    <a class="day-back" id="day-back" href="./?view=numero#num-calendar-card">← Zpět do Orloje</a>
+    <span class="day-build" id="day-build">Profil dne · v11.07</span>
+  </header>
+
+  <section class="day-hero" aria-labelledby="day-title">
+    <div class="day-hero-copy">
+      <div class="day-kicker">Jeden den · všechny související vrstvy</div>
+      <h1 id="day-title">Profil dne</h1>
+      <p id="day-context">Načítám časové pásmo a místo pozorování…</p>
+    </div>
+    <div class="day-date-controls" aria-label="Volba dne">
+      <button id="day-prev" type="button" aria-label="Předchozí den">‹</button>
+      <label><span>Datum</span><input id="day-date" type="date"></label>
+      <button id="day-next" type="button" aria-label="Následující den">›</button>
+      <button class="quiet" id="day-today" type="button">Dnes</button>
+      <button class="quiet" id="day-share" type="button">Sdílet den</button>
+    </div>
+    <div class="day-method-strip">
+      <span><b>12:00</b> reprezentativní mapa dne</span>
+      <span><b>00:00–24:00</b> přesné prahy</span>
+      <span><b>lokálně</b> profil a pozorovatel</span>
+    </div>
+  </section>
+
+  <section class="day-summary" aria-label="Den v kostce">
+    <article class="day-moon-summary">
+      <div class="day-moon-disc" id="day-moon-disc"></div>
+      <div><span>Lunární rytmus</span><h2 id="day-moon-title">—</h2><p id="day-moon-copy">—</p></div>
+    </article>
+    <article class="day-summary-tile"><span>Slunce</span><b id="day-sun-value">—</b><small>tropická poloha v místní poledne</small></article>
+    <article class="day-summary-tile ruler"><i id="day-ruler-glyph">—</i><span>Tradiční vládce dne</span><b id="day-ruler-value">—</b><small id="day-ruler-copy">—</small></article>
+    <article class="day-summary-tile number"><span id="day-number-label">Číslo dne</span><b id="day-number-value">—</b><small>moderní numerologická metoda Orloje</small></article>
+  </section>
+
+  <section class="day-section day-sky-section" aria-labelledby="day-sky-title">
+    <div class="day-section-head">
+      <div><div class="day-section-kicker">Výpočet · západní tropický rámec</div><h2 id="day-sky-title">Mapa dne</h2></div>
+      <span id="day-noon-label">Mapa pro 12:00</span>
+    </div>
+    <p class="day-lead">Kruh zachycuje geocentrické polohy v místní poledne. Je to stabilní orientační řez dnem; přesné okamžiky změn jsou uvedeny samostatně v časové řece níže.</p>
+    <div class="day-sky-grid">
+      <article class="day-card day-wheel-card"><div class="day-wheel" id="day-wheel"></div></article>
+      <article class="day-card"><div class="day-card-kicker">Planety</div><div class="day-planets" id="day-planets"></div></article>
+      <article class="day-card"><div class="day-card-kicker">Hlavní aspekty v poledne</div><div class="day-aspects" id="day-aspects"></div><p class="day-card-note">Orb vyjadřuje odchylku od přesného úhlu. Samotná geometrie není hotovým výkladem události.</p></article>
+    </div>
+  </section>
+
+  <section class="day-section" aria-labelledby="day-events-title">
+    <div class="day-section-head">
+      <div><div class="day-section-kicker">Přesné okamžiky · místní občanský den</div><h2 id="day-events-title">Časová řeka dne</h2></div>
+      <span>astronomie → astrologická gramatika</span>
+    </div>
+    <p class="day-lead">Zobrazuje přesné fáze Měsíce, zatmění, slunovraty a rovnodennosti, změny znamení, planetární stanice a hlavní geocentrické aspekty, které skutečně vrcholí uvnitř zvoleného dne.</p>
+    <div class="day-events" id="day-events"></div>
+  </section>
+
+  <section class="day-section" aria-labelledby="day-personal-title">
+    <div class="day-section-head">
+      <div><div class="day-section-kicker">Volitelná osobní vrstva</div><h2 id="day-personal-title">Rezonance s nativní mapou</h2></div>
+      <span id="day-personal-meta">Načítám místní profil…</span>
+    </div>
+    <p class="day-lead">Tranzitní polohy v místní poledne se porovnávají s nativními planetami, Ascendentem a MC. Sdílený odkaz obsahuje pouze datum; narození se do něj nikdy nevkládá.</p>
+    <div class="day-personal" id="day-personal"></div>
+  </section>
+
+  <section class="day-section" aria-labelledby="day-number-title">
+    <div class="day-section-head">
+      <div><div class="day-section-kicker">Moderní numerologická tradice</div><h2 id="day-number-title">Číselný rytmus</h2></div>
+      <span>celé číslo → redukce</span>
+    </div>
+    <div class="day-number-grid">
+      <article class="day-number-card universal" id="day-universal-number"></article>
+      <article class="day-number-card personal" id="day-personal-number"></article>
+    </div>
+    <p class="day-caution">Mistrovská čísla 11, 22 a 33 se v mezikrocích neredukují. Číslo je symbolický kalendářní jazyk, nikoli měřená vlastnost dne.</p>
+  </section>
+
+  <section class="day-section" aria-labelledby="day-calendars-title">
+    <div class="day-section-head">
+      <div><div class="day-section-kicker">Jeden okamžik · různé zápisy</div><h2 id="day-calendars-title">Tři kalendáře</h2></div>
+      <span>Gregoriánský → Etiopský → Juliánský</span>
+    </div>
+    <div class="day-calendars" id="day-calendars"></div>
+  </section>
+
+  <section class="day-tradition-door" aria-labelledby="day-vedic-title">
+    <div><div class="day-section-kicker">Práh jiné tradice</div><h2 id="day-vedic-title">Tentýž den pohledem Džjótiše</h2><p>Siderická obloha, nakšatry a pančánga zůstávají na vlastní stránce. Datum se přenese, systémy se nesmíchají.</p></div>
+    <a class="day-button" id="day-vedic-link" href="vedic.html?view=sky">Otevřít védskou observatoř →</a>
+  </section>
+
+  <section class="day-method-card" aria-labelledby="day-method-title">
+    <div class="day-section-kicker">Jak číst Profil dne</div>
+    <h2 id="day-method-title">Jev → souřadnice → tradice → osobní pozorování</h2>
+    <div class="day-method-grid">
+      <article><span>01 · Jev</span><p>Přesný čas zatmění, fáze, ingrese, stanice nebo aspektu.</p></article>
+      <article><span>02 · Souřadnice</span><p>Poloha tělesa v tropickém zvěrokruhu a časovém pásmu pozorovatele.</p></article>
+      <article><span>03 · Tradice</span><p>Astrologie a numerologie přidávají symbolickou gramatiku, nikoli fyzikální účinek.</p></article>
+      <article><span>04 · Pozorování</span><p>Osobní zkušenost lze porovnávat s mapou bez předem určeného verdiktu.</p></article>
+    </div>
+    <div class="day-sources"><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine · výpočtové jádro ↗</a><span>Kalendáře · Intl/ICU</span><span>Profil narození · pouze localStorage</span></div>
+  </section>
+
+  <footer class="day-footer"><b>Orloj · Profil dne v11.07</b> · osobní observatoř času · připravuje Pansophia Institute · osobní údaje zůstávají v zařízení</footer>
+</main>
+<script src="astronomy-engine.min.js?v=public-v11-07"></script>
+<script src="day-profile.js?v=public-v11-07"></script>
+</body>
+</html>
