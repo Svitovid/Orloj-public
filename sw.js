@@ -1,6 +1,6 @@
-/* Orloj Public v11.08 — Časová řeka */
-var CACHE = "orloj-public-v11-08";
-var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+/* Orloj Public v11.09 — Životní kronika */
+var CACHE = "orloj-public-v11-09";
+var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
@@ -44,6 +44,7 @@ self.addEventListener("fetch", function(event) {
           if (event.request.mode === "navigate") {
             if (/\/day\.html$/.test(requestURL.pathname)) return caches.match("./day.html");
             if (/\/timeline\.html$/.test(requestURL.pathname)) return caches.match("./timeline.html");
+            if (/\/life\.html$/.test(requestURL.pathname)) return caches.match("./life.html");
             if (/\/vedic\.html$/.test(requestURL.pathname)) return caches.match("./vedic.html");
             if (/\/tarot\.html$/.test(requestURL.pathname)) return caches.match("./tarot.html");
             return caches.match("./index.html");

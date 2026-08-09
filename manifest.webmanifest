@@ -1,7 +1,7 @@
 {
   "name": "Orloj — osobní observatoř času",
   "short_name": "Orloj",
-  "description": "Osobní observatoř oblohy a času s Profilem dne, Časovou řekou, západní astrologií a samostatnými studovnami džjótiše a Human Designu.",
+  "description": "Osobní observatoř oblohy a času s Profilem dne, Časovou řekou, Životní kronikou, západní astrologií a samostatnými studovnami džjótiše a Human Designu.",
   "lang": "cs",
   "start_url": "./",
   "scope": "./",

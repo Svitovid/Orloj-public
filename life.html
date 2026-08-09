@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="cs" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090c12">
+  <meta name="application-name" content="Orloj · Životní kronika v11.09">
+  <meta name="orloj-build" content="public-v11-09">
+  <meta name="description" content="Soukromá životní kronika Orloje: osobní roky, čínský kalendář, planetární cykly a vlastní vzpomínky.">
+  <title>Orloj · Životní kronika</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="life-chronicle.css?v=public-v11-09">
+  <script>(function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();</script>
+</head>
+<body>
+<main class="life-shell">
+  <header class="life-topbar">
+    <a href="./?view=today">← Zpět do Orloje</a>
+    <nav><a href="day.html">Profil dne</a><a href="timeline.html">Časová řeka</a></nav>
+    <span>v11.09</span>
+  </header>
+
+  <section class="life-hero">
+    <div class="life-kicker">Paměť · cyklus · souvislost</div>
+    <h1>Životní kronika</h1>
+    <p>Rok po roce skládá vypočtené rytmy, tradiční symboliku a tvoje skutečné vzpomínky. Konstelace nejsou vydávány za příčinu událostí — jsou časovou mapou, se kterou lze zkušenost porovnat.</p>
+    <div class="life-profile" id="life-profile-name">lokální profil</div>
+  </section>
+
+  <section class="life-nav" aria-label="Výběr roku">
+    <button id="life-prev" type="button" aria-label="Předchozí rok">←</button>
+    <label>Vybraný rok <input id="life-year-input" inputmode="numeric" type="number"></label>
+    <button id="life-next" type="button" aria-label="Následující rok">→</button>
+  </section>
+  <section class="life-years" id="life-years" aria-label="Dosavadní roky života"></section>
+
+  <section id="life-status" class="life-status"><div class="life-loader"><b>Otevírám kroniku…</b></div></section>
+
+  <div id="life-content" hidden>
+    <section class="life-year-hero">
+      <div><div class="life-kicker">Rok života</div><h2 id="life-year-title">—</h2><p id="life-age">—</p></div>
+      <div class="life-year-method"><b>Co zde znamená „vliv“</b><p>Geometrický tranzit je výpočet. Jeho význam je tradiční astrologická symbolika. Vzpomínka je tvoje evidence. Kronika je drží vedle sebe, ale neslévá je do kauzálního tvrzení.</p></div>
+    </section>
+
+    <section class="life-section" aria-labelledby="life-number-title">
+      <div class="life-section-head"><div><div class="life-kicker">Numerologický rytmus</div><h2 id="life-number-title">Osobní rok</h2></div><span>mistrovská čísla 11 · 22 · 33 se neredukují</span></div>
+      <p class="life-lead">Orloj ukazuje obě běžné hranice osobního roku. Kalendářní škola mění číslo 1. ledna; narozeninová škola až v den narozenin.</p>
+      <div class="life-number-grid"><div id="life-calendar-number"></div><div id="life-birthday-numbers"></div></div>
+    </section>
+
+    <section class="life-section life-chinese-section" aria-labelledby="life-chinese-title">
+      <div class="life-section-head"><div><div class="life-kicker">Čínský lunisolární kalendář</div><h2 id="life-chinese-title">Dva úseky občanského roku</h2></div><span id="life-chinese-note">—</span></div>
+      <div class="life-chinese" id="life-chinese"></div>
+      <p class="life-caution">Roční zvíře je pouze jedna vrstva čínských systémů. Není zaměňováno za úplnou mapu Bāzì ani za západní nativ.</p>
+    </section>
+
+    <section class="life-section" aria-labelledby="life-sky-title">
+      <div class="life-section-head"><div><div class="life-kicker">Vypočtená obloha</div><h2 id="life-sky-title">Mapa roku a dráhy planet</h2></div><div class="life-focus" role="group" aria-label="Okamžik mapy"><button data-focus="start" type="button">1. leden</button><button data-focus="middle" type="button">Střed roku</button><button class="on" data-focus="birthday" type="button">Narozeniny</button></div></div>
+      <p class="life-lead">Kruh je přesný snímek zvoleného dne v místní poledne. Pásy pod ním ukazují, kterými znameními během roku procházely pomalé planety.</p>
+      <div class="life-sky-grid"><div class="life-wheel" id="life-wheel"></div><div class="life-positions" id="life-positions"></div></div>
+      <div class="life-tracks" id="life-tracks"></div>
+    </section>
+
+    <section class="life-section" aria-labelledby="life-cycles-title">
+      <div class="life-section-head"><div><div class="life-kicker">Osobní astrologická vrstva</div><h2 id="life-cycles-title">Dlouhé tranzitní cykly</h2></div><span id="life-cycle-count">—</span></div>
+      <p class="life-lead">Jupiter, Saturn, Uran, Neptun a Pluto jsou porovnány s nativními planetami, Ascendentem a MC. Opakované průchody stejného aspektu jsou spojeny do jednoho příběhu.</p>
+      <div class="life-cycles" id="life-cycles"></div>
+    </section>
+
+    <section class="life-section" aria-labelledby="life-eclipse-title">
+      <div class="life-section-head"><div><div class="life-kicker">Pevné body oblohy</div><h2 id="life-eclipse-title">Zatmění roku</h2></div><span>astronomický okamžik · globální jev</span></div>
+      <div class="life-eclipses" id="life-eclipses"></div>
+    </section>
+
+    <section class="life-section life-memory-section" aria-labelledby="life-memory-title">
+      <div class="life-section-head"><div><div class="life-kicker">Tvoje evidence</div><h2 id="life-memory-title">Vzpomínky a životní změny</h2></div><span>uloženo pouze v tomto zařízení</span></div>
+      <div class="life-memory-grid">
+        <label><span>Co si z tohoto roku vybavuji?</span><textarea id="life-memory" rows="7" placeholder="Místa, lidé, obrazy, pocity, škola, cesty, sny…"></textarea></label>
+        <label><span>Co se změnilo a co zůstalo?</span><textarea id="life-change" rows="7" placeholder="Začátky, konce, přechody, rozhodnutí, nové role…"></textarea></label>
+      </div>
+      <div class="life-memory-actions"><button id="life-save" type="button">Uložit vzpomínky</button><span id="life-save-message" role="status"></span></div>
+      <div class="life-milestone-form"><label>Datum, pokud je známé <input id="life-milestone-date" type="date"></label><label>Milník <input id="life-milestone-title" type="text" maxlength="160" placeholder="Např. nástup na novou školu"></label><button id="life-add-milestone" type="button">Přidat milník</button></div>
+      <div class="life-milestones" id="life-milestones"></div>
+      <p class="life-caution">Vzpomínky nejsou součástí URL, neposílají se do výpočtu a zůstávají v místním úložišti prohlížeče.</p>
+    </section>
+
+    <section class="life-method">
+      <div><b>1 · Výpočet</b><p>Datum, polohy planet, aspekty a hranice kalendářů.</p></div>
+      <div><b>2 · Tradice</b><p>Historicky předávaný symbolický jazyk numerologie a astrologie.</p></div>
+      <div><b>3 · Vzpomínka</b><p>Vlastní událost, emoce a obraz z daného období.</p></div>
+      <div><b>4 · Souvislost</b><p>Otázka, zda se vrstvy potkávají — bez předem daného závěru.</p></div>
+    </section>
+  </div>
+
+  <footer class="life-footer"><b>Orloj · Životní kronika v11.09</b> · Pansophia Institute · soukromá observatoř vlastního času</footer>
+</main>
+<script src="astronomy-engine.min.js?v=public-v11-09"></script>
+<script src="day-profile.js?v=public-v11-09"></script>
+<script src="life-chronicle.js?v=public-v11-09"></script>
+</body>
+</html>

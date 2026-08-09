@@ -12,26 +12,29 @@ const day = fs.readFileSync(path.join(root, "day.html"), "utf8");
 const dayScript = fs.readFileSync(path.join(root, "day-profile.js"), "utf8");
 const timeline = fs.readFileSync(path.join(root, "timeline.html"), "utf8");
 const timelineScript = fs.readFileSync(path.join(root, "timeline.js"), "utf8");
+const life = fs.readFileSync(path.join(root, "life.html"), "utf8");
+const lifeScript = fs.readFileSync(path.join(root, "life-chronicle.js"), "utf8");
 const worker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.webmanifest"), "utf8"));
 
-test("release identifiers are consistently v11.08", () => {
-  assert.match(index, /name="orloj-build" content="public-v11-08"|content="public-v11-08" name="orloj-build"/);
-  assert.match(vedic, /name="orloj-build" content="public-v11-08"/);
-  assert.match(day, /name="orloj-build" content="public-v11-08"/);
-  assert.match(timeline, /name="orloj-build" content="public-v11-08"/);
-  assert.match(index, /Orloj · Public v11\.08 · Časová řeka/);
-  assert.match(index, /sw\.js\?v=public-v11-08/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-08"/);
-  assert.doesNotMatch(index + vedic + day + timeline + worker, /public-v11-07|orloj-public-v11-07/);
+test("release identifiers are consistently v11.09", () => {
+  assert.match(index, /name="orloj-build" content="public-v11-09"|content="public-v11-09" name="orloj-build"/);
+  assert.match(vedic, /name="orloj-build" content="public-v11-09"/);
+  assert.match(day, /name="orloj-build" content="public-v11-09"/);
+  assert.match(timeline, /name="orloj-build" content="public-v11-09"/);
+  assert.match(life, /name="orloj-build" content="public-v11-09"/);
+  assert.match(index, /Orloj · Public v11\.09 · Životní kronika/);
+  assert.match(index, /sw\.js\?v=public-v11-09/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-09"/);
+  assert.doesNotMatch(index + vedic + day + timeline + life + worker, /public-v11-08|orloj-public-v11-08/);
 });
 
 test("Human Design assets and route are wired before the main application", () => {
-  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-08"></script>');
-  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-08"></script>');
+  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-09"></script>');
+  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-09"></script>');
   const main = index.indexOf("<script>\n(function(){", engine);
   assert.ok(astronomy > 0 && engine > astronomy && main > engine);
-  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-08"/);
+  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-09"/);
   assert.match(index, /id="panel-design"/);
   assert.match(index, /data-open-tab="design"/);
   assert.match(index, /design:"Human Design"/);
@@ -56,11 +59,15 @@ test("every precached local asset exists", () => {
   assert.ok(assets.includes("./timeline.html"));
   assert.ok(assets.includes("./timeline.js"));
   assert.ok(assets.includes("./timeline.css"));
+  assert.ok(assets.includes("./life.html"));
+  assert.ok(assets.includes("./life-chronicle.js"));
+  assert.ok(assets.includes("./life-chronicle.css"));
 });
 
 test("manifest names the day profile and both specialist systems without changing app scope", () => {
   assert.match(manifest.description, /Profilem dne/);
   assert.match(manifest.description, /Časovou řekou/);
+  assert.match(manifest.description, /Životní kronikou/);
   assert.match(manifest.description, /Human Designu/);
   assert.match(manifest.description, /džjótiše/);
   assert.equal(manifest.start_url, "./");
@@ -93,6 +100,21 @@ test("Time river is a separate shareable page over the common day engine", () =>
   assert.match(timelineScript, /url\.searchParams|searchParams\.set\("start"/);
   assert.doesNotMatch(timelineScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
   assert.match(worker, /timeline\.html/);
+});
+
+test("Life chronicle is a private year view linked across the application", () => {
+  assert.match(index, /href="life\.html">Životní kronika/);
+  assert.match(day, /id="day-life-link"/);
+  assert.match(timeline, /href="life\.html">Životní kronika/);
+  assert.match(life, /id="life-years"/);
+  assert.match(life, /id="life-calendar-number"/);
+  assert.match(life, /id="life-chinese"/);
+  assert.match(life, /id="life-wheel"/);
+  assert.match(life, /id="life-cycles"/);
+  assert.match(life, /id="life-memory"/);
+  assert.match(lifeScript, /searchParams\.set\("year",state\.year\)/);
+  assert.doesNotMatch(lifeScript, /searchParams\.set\([^)]*(profile|birth|date|time|lat|lon|memory)/i);
+  assert.match(worker, /life\.html/);
 });
 
 test("Jyotisha accepts a date handoff while remaining a separate page", () => {
