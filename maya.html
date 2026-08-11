@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090d10">
+  <meta name="application-name" content="Orloj · Mayské kalendárium v11.10">
+  <meta name="orloj-build" content="public-v11-10">
+  <meta name="description" content="Samostatný mayský systém Orloje: Tzolk’in, Haab, Kalendářní kolo a Dlouhý počet s korelací GMT 584 283.">
+  <title>Orloj · Mayské kalendárium</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="maya-calendar.css?v=public-v11-10">
+  <script>
+  (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
+  </script>
+</head>
+<body>
+<main class="maya-shell">
+  <header class="maya-topbar">
+    <a class="maya-back" href="./?view=calendars">← Zpět do atlasu kalendářů</a>
+    <span class="maya-build">samostatný systém · v11.10</span>
+  </header>
+
+  <section class="maya-hero" aria-labelledby="maya-title">
+    <div class="maya-hero-mark" aria-hidden="true"><i></i><i></i><i></i><b></b><b></b></div>
+    <div class="maya-kicker">Kola návratu · adresa dějin</div>
+    <h1 id="maya-title">Mayské kalendárium</h1>
+    <p>Tzolk’in a Haab skládají den z opakujících se cyklů. Dlouhý počet mu dává jedinečnou historickou adresu. Orloj je zobrazuje na vlastní stránce, aby se původní kalendářní mechanismy nesmíchaly s numerologií, západní astrologií ani novodobým Dreamspellem.</p>
+    <div class="maya-boundary"><span>GMT 584 283</span><span>260 dní</span><span>365 dní</span><span>18 980 dní</span><span>proleptický Gregorián</span></div>
+    <div class="maya-controls">
+      <button id="maya-prev" type="button" aria-label="Předchozí den">−1</button>
+      <label><span>Vlastní datum systému</span><input id="maya-date" type="date" min="0001-01-01" max="4000-12-31"></label>
+      <button id="maya-next" type="button" aria-label="Následující den">+1</button>
+      <button class="quiet" id="maya-today" type="button">Dnes</button>
+    </div>
+  </section>
+
+  <nav class="maya-nav" role="tablist" aria-label="Oddíly mayského kalendária">
+    <button class="on" data-maya-page="gear" role="tab" aria-selected="true" type="button">Soukolí</button>
+    <button data-maya-page="tzolkin" role="tab" aria-selected="false" type="button">Tzolk’in</button>
+    <button data-maya-page="haab" role="tab" aria-selected="false" type="button">Haab</button>
+    <button data-maya-page="count" role="tab" aria-selected="false" type="button">Dlouhý počet</button>
+    <button data-maya-page="study" role="tab" aria-selected="false" type="button">Studovna</button>
+  </nav>
+
+  <section class="maya-page on" data-maya-panel="gear">
+    <div class="maya-grid">
+      <article class="maya-card maya-wheel-card">
+        <div class="maya-section-kicker">Jeden den · čtyři odečty</div>
+        <h2 id="maya-date-label">—</h2>
+        <p class="maya-copy">Vnější kruh sleduje Haab, prostřední dvacet denních znaků a vnitřní třináct čísel. Střed drží lineární adresu Dlouhého počtu.</p>
+        <div class="maya-wheel" id="maya-wheel"></div>
+        <div class="maya-wheel-legend"><span class="haab">Haab · 365</span><span class="signs">znaky · 20</span><span class="tones">čísla · 13</span></div>
+      </article>
+      <aside class="maya-card">
+        <div class="maya-section-kicker">Odečet zvoleného dne</div>
+        <h2>Čtyři souřadnice času</h2>
+        <div class="maya-readouts">
+          <article><span>Tzolk’in</span><b id="maya-overview-tzolkin">—</b><small id="maya-overview-tzolkin-meta">—</small></article>
+          <article><span>Haab</span><b id="maya-overview-haab">—</b><small id="maya-overview-haab-meta">—</small></article>
+          <article><span>Dlouhý počet</span><b id="maya-overview-count">—</b><small id="maya-overview-count-meta">—</small></article>
+          <article><span>Kalendářní kolo</span><b id="maya-overview-round">—</b><small id="maya-overview-round-meta">—</small></article>
+        </div>
+      </aside>
+      <article class="maya-card full maya-round-card">
+        <div><div class="maya-section-kicker">Nejmenší společný násobek</div><h2>Kalendářní kolo</h2><p class="maya-copy">Kombinace Tzolk’inu a Haabu se vrací po 18 980 dnech: 73 posvátných cyklů se setká s 52 nepřestupnými roky Haab.</p></div>
+        <div class="maya-progress-head"><span>Pozice od epochální kotvy</span><b id="maya-round-position">—</b></div><div class="maya-progress"><i id="maya-round-bar"></i></div>
+        <div class="maya-equation"><span>73 × 260</span><i>=</i><b>18 980 dní</b><i>=</i><span>52 × 365</span></div>
+      </article>
+      <article class="maya-anniversary full" id="maya-anniversary" hidden>
+        <span>Gregoriánské výročí epochálního převodu</span><h2 id="maya-anniversary-date">—</h2><p>Vybraný den sdílí den a měsíc s převodem mayské epochy na 11. srpna 3114 př. n. l. Nejde o každoroční mayský Nový rok: Tzolk’in i Haab jsou nyní v jiné poloze.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="maya-page" data-maya-panel="tzolkin">
+    <article class="maya-card">
+      <div class="maya-section-kicker">Posvátný kalendář · 260 dní</div>
+      <h2>Třináct čísel a dvacet denních znaků</h2>
+      <p class="maya-copy">Obě řady postupují každý den současně. Stejná číselně-znaková kombinace se proto vrátí až po 260 dnech, nikoli po třinácti nebo dvaceti.</p>
+      <div class="maya-current" id="maya-tzolkin-current"></div>
+      <h3 class="maya-subtitle">Třináct čísel</h3><div class="maya-thirteen" id="maya-thirteen"></div>
+      <h3 class="maya-subtitle">Dvacet denních znaků</h3><div class="maya-sign-grid" id="maya-tzolkin-signs"></div>
+      <div class="maya-method-note"><b>Dvě pojmenování</b> · První jméno na kartě používá standardní epigrafickou/yucateckou řadu; menší jméno ukazuje odpovídající den v živé k’iche’ tradici Cholq’ij. Významy jednotlivých dnů zde zatím nejsou zploštěny do univerzálního osobnostního horoskopu.</div>
+    </article>
+  </section>
+
+  <section class="maya-page" data-maya-panel="haab">
+    <article class="maya-card">
+      <div class="maya-section-kicker">Občanský kalendář · 365 dní</div>
+      <h2>Osmnáct měsíců a závěrečný Wayeb’</h2>
+      <p class="maya-copy">Haab má osmnáct dvacetidenních měsíců a pět závěrečných dnů. Nemá přestupný den, takže jej Orloj nevydává za přesnou kopii tropického roku.</p>
+      <div class="maya-current haab" id="maya-haab-current"></div>
+      <div class="maya-progress-head"><span>Postup rokem Haab</span><b id="maya-haab-position">—</b></div><div class="maya-progress haab"><i id="maya-haab-progress"></i></div>
+      <div class="maya-month-grid" id="maya-haab-months"></div>
+      <div class="maya-method-note"><b>Nulové číslování</b> · Dny měsíců se zapisují od 0 do 19; Wayeb’ od 0 do 4. Zápis 14 Yaxk’in proto označuje patnáctý den daného měsíce v pořadí.</div>
+    </article>
+  </section>
+
+  <section class="maya-page" data-maya-panel="count">
+    <article class="maya-card maya-count-hero">
+      <div class="maya-section-kicker">Lineární chronologie</div>
+      <h2 id="maya-count-value">—</h2><p id="maya-count-date">—</p>
+      <div class="maya-count-drums" id="maya-count-drums"></div>
+      <div class="maya-count-equation" id="maya-count-equation"></div>
+    </article>
+    <article class="maya-card">
+      <div class="maya-section-kicker">Tři prahy</div>
+      <h2>Počátek, velké dokončení a zvolený den</h2>
+      <p class="maya-copy">Stejný pětimístný zápis 13.0.0.0.0 označuje mytickou epochální kotvu i dokončení třinácti b’ak’tunů roku 2012. Kalendář po tomto prahu pokračuje dál.</p>
+      <div class="maya-history-table" role="table" aria-label="Příklady Dlouhého počtu">
+        <div class="head" role="row"><span>Gregoriánský převod</span><span>Dlouhý počet</span><span>Kalendářní kolo</span></div>
+        <div role="row"><span>11. 8. 3114 př. n. l.</span><b>13.0.0.0.0</b><span>4 Ajaw · 8 Kumk’u</span></div>
+        <div role="row"><span>21. 12. 2012</span><b>13.0.0.0.0</b><span>4 Ajaw · 3 K’ank’in</span></div>
+        <div class="selected" role="row"><span id="maya-selected-row-date">—</span><b id="maya-selected-row-count">—</b><span id="maya-selected-row-round">—</span></div>
+      </div>
+      <div class="maya-method-note"><b>Rok 2012</b> · Uzavřel interval 1 872 000 dní, tedy třináct b’ak’tunů. Nebyl koncem kalendáře ani doloženou mayskou předpovědí zániku světa.</div>
+      <div class="maya-method-note"><b>Číslice v rozhraní</b> · Tečky a čáry zachovávají poziční princip mayských číslic. Otevřený kruh pro nulu je záměrně neutrální schéma Orloje, nikoli faksimile konkrétního historického glyfu.</div>
+    </article>
+  </section>
+
+  <section class="maya-page" data-maya-panel="study">
+    <article class="maya-card">
+      <div class="maya-section-kicker">Studovna mayského času</div>
+      <h2>Čtyři mechanismy, čtyři odlišné otázky</h2>
+      <table class="maya-compare"><thead><tr><th>Systém</th><th>Stavba</th><th>Co určuje</th></tr></thead><tbody>
+        <tr><td>Tzolk’in</td><td>13 × 20 = 260 dní</td><td>Posvátnou číselně-znakovou kombinaci dne</td></tr>
+        <tr><td>Haab</td><td>18 × 20 + 5 = 365 dní</td><td>Občanské datum uvnitř nepřestupného roku</td></tr>
+        <tr><td>Kalendářní kolo</td><td>nejmenší společný násobek = 18 980 dní</td><td>Společnou polohu Tzolk’inu a Haabu</td></tr>
+        <tr><td>Dlouhý počet</td><td>b’ak’tun · k’atun · tun · winal · k’in</td><td>Jedinečnou chronologickou adresu dne</td></tr>
+      </tbody></table>
+      <div class="maya-study-grid">
+        <article><span>01 · Korelace</span><h3>GMT 584 283</h3><p>Orloj přičítá k Dlouhému počtu korelační konstantu Goodman–Martínez–Thompson. Je široce přijímaná a podporovaná radiokarbonovým datováním, ale rozhraní ji vždy přiznává jako zvolenou korelaci.</p></article>
+        <article><span>02 · Epocha</span><h3>Ustavení řádu</h3><p>11. srpen 3114 př. n. l. je proleptický gregoriánský převod mytické kotvy 4 Ajaw 8 Kumk’u. Mayské texty znají také události před ní; nejde nutně o absolutní vznik času z ničeho.</p></article>
+        <article><span>03 · Živá tradice</span><h3>Kalendář neskončil</h3><p>Posvátné počítání dnů pokračuje v mayských komunitách. Orloj proto uvádí vedle epigrafických názvů také odpovídající k’iche’ jména, ale jejich významy ponechává hlasu konkrétní tradice.</p></article>
+        <article><span>04 · Hranice</span><h3>Dreamspell není totéž</h3><p>Dreamspell, „galaktické podpisy“ a třináctiměsíční kalendář jsou moderní systém José Argüellese. Mohou být studovány samostatně, ale nejsou vydávány za historický mayský kalendář.</p></article>
+      </div>
+      <div class="maya-scope"><div><span>Součást v11.10</span><b>Tzolk’in · Haab · Kalendářní kolo · Dlouhý počet</b></div><div><span>Pozdější studium</span><b>Páni noci · lunární řada · Venušiny tabulky · 819denní cyklus</b></div></div>
+      <div class="maya-sources">
+        <a href="https://maya.nmai.si.edu/calendar/calendar-system" target="_blank" rel="noopener noreferrer">Smithsonian · systém kalendářů ↗</a>
+        <a href="https://maya.nmai.si.edu/calendar/maya-calendar-converter" target="_blank" rel="noopener noreferrer">Smithsonian · kontrolní převodník ↗</a>
+        <a href="https://www.nature.com/articles/srep01597" target="_blank" rel="noopener noreferrer">Scientific Reports · korelace GMT ↗</a>
+      </div>
+    </article>
+  </section>
+
+  <footer class="maya-footer"><b>Orloj · Mayské kalendárium v11.10</b> · samostatná studovna Pansophia Institute · korelace GMT 584 283 · historický výpočet a symbolický význam zůstávají rozlišeny</footer>
+</main>
+<script src="maya-calendar.js?v=public-v11-10"></script>
+</body>
+</html>
