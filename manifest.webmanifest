@@ -1,13 +1,13 @@
 {
-  "name": "Digitální orloj — živá fasáda času",
+  "name": "Orloj — osobní observatoř času",
   "short_name": "Orloj",
-  "description": "Veřejná živá fasáda gregoriánského času, tropické astrologie a univerzální numerologie.",
+  "description": "Osobní observatoř oblohy a času s Profilem dne, Časovou řekou, Životní kronikou, západní astrologií a samostatnými systémy džjótiše, mayského kalendária a Human Designu.",
   "lang": "cs",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#080b0f",
-  "theme_color": "#080b0f",
+  "background_color": "#000000",
+  "theme_color": "#0a0d13",
   "icons": [
     {
       "src": "./IMG_3491.png",
