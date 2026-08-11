@@ -1,6 +1,6 @@
-/* Orloj Public v11.10 — Mayské soukolí */
-var CACHE = "orloj-public-v11-10-maya";
-var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+/* Orloj Public v11.11 — mistrovská fasáda */
+var CACHE = "orloj-public-v11-11-master-facade";
+var ASSETS = ["./", "./index.html", "./orloj-facade.js", "./orloj-facade.css", "./day-profile.js", "./astronomy-engine.min.js", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
@@ -41,15 +41,7 @@ self.addEventListener("fetch", function(event) {
       .catch(function() {
         return caches.match(event.request).then(function(hit) {
           if (hit) return hit;
-          if (event.request.mode === "navigate") {
-            if (/\/day\.html$/.test(requestURL.pathname)) return caches.match("./day.html");
-            if (/\/timeline\.html$/.test(requestURL.pathname)) return caches.match("./timeline.html");
-            if (/\/life\.html$/.test(requestURL.pathname)) return caches.match("./life.html");
-            if (/\/vedic\.html$/.test(requestURL.pathname)) return caches.match("./vedic.html");
-            if (/\/maya\.html$/.test(requestURL.pathname)) return caches.match("./maya.html");
-            if (/\/tarot\.html$/.test(requestURL.pathname)) return caches.match("./tarot.html");
-            return caches.match("./index.html");
-          }
+          if (event.request.mode === "navigate") return caches.match("./index.html");
           return Response.error();
         });
       })
