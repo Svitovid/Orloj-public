@@ -1,0 +1,1081 @@
+:root {
+  color-scheme: dark;
+  --night: #05070a;
+  --night-soft: #0b1016;
+  --stone: #171712;
+  --stone-light: #28251c;
+  --stone-line: rgba(222, 202, 146, .24);
+  --gold: #d7bd77;
+  --gold-bright: #f1d99a;
+  --gold-dim: #8f7846;
+  --ivory: #f3ead6;
+  --muted: #9d9789;
+  --axis: #cc654f;
+  --solar: #f3bd58;
+  --lunar: #cbd9f3;
+  --cyan: #73c6ce;
+  --soft-aspect: #65bba8;
+  --hard-aspect: #ca6b5c;
+  --neutral-aspect: #c9a961;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--night);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ivory);
+  background:
+    radial-gradient(circle at 50% -4%, rgba(70, 88, 102, .28), transparent 34rem),
+    radial-gradient(circle at 16% 31%, rgba(27, 71, 75, .14), transparent 26rem),
+    linear-gradient(180deg, #090d12 0%, #05070a 48%, #090805 100%);
+  padding:
+    max(18px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(42px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  overflow-x: hidden;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  opacity: .27;
+  background-image:
+    radial-gradient(circle at 12% 23%, rgba(255,255,255,.75) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 68% 17%, rgba(219,229,255,.75) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 87% 42%, rgba(255,220,162,.72) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 29% 72%, rgba(255,255,255,.58) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 76% 86%, rgba(210,230,255,.52) 0 1px, transparent 1.4px);
+  background-size: 310px 310px, 420px 420px, 370px 370px, 510px 510px, 460px 460px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.facade-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1040px);
+  margin: 0 auto;
+  isolation: isolate;
+}
+
+.facade-shell::before,
+.facade-shell::after {
+  position: absolute;
+  top: 5rem;
+  bottom: 8rem;
+  z-index: -1;
+  width: 1px;
+  content: "";
+  background: linear-gradient(transparent, rgba(215, 189, 119, .18) 9%, rgba(215, 189, 119, .1) 90%, transparent);
+}
+
+.facade-shell::before { left: 2.2%; }
+.facade-shell::after { right: 2.2%; }
+
+.now-axis {
+  position: absolute;
+  top: 7.2rem;
+  bottom: 9rem;
+  left: 50%;
+  z-index: 6;
+  width: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0,
+    rgba(204, 101, 79, .18) 2%,
+    rgba(204, 101, 79, .8) 12%,
+    rgba(204, 101, 79, .38) 82%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(204, 101, 79, .18);
+}
+
+.now-axis::before {
+  position: absolute;
+  top: 15.15rem;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  content: "";
+  border: 1px solid rgba(255, 179, 141, .72);
+  background: var(--axis);
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 13px rgba(204, 101, 79, .7);
+}
+
+.now-axis-label {
+  position: sticky;
+  top: 1rem;
+  display: block;
+  width: max-content;
+  padding: 4px 7px;
+  color: #f4b099;
+  background: rgba(8, 10, 12, .86);
+  border: 1px solid rgba(204, 101, 79, .38);
+  border-radius: 999px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  transform: translate(-50%, -50%);
+}
+
+.facade-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .3rem clamp(.3rem, 2vw, 1.3rem) 1.15rem;
+  border-bottom: 1px solid rgba(215, 189, 119, .2);
+}
+
+.facade-kicker,
+.stage-heading > span,
+.calendar-header span,
+.automaton-copy small,
+.planet-plaque small,
+.selected-day-seal small,
+.facade-footer > span {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.facade-kicker {
+  color: var(--gold-dim);
+}
+
+.facade-title h1 {
+  margin: .22rem 0 0;
+  color: var(--ivory);
+  font-size: clamp(1.65rem, 4vw, 2.55rem);
+  font-weight: 500;
+  letter-spacing: -.035em;
+}
+
+.live-stamp {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-items: end;
+  gap: 2px 7px;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.live-stamp strong {
+  grid-column: 1 / -1;
+  color: var(--ivory);
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+.live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #79c6a1;
+  box-shadow: 0 0 8px rgba(121, 198, 161, .72);
+}
+
+main {
+  position: relative;
+}
+
+.automata-crown {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr 1.14fr 1fr;
+  align-items: end;
+  width: min(86%, 760px);
+  margin: 1.15rem auto -1.4rem;
+  gap: clamp(5px, 1.2vw, 12px);
+}
+
+.automata-crown::before {
+  position: absolute;
+  right: -4%;
+  bottom: -7px;
+  left: -4%;
+  height: 18px;
+  z-index: -1;
+  content: "";
+  border: 1px solid rgba(215, 189, 119, .28);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #2c291e, #11110e);
+  box-shadow: 0 8px 22px rgba(0,0,0,.7);
+}
+
+.automaton {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 105px;
+  padding: 22px clamp(9px, 2vw, 19px) 14px;
+  overflow: hidden;
+  border: 1px solid var(--stone-line);
+  border-bottom-color: rgba(215, 189, 119, .36);
+  border-radius: 54% 54% 13px 13px / 42% 42% 13px 13px;
+  background:
+    radial-gradient(circle at 50% 13%, rgba(215, 189, 119, .13), transparent 35%),
+    linear-gradient(145deg, #242219, #10110f 62%, #080a0c);
+  box-shadow: inset 0 1px rgba(255,255,255,.055), 0 8px 24px rgba(0,0,0,.42);
+}
+
+.automaton-ruler {
+  min-height: 127px;
+  padding-top: 27px;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(218, 176, 88, .22), transparent 37%),
+    linear-gradient(145deg, #302a1c, #14140f 64%, #090a0b);
+}
+
+.automaton-arch {
+  position: absolute;
+  inset: 8px 8px 5px;
+  border: 1px solid rgba(215, 189, 119, .12);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.automaton-orbit {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: clamp(36px, 6vw, 52px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(215, 189, 119, .35);
+  border-radius: 50%;
+  color: var(--gold-bright);
+  background: radial-gradient(circle, rgba(215, 189, 119, .11), rgba(0,0,0,.28));
+  box-shadow: inset 0 0 14px rgba(0,0,0,.5), 0 0 13px rgba(215, 189, 119, .09);
+  font-family: Georgia, serif;
+  font-size: clamp(1.25rem, 4vw, 1.8rem);
+}
+
+.automaton-solar .automaton-orbit {
+  color: var(--solar);
+  text-shadow: 0 0 12px rgba(243, 189, 88, .46);
+}
+
+.automaton-lunar .automaton-orbit {
+  color: var(--lunar);
+  text-shadow: 0 0 12px rgba(203, 217, 243, .38);
+}
+
+.automaton-lunar .automaton-orbit svg {
+  display: block;
+  width: 76%;
+  height: 76%;
+  overflow: visible;
+}
+
+.automaton-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding-left: clamp(7px, 1.5vw, 13px);
+}
+
+.automaton-copy small {
+  overflow: hidden;
+  color: var(--gold-dim);
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.automaton-copy strong {
+  display: block;
+  margin-top: 5px;
+  overflow: hidden;
+  color: var(--ivory);
+  font-size: clamp(.9rem, 2.4vw, 1.18rem);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.automaton-copy span {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(8px, 1.4vw, 10px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.celestial-stage {
+  position: relative;
+  z-index: 2;
+  padding: 3.5rem 0 2.2rem;
+}
+
+.stage-heading {
+  position: relative;
+  z-index: 5;
+  width: max-content;
+  max-width: 74%;
+  margin: 0 auto -3.6rem;
+  padding: 6px 18px 7px;
+  text-align: center;
+  background: radial-gradient(ellipse, rgba(7,9,11,.98) 55%, rgba(7,9,11,.72) 74%, transparent 75%);
+}
+
+.stage-heading > span {
+  color: var(--gold-dim);
+  font-size: 8px;
+}
+
+.stage-heading h2 {
+  margin: 2px 0 0;
+  color: var(--gold-bright);
+  font-size: clamp(1.15rem, 3.5vw, 1.8rem);
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.stage-heading p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 9px;
+}
+
+.dial-frame {
+  position: relative;
+  z-index: 2;
+  width: min(94vw, 880px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  padding: clamp(4px, 1vw, 10px);
+  border: 1px solid rgba(215, 189, 119, .25);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 8deg, #222017, #0c1012, #262116, #0c1012, #222017),
+    #090b0d;
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.72),
+    0 0 0 5px rgba(5,7,9,.85),
+    0 0 0 6px rgba(215,189,119,.12),
+    inset 0 0 24px rgba(215,189,119,.11);
+}
+
+.dial-frame::before,
+.dial-frame::after {
+  position: absolute;
+  z-index: 3;
+  width: 15px;
+  height: 15px;
+  content: "";
+  border: 1px solid rgba(215, 189, 119, .5);
+  background: #171710;
+  transform: rotate(45deg);
+}
+
+.dial-frame::before { top: 49%; left: -8px; }
+.dial-frame::after { top: 49%; right: -8px; }
+
+.dial-halo {
+  position: absolute;
+  inset: -4%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 64%, rgba(215,189,119,.07) 65%, transparent 73%);
+  filter: blur(2px);
+}
+
+.celestial-dial {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  border-radius: 50%;
+}
+
+.celestial-dial text {
+  user-select: none;
+}
+
+.time-label {
+  fill: rgba(240, 228, 198, .61);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.zodiac-glyph {
+  fill: var(--gold-bright);
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 28px;
+  filter: drop-shadow(0 0 5px rgba(215,189,119,.18));
+}
+
+.zodiac-degree {
+  fill: rgba(232, 217, 181, .42);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+.planet-marker,
+.node-marker {
+  cursor: pointer;
+  outline: none;
+}
+
+.planet-marker .marker-disc,
+.node-marker .marker-disc {
+  transition: r .16s ease, stroke-width .16s ease, filter .16s ease;
+}
+
+.planet-marker:hover .marker-disc,
+.planet-marker:focus .marker-disc,
+.planet-marker.is-selected .marker-disc,
+.node-marker:hover .marker-disc,
+.node-marker:focus .marker-disc,
+.node-marker.is-selected .marker-disc {
+  r: 19px;
+  stroke-width: 2.2px;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.planet-symbol,
+.node-symbol {
+  pointer-events: none;
+  font-family: Georgia, serif;
+  font-size: 21px;
+}
+
+.retro-mark {
+  pointer-events: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.dial-center-clock {
+  fill: var(--ivory);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+.dial-center-date {
+  fill: rgba(239, 230, 211, .6);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 10px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.planet-plaque {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  width: min(82%, 540px);
+  min-height: 92px;
+  margin: -3.2rem auto 0;
+  padding: 14px 20px;
+  border: 1px solid rgba(215, 189, 119, .29);
+  border-radius: 4px 4px 30px 30px;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.025), transparent 22%, transparent 78%, rgba(255,255,255,.025)),
+    linear-gradient(180deg, #242117, #11120f);
+  box-shadow: 0 15px 30px rgba(0,0,0,.56), inset 0 1px rgba(255,255,255,.04);
+}
+
+.planet-plaque::before {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  content: "";
+  border: 1px solid rgba(215, 189, 119, .5);
+  background: #1b1912;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.plaque-glyph {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-right: 15px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--solar);
+  background: rgba(0,0,0,.22);
+  font-size: 25px;
+}
+
+.planet-plaque small {
+  color: var(--gold-dim);
+  font-size: 8px;
+}
+
+.planet-plaque strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--ivory);
+  font-size: 1.18rem;
+  font-weight: 500;
+}
+
+.planet-plaque p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.calendar-stone {
+  position: relative;
+  z-index: 3;
+  width: min(94%, 860px);
+  margin: 1.2rem auto 0;
+  padding: clamp(18px, 4vw, 38px);
+  border: 1px solid rgba(215, 189, 119, .27);
+  border-radius: 42px 42px 9px 9px;
+  background:
+    radial-gradient(ellipse at 50% 0, rgba(215,189,119,.12), transparent 32%),
+    repeating-linear-gradient(93deg, rgba(255,255,255,.012) 0 1px, transparent 1px 29px),
+    linear-gradient(145deg, #211f18, #12130f 52%, #0c0d0c);
+  box-shadow: 0 28px 60px rgba(0,0,0,.58), inset 0 1px rgba(255,255,255,.05);
+}
+
+.calendar-stone::before {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 72%;
+  height: 15px;
+  content: "";
+  border: 1px solid rgba(215, 189, 119, .3);
+  border-radius: 50%;
+  background: #1c1a13;
+  transform: translateX(-50%);
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.calendar-header span {
+  color: var(--gold-dim);
+  font-size: 8px;
+}
+
+.calendar-header h2 {
+  margin: 3px 0 0;
+  color: var(--gold-bright);
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  font-weight: 500;
+}
+
+.stone-button,
+.day-step,
+.today-button {
+  border: 1px solid rgba(215, 189, 119, .28);
+  color: var(--gold-bright);
+  background: rgba(0,0,0,.17);
+  cursor: pointer;
+}
+
+.stone-button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+.stone-button:hover,
+.stone-button:focus-visible,
+.day-step:hover,
+.day-step:focus-visible,
+.today-button:hover,
+.today-button:focus-visible {
+  border-color: rgba(241, 217, 154, .62);
+  outline: none;
+  background: rgba(215, 189, 119, .1);
+}
+
+.selected-day-seal {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px 1fr 1fr 38px;
+  align-items: stretch;
+  width: min(100%, 610px);
+  margin: 1.4rem auto 1.5rem;
+  border-top: 1px solid rgba(215, 189, 119, .18);
+  border-bottom: 1px solid rgba(215, 189, 119, .18);
+  background: rgba(0,0,0,.11);
+}
+
+.selected-day-seal::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  content: "";
+  background: linear-gradient(transparent, rgba(204, 101, 79, .62), transparent);
+}
+
+.day-step {
+  position: relative;
+  z-index: 1;
+  border-top: 0;
+  border-bottom: 0;
+  font-size: 1.5rem;
+}
+
+.day-seal-date,
+.number-seal {
+  min-width: 0;
+  padding: 15px 12px;
+  text-align: center;
+}
+
+.day-seal-date small,
+.number-seal small {
+  color: var(--gold-dim);
+  font-size: 7px;
+}
+
+.day-seal-date strong,
+.number-seal strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ivory);
+  font-size: clamp(1rem, 3.6vw, 1.42rem);
+  font-weight: 500;
+}
+
+.number-seal strong {
+  color: var(--gold-bright);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .06em;
+}
+
+.day-seal-date span,
+.number-seal span {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weekday-row,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.weekday-row {
+  border-bottom: 1px solid rgba(215, 189, 119, .17);
+}
+
+.weekday-row span {
+  padding: 7px 2px;
+  color: var(--gold-dim);
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.calendar-grid {
+  border-left: 1px solid rgba(215, 189, 119, .1);
+}
+
+.calendar-day {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  min-height: 78px;
+  padding: 8px 8px 7px;
+  border: 0;
+  border-right: 1px solid rgba(215, 189, 119, .1);
+  border-bottom: 1px solid rgba(215, 189, 119, .1);
+  color: var(--ivory);
+  background: rgba(0,0,0,.055);
+  text-align: left;
+  cursor: pointer;
+}
+
+.calendar-day:nth-child(7n+6),
+.calendar-day:nth-child(7n) {
+  background: rgba(215, 189, 119, .025);
+}
+
+.calendar-day:hover,
+.calendar-day:focus-visible {
+  z-index: 2;
+  outline: 1px solid rgba(215, 189, 119, .45);
+  outline-offset: -1px;
+  background: rgba(215, 189, 119, .07);
+}
+
+.calendar-day.is-outside {
+  opacity: .32;
+}
+
+.calendar-day.is-today::after {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  content: "";
+  border-radius: 50%;
+  background: #78c19f;
+  box-shadow: 0 0 7px rgba(120,193,159,.55);
+}
+
+.calendar-day.is-selected {
+  z-index: 1;
+  color: #fff6e3;
+  background:
+    linear-gradient(180deg, rgba(204,101,79,.16), rgba(215,189,119,.065));
+  box-shadow: inset 0 0 0 1px rgba(204, 101, 79, .48);
+}
+
+.calendar-day.is-selected::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  content: "";
+  background: rgba(204, 101, 79, .35);
+}
+
+.calendar-date-number {
+  position: relative;
+  z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+}
+
+.calendar-universal {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  color: var(--gold-bright);
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(.82rem, 2.6vw, 1.15rem);
+  letter-spacing: .03em;
+}
+
+.calendar-lunar-mark {
+  position: relative;
+  z-index: 1;
+  min-height: 10px;
+  color: var(--lunar);
+  text-align: right;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 7px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.calendar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.today-button,
+.date-picker {
+  min-height: 38px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.today-button {
+  padding: 0 15px;
+}
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid rgba(215, 189, 119, .18);
+  color: var(--muted);
+  background: rgba(0,0,0,.1);
+}
+
+.date-picker input {
+  width: 116px;
+  border: 0;
+  outline: 0;
+  color: var(--ivory);
+  background: transparent;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+}
+
+.facade-footer {
+  width: min(92%, 760px);
+  margin: 2.8rem auto 0;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid rgba(215, 189, 119, .16);
+  color: var(--muted);
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.facade-footer p {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.facade-footer strong {
+  color: var(--ivory);
+  font-weight: 650;
+}
+
+.facade-footer .facade-method {
+  margin-top: 7px;
+  color: #77756d;
+  font-size: 9px;
+}
+
+.facade-footer > span {
+  margin-top: 14px;
+  color: var(--gold-dim);
+  font-size: 7px;
+}
+
+noscript {
+  display: block;
+  padding: 1rem;
+  color: white;
+  text-align: center;
+}
+
+@media (max-width: 680px) {
+  body {
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  .facade-header {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .automata-crown {
+    width: 96%;
+    margin-top: .8rem;
+    gap: 4px;
+  }
+
+  .automaton {
+    min-height: 89px;
+    padding: 18px 6px 10px;
+  }
+
+  .automaton-ruler {
+    min-height: 105px;
+    padding-top: 22px;
+  }
+
+  .automaton-orbit {
+    width: 33px;
+    font-size: 1.2rem;
+  }
+
+  .automaton-copy {
+    padding-left: 5px;
+  }
+
+  .automaton-copy small {
+    font-size: 6px;
+    letter-spacing: .08em;
+  }
+
+  .automaton-copy strong {
+    font-size: .78rem;
+  }
+
+  .automaton-copy span {
+    font-size: 7px;
+  }
+
+  .celestial-stage {
+    padding-top: 3rem;
+  }
+
+  .stage-heading {
+    margin-bottom: -2.6rem;
+  }
+
+  .dial-frame {
+    width: min(100%, 620px);
+  }
+
+  .dial-frame::before { left: 0; }
+  .dial-frame::after { right: 0; }
+
+  .planet-plaque {
+    width: 88%;
+    min-height: 78px;
+    margin-top: -2.5rem;
+    padding: 11px 14px;
+  }
+
+  .plaque-glyph {
+    width: 43px;
+    height: 43px;
+    margin-right: 10px;
+    font-size: 21px;
+  }
+
+  .planet-plaque strong { font-size: 1rem; }
+  .planet-plaque p { font-size: 9px; }
+
+  .calendar-stone {
+    width: 100%;
+    padding: 18px 8px 20px;
+    border-radius: 30px 30px 7px 7px;
+  }
+
+  .calendar-header {
+    grid-template-columns: 34px 1fr 34px;
+    gap: 7px;
+  }
+
+  .stone-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .selected-day-seal {
+    grid-template-columns: 30px 1fr 1fr 30px;
+  }
+
+  .day-seal-date,
+  .number-seal {
+    padding: 12px 5px;
+  }
+
+  .day-seal-date span,
+  .number-seal span {
+    font-size: 7px;
+  }
+
+  .calendar-day {
+    min-height: 61px;
+    padding: 6px 5px;
+  }
+
+  .calendar-date-number { font-size: 8px; }
+  .calendar-universal { font-size: .78rem; }
+  .calendar-lunar-mark { font-size: 6px; }
+
+  .calendar-actions {
+    flex-wrap: wrap;
+  }
+
+  .facade-shell::before,
+  .facade-shell::after {
+    display: none;
+  }
+}
+
+@media (max-width: 390px) {
+  .facade-kicker { font-size: 7px; }
+  .live-stamp span:not(.live-dot) { display: none; }
+  .automaton { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .automaton-copy { width: 100%; padding: 4px 0 0; }
+  .automaton-copy span { display: none; }
+  .stage-heading p { display: none; }
+  .calendar-day { min-height: 56px; }
+  .calendar-lunar-mark { min-height: 7px; }
+  .date-picker { display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-dot {
+    animation: live-pulse 2.8s ease-in-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .48; transform: scale(.78); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
