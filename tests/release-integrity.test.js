@@ -8,6 +8,7 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const vedic = fs.readFileSync(path.join(root, "vedic.html"), "utf8");
+const maya = fs.readFileSync(path.join(root, "maya.html"), "utf8");
 const day = fs.readFileSync(path.join(root, "day.html"), "utf8");
 const dayScript = fs.readFileSync(path.join(root, "day-profile.js"), "utf8");
 const timeline = fs.readFileSync(path.join(root, "timeline.html"), "utf8");
@@ -17,16 +18,17 @@ const lifeScript = fs.readFileSync(path.join(root, "life-chronicle.js"), "utf8")
 const worker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.webmanifest"), "utf8"));
 
-test("release identifiers are consistently v11.09", () => {
-  assert.match(index, /name="orloj-build" content="public-v11-09"|content="public-v11-09" name="orloj-build"/);
-  assert.match(vedic, /name="orloj-build" content="public-v11-09"/);
-  assert.match(day, /name="orloj-build" content="public-v11-09"/);
-  assert.match(timeline, /name="orloj-build" content="public-v11-09"/);
-  assert.match(life, /name="orloj-build" content="public-v11-09"/);
-  assert.match(index, /Orloj · Public v11\.09 · Životní kronika/);
-  assert.match(index, /sw\.js\?v=public-v11-09-day-calendar-rhythm/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-09-day-calendar-rhythm"/);
-  assert.doesNotMatch(index + vedic + day + timeline + life + worker, /public-v11-08|orloj-public-v11-08/);
+test("release identifiers are consistently v11.10", () => {
+  assert.match(index, /name="orloj-build" content="public-v11-10"|content="public-v11-10" name="orloj-build"/);
+  assert.match(vedic, /name="orloj-build" content="public-v11-10"/);
+  assert.match(maya, /name="orloj-build" content="public-v11-10"/);
+  assert.match(day, /name="orloj-build" content="public-v11-10"/);
+  assert.match(timeline, /name="orloj-build" content="public-v11-10"/);
+  assert.match(life, /name="orloj-build" content="public-v11-10"/);
+  assert.match(index, /Orloj · Public v11\.10 · Mayské soukolí/);
+  assert.match(index, /sw\.js\?v=public-v11-10-maya/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-10-maya"/);
+  assert.doesNotMatch(index + vedic + maya + day + timeline + life + worker, /public-v11-09|orloj-public-v11-09/);
 });
 
 test("day profile shows ordinal day, ISO week and the traditional ruling planet", () => {
@@ -40,11 +42,11 @@ test("day profile shows ordinal day, ISO week and the traditional ruling planet"
 });
 
 test("Human Design assets and route are wired before the main application", () => {
-  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-09"></script>');
-  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-09"></script>');
+  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-10"></script>');
+  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-10"></script>');
   const main = index.indexOf("<script>\n(function(){", engine);
   assert.ok(astronomy > 0 && engine > astronomy && main > engine);
-  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-09"/);
+  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-10"/);
   assert.match(index, /id="panel-design"/);
   assert.match(index, /data-open-tab="design"/);
   assert.match(index, /design:"Human Design"/);
@@ -63,6 +65,9 @@ test("every precached local asset exists", () => {
   assert.ok(assets.includes("./vedic.html"));
   assert.ok(assets.includes("./vedic-astrology.js"));
   assert.ok(assets.includes("./vedic-astrology.css"));
+  assert.ok(assets.includes("./maya.html"));
+  assert.ok(assets.includes("./maya-calendar.js"));
+  assert.ok(assets.includes("./maya-calendar.css"));
   assert.ok(assets.includes("./day.html"));
   assert.ok(assets.includes("./day-profile.js"));
   assert.ok(assets.includes("./day-profile.css"));
@@ -74,12 +79,13 @@ test("every precached local asset exists", () => {
   assert.ok(assets.includes("./life-chronicle.css"));
 });
 
-test("manifest names the day profile and both specialist systems without changing app scope", () => {
+test("manifest names the day profile and specialist systems without changing app scope", () => {
   assert.match(manifest.description, /Profilem dne/);
   assert.match(manifest.description, /Časovou řekou/);
   assert.match(manifest.description, /Životní kronikou/);
   assert.match(manifest.description, /Human Designu/);
   assert.match(manifest.description, /džjótiše/);
+  assert.match(manifest.description, /mayského kalendária/);
   assert.equal(manifest.start_url, "./");
   assert.equal(manifest.scope, "./");
   assert.equal(manifest.display, "standalone");
@@ -94,10 +100,11 @@ test("Profile dne is a separate shareable page linked from both calendars", () =
   assert.match(day, /id="day-personal"/);
   assert.match(day, /id="day-calendars"/);
   assert.match(day, /vedic\.html\?view=sky/);
+  assert.match(day, /maya\.html\?view=gear/);
   assert.match(dayScript, /url\.searchParams\.set\("date",state\.dateKey\)/);
   assert.match(dayScript, /getElementById\("day-app"\)/);
-  assert.match(day, /day-profile\.js\?v=public-v11-09-day-calendar-rhythm/);
-  assert.match(timeline + life, /day-profile\.js\?v=public-v11-09-fix1/);
+  assert.match(day, /day-profile\.js\?v=public-v11-10/);
+  assert.match(timeline + life, /day-profile\.js\?v=public-v11-10/);
   assert.doesNotMatch(dayScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
 });
 
@@ -133,6 +140,22 @@ test("Life chronicle is a private year view linked across the application", () =
 test("Jyotisha accepts a date handoff while remaining a separate page", () => {
   assert.match(dayScript, /vedic\.html\?view=sky&date=/);
   assert.match(fs.readFileSync(path.join(root, "vedic-astrology.js"), "utf8"), /requestedDate=params\.get\("date"\)/);
+});
+
+test("Maya calendar accepts a date handoff while remaining a separate system", () => {
+  const mayaScript = fs.readFileSync(path.join(root, "maya-calendar.js"), "utf8");
+  assert.match(dayScript, /maya\.html\?view=gear&date=/);
+  assert.match(index, /class="tradition-door maya-tradition-door" href="maya\.html"/);
+  assert.match(index, /href="maya\.html"[^>]*>.*Mayské kalendárium/s);
+  assert.doesNotMatch(index, /id="panel-maya"|data-tab="maya"|data-open-tab="maya"/);
+  assert.match(maya, /Vlastní datum systému/);
+  assert.match(maya, /Tzolk’in/);
+  assert.match(maya, /Kalendářní kolo/);
+  assert.match(maya, /Dlouhý počet/);
+  assert.match(maya, /GMT 584 283/);
+  assert.match(mayaScript, /requestedDate=params\.get\("date"\)/);
+  assert.match(mayaScript, /GMT_CORRELATION=584283/);
+  assert.doesNotMatch(maya, /galaktický podpis|13 Moon Calendar/i);
 });
 
 test("Jyotisha is a separate page, not another western astrology panel", () => {
