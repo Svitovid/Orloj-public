@@ -1,5 +1,5 @@
-/* Orloj Public v11.11 — Osobní obloha */
-var CACHE = "orloj-public-v11-11-personal-sky";
+/* Orloj Public v11.12 — Cesta symbolu */
+var CACHE = "orloj-public-v11-12-symbolic-path";
 var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
