@@ -18,17 +18,17 @@ const lifeScript = fs.readFileSync(path.join(root, "life-chronicle.js"), "utf8")
 const worker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.webmanifest"), "utf8"));
 
-test("release identifiers are consistently v11.12", () => {
-  assert.match(index, /name="orloj-build" content="public-v11-12"|content="public-v11-12" name="orloj-build"/);
-  assert.match(vedic, /name="orloj-build" content="public-v11-12"/);
-  assert.match(maya, /name="orloj-build" content="public-v11-12"/);
-  assert.match(day, /name="orloj-build" content="public-v11-12"/);
-  assert.match(timeline, /name="orloj-build" content="public-v11-12"/);
-  assert.match(life, /name="orloj-build" content="public-v11-12"/);
-  assert.match(index, /Orloj · Public v11\.12 · Cesta symbolu/);
-  assert.match(index, /sw\.js\?v=public-v11-12-symbolic-path/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-12-symbolic-path"/);
-  assert.doesNotMatch(index + vedic + maya + day + timeline + life + worker, /public-v11-1[01]|orloj-public-v11-1[01]|v11\.1[01]/);
+test("release identifiers are consistently v11.13", () => {
+  assert.match(index, /name="orloj-build" content="public-v11-13"|content="public-v11-13" name="orloj-build"/);
+  assert.match(vedic, /name="orloj-build" content="public-v11-13"/);
+  assert.match(maya, /name="orloj-build" content="public-v11-13"/);
+  assert.match(day, /name="orloj-build" content="public-v11-13"/);
+  assert.match(timeline, /name="orloj-build" content="public-v11-13"/);
+  assert.match(life, /name="orloj-build" content="public-v11-13"/);
+  assert.match(index, /Orloj · Public v11\.13 · Cesta časem/);
+  assert.match(index, /sw\.js\?v=public-v11-13-time-journey/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-13-time-journey"/);
+  assert.doesNotMatch(index + vedic + maya + day + timeline + life + worker, /public-v11-1[012]|orloj-public-v11-1[012]|v11\.1[012]/);
 });
 
 test("day profile shows ordinal day, ISO week and the traditional ruling planet", () => {
@@ -42,11 +42,11 @@ test("day profile shows ordinal day, ISO week and the traditional ruling planet"
 });
 
 test("Human Design assets and route are wired before the main application", () => {
-  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-12"></script>');
-  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-12"></script>');
+  const astronomy = index.indexOf('<script src="./astronomy-engine.min.js?v=public-v11-13"></script>');
+  const engine = index.indexOf('<script src="./human-design.js?v=public-v11-13"></script>');
   const main = index.indexOf("<script>\n(function(){", engine);
   assert.ok(astronomy > 0 && engine > astronomy && main > engine);
-  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-12"/);
+  assert.match(index, /href="\.\/human-design\.css\?v=public-v11-13"/);
   assert.match(index, /id="panel-design"/);
   assert.match(index, /data-open-tab="design"/);
   assert.match(index, /design:"Human Design"/);
@@ -103,8 +103,8 @@ test("Profile dne is a separate shareable page linked from both calendars", () =
   assert.match(day, /maya\.html\?view=gear/);
   assert.match(dayScript, /url\.searchParams\.set\("date",state\.dateKey\)/);
   assert.match(dayScript, /getElementById\("day-app"\)/);
-  assert.match(day, /day-profile\.js\?v=public-v11-12/);
-  assert.match(timeline + life, /day-profile\.js\?v=public-v11-12/);
+  assert.match(day, /day-profile\.js\?v=public-v11-13/);
+  assert.match(timeline + life, /day-profile\.js\?v=public-v11-13/);
   assert.doesNotMatch(dayScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
 });
 
@@ -120,6 +120,16 @@ test("Time river is a separate shareable page over the common day engine", () =>
   assert.match(timelineScript, /url\.searchParams|searchParams\.set\("start"/);
   assert.doesNotMatch(timelineScript, /searchParams\.set\([^)]*(profile|birth|lat|lon)/i);
   assert.match(worker, /timeline\.html/);
+});
+
+test("Time journey opens any historical day or a month in the river", () => {
+  assert.match(index, /id="time-travel-form"/);
+  assert.match(index, /id="time-travel-date"[^>]*type="date"/);
+  assert.match(index, /id="time-travel-river"/);
+  assert.match(index, /day\.html\?date="\+encodeURIComponent\(selectedDay\(\)\)/);
+  assert.match(index, /timeline\.html\?start="\+encodeURIComponent\(selectedDay\(\)\)\+"&range=month&mode=simple/);
+  assert.match(index, /Cesta časem/);
+  assert.doesNotMatch(index, /time-travel[^\n]*(profile|birth|lat|lon)=/i);
 });
 
 test("Life chronicle is a private year view linked across the application", () => {
