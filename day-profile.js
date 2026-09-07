@@ -151,13 +151,26 @@
   function isoWeek(key){var p=parseDateKey(key);if(!p)return null;var date=new Date(Date.UTC(p.year,p.month-1,p.day)),day=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-day);var first=new Date(Date.UTC(date.getUTCFullYear(),0,1));return Math.ceil((((date-first)/DAY)+1)/7);}
   function dayRuler(key){var date=civilDate(key);return DAY_RULERS[date.getUTCDay()];}
 
-  return{DAY:DAY,SIGNS:SIGNS,SIGN_GLYPHS:SIGN_GLYPHS,BODY_META:BODY_META,ASPECTS:ASPECTS,DAY_RULERS:DAY_RULERS,NUMBER_THEMES:NUMBER_THEMES,rev:rev,signed:signed,validTimeZone:validTimeZone,parseDateKey:parseDateKey,shiftDateKey:shiftDateKey,addMonthsDateKey:addMonthsDateKey,dateKeyAt:dateKeyAt,civilDate:civilDate,localPartsAt:localPartsAt,zonedLocalToUtc:zonedLocalToUtc,dayBounds:dayBounds,rangeBounds:rangeBounds,longitude:longitude,longitudeById:longitudeById,motion:motion,signAt:signAt,fmtDeg:fmtDeg,snapshot:snapshot,angularSeparation:angularSeparation,aspects:aspects,moonPhase:moonPhase,phaseEvents:phaseEvents,eclipseEvents:eclipseEvents,seasonEvents:seasonEvents,ingressEvents:ingressEvents,stationEvents:stationEvents,exactAspectEvents:exactAspectEvents,dailyEvents:dailyEvents,phaseEventsRange:phaseEventsRange,eclipseEventsRange:eclipseEventsRange,seasonEventsRange:seasonEventsRange,aspectWindows:aspectWindows,personalTransitWindows:personalTransitWindows,rangeEvents:rangeEvents,angles:angles,validProfile:validProfile,natalChart:natalChart,personalResonance:personalResonance,digitSum:digitSum,reduceMaster:reduceMaster,rootNumber:rootNumber,numberLabel:numberLabel,numerology:numerology,julianDate:julianDate,intlCalendar:intlCalendar,calendars:calendars,dayOfYear:dayOfYear,isoWeek:isoWeek,dayRuler:dayRuler};
+  // One illumination source drives the disc, panel and halo. New moon is unlit.
+  function moonAppearance(illumination){
+    var amount=Number(illumination),light=isFinite(amount)?Math.max(0,Math.min(1,amount)):0,glow=light*light;
+    return{wash:.16*glow,border:.09+.22*glow,inset:.055*glow,glow:.38*glow,glowSize:28*glow};
+  }
+  function timelineContext(key,context){
+    context=context||{};
+    var range=["week","month","quarter"].indexOf(context.range)>=0?context.range:"month",mode=context.mode==="study"?"study":"simple",start=parseDateKey(context.start)?context.start:key;
+    var end=range==="week"?shiftDateKey(start,7):addMonthsDateKey(start,range==="quarter"?3:1);
+    if(key<start||key>=end)start=key;
+    return{start:start,range:range,mode:mode};
+  }
+
+  return{DAY:DAY,SIGNS:SIGNS,SIGN_GLYPHS:SIGN_GLYPHS,BODY_META:BODY_META,ASPECTS:ASPECTS,DAY_RULERS:DAY_RULERS,NUMBER_THEMES:NUMBER_THEMES,rev:rev,signed:signed,validTimeZone:validTimeZone,parseDateKey:parseDateKey,shiftDateKey:shiftDateKey,addMonthsDateKey:addMonthsDateKey,dateKeyAt:dateKeyAt,civilDate:civilDate,localPartsAt:localPartsAt,zonedLocalToUtc:zonedLocalToUtc,dayBounds:dayBounds,rangeBounds:rangeBounds,longitude:longitude,longitudeById:longitudeById,motion:motion,signAt:signAt,fmtDeg:fmtDeg,snapshot:snapshot,angularSeparation:angularSeparation,aspects:aspects,moonPhase:moonPhase,phaseEvents:phaseEvents,eclipseEvents:eclipseEvents,seasonEvents:seasonEvents,ingressEvents:ingressEvents,stationEvents:stationEvents,exactAspectEvents:exactAspectEvents,dailyEvents:dailyEvents,phaseEventsRange:phaseEventsRange,eclipseEventsRange:eclipseEventsRange,seasonEventsRange:seasonEventsRange,aspectWindows:aspectWindows,personalTransitWindows:personalTransitWindows,rangeEvents:rangeEvents,angles:angles,validProfile:validProfile,natalChart:natalChart,personalResonance:personalResonance,digitSum:digitSum,reduceMaster:reduceMaster,rootNumber:rootNumber,numberLabel:numberLabel,numerology:numerology,julianDate:julianDate,intlCalendar:intlCalendar,calendars:calendars,dayOfYear:dayOfYear,isoWeek:isoWeek,dayRuler:dayRuler,moonAppearance:moonAppearance,timelineContext:timelineContext};
 });
 
 (function(){
   "use strict";
   if(typeof window==="undefined"||!window.document||!window.OrlojDay||!window.document.getElementById("day-app"))return;
-  var D=window.OrlojDay,A=window.Astronomy,PROFILE_KEY="orloj-public-profile-v1",OBSERVER_KEY="orloj-public-observer-v1",state={dateKey:null,timezone:null,observer:null,profile:null};
+  var D=window.OrlojDay,A=window.Astronomy,PROFILE_KEY="orloj-public-profile-v1",OBSERVER_KEY="orloj-public-observer-v1",state={dateKey:null,timezone:null,observer:null,profile:null,river:null};
   function $(id){return document.getElementById(id);}
   function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function readLocal(key){try{return JSON.parse(localStorage.getItem(key)||"null");}catch(e){return null;}}
@@ -174,25 +187,69 @@
     points.forEach(function(point){var q=pos[point.id],anchor=polar(point.lon,116);if(q.lane)svg+='<line x1="'+anchor.x.toFixed(1)+'" y1="'+anchor.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'" stroke="'+point.color+'" stroke-opacity=".28"/>';svg+='<circle class="day-wheel-point" data-body="'+point.id+'" cx="'+q.x.toFixed(1)+'" cy="'+q.y.toFixed(1)+'" r="9.7" fill="'+nodeFill+'" stroke="'+point.color+'" stroke-width="1.3"/><text x="'+q.x.toFixed(1)+'" y="'+(q.y+.5).toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="'+point.color+'" font-size="12">'+point.glyph+'</text>';});return svg+'</svg>';}
   function moonDisc(phase,size){var r=size/2-1,c=size/2,rx=(r*Math.abs(1-2*phase.illumination)).toFixed(2),f1=phase.waxing?1:0,f2=phase.waxing?(phase.illumination>.5?1:0):(phase.illumination>.5?0:1),top=c+","+(c-r),bottom=c+","+(c+r),path="M "+top+" A "+r+","+r+" 0 0 "+f1+" "+bottom+" A "+rx+","+r+" 0 0 "+f2+" "+top+" Z";return '<svg viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+c+'" cy="'+c+'" r="'+r+'" fill="#151a23" stroke="rgba(235,240,248,.18)"/><path d="'+path+'" fill="#dfe8ff"/></svg>';}
   function eventClass(event){return event.kind==="eclipse"?"eclipse":event.kind==="aspect"?event.aspect.type:event.kind;}
-  function eventLayer(event){return event.layer==="astronomie"||event.layer==="souřadnice"?"výpočet":"tradice";}
-  function renderEvents(result){var box=$("day-events"),events=result.events;if(!events.length){box.innerHTML='<div class="day-empty">Uvnitř zvoleného občanského dne nenastává přesný hlavní práh. To neznamená, že je den „prázdný“; pouze nepřekračuje jednu ze sledovaných hranic.</div>';return;}box.innerHTML=events.map(function(event){return '<article class="day-event '+eventClass(event)+'"><time>'+fmtTime(event.at)+'</time><i>'+event.glyph+'</i><div><span class="day-layer '+eventLayer(event)+'">'+event.layer+'</span><b>'+esc(event.title)+'</b><p>'+esc(event.detail)+'</p></div></article>';}).join("");}
-  function renderAspects(list){var box=$("day-aspects"),tight=list.slice(0,10);box.innerHTML=tight.length?tight.map(function(a){return '<article class="day-aspect"><span class="day-aspect-glyph" style="color:'+a.color+'">'+a.a.glyph+' '+a.glyph+' '+a.b.glyph+'</span><div><b>'+a.a.name+' · '+a.name.toLowerCase()+' · '+a.b.name+'</b><small>orb '+a.orb.toFixed(2)+'° · poloha v místní poledne</small></div></article>';}).join(""):'<div class="day-empty">V pracovních orbech není v místní poledne žádný hlavní aspekt.</div>';}
+  function renderEvents(result){var box=$("day-events"),events=result.events;if(!events.length){box.innerHTML='<div class="day-empty">V tento den nevrcholí žádná ze sledovaných událostí.</div>';return;}box.innerHTML=events.map(function(event){return '<article class="day-event '+eventClass(event)+'"><time>'+fmtTime(event.at)+'</time><i>'+event.glyph+'</i><div><b>'+esc(event.title)+'</b><p>'+esc(event.detail)+'</p></div></article>';}).join("");}
+  function renderAspects(list){var box=$("day-aspects"),tight=list.slice(0,10);box.innerHTML=tight.length?tight.map(function(a){return '<article class="day-aspect"><span class="day-aspect-glyph" style="color:'+a.color+'">'+a.a.glyph+' '+a.glyph+' '+a.b.glyph+'</span><div><b>'+a.a.name+' · '+a.name.toLowerCase()+' · '+a.b.name+'</b><small>orb '+a.orb.toFixed(2)+'°</small></div></article>';}).join(""):'<div class="day-empty">V pracovních orbech není v místní poledne žádný hlavní aspekt.</div>';}
   function renderPlanets(points){$("day-planets").innerHTML=points.map(function(p){return '<article class="day-planet"><i style="color:'+p.color+'">'+p.glyph+'</i><span><b>'+p.name+'</b><small>'+p.sign.name+' '+D.fmtDeg(p.sign.degree)+'</small></span><em>'+(p.retro?'R':'→')+'</em></article>';}).join("");}
-  function renderPersonal(personal){var box=$("day-personal"),meta=$("day-personal-meta");if(!personal.profile){meta.textContent="Osobní profil není v tomto zařízení vytvořen.";box.innerHTML='<div class="day-empty"><b>Osobní vrstva zůstává prázdná.</b><p>Po zadání data, času a místa narození Orloj porovná tranzity zvoleného dne s nativními planetami, Ascendentem a MC.</p><a class="day-button quiet" href="./?view=map">Vytvořit osobní mapu →</a></div>';return;}meta.textContent=(personal.profile.name||"Můj profil")+" · osobní data zůstávají pouze v tomto zařízení";var hits=personal.hits.slice(0,10);box.innerHTML=hits.length?hits.map(function(hit){return '<article class="day-personal-hit"><span style="color:'+hit.transit.color+'">'+hit.transit.glyph+'</span><i style="color:'+hit.color+'">'+hit.glyph+'</i><span style="color:'+hit.natal.color+'">'+hit.natal.glyph+'</span><div><b>'+hit.transit.name+' · '+hit.name.toLowerCase()+' · nativní '+hit.natal.name+'</b><small>orb '+hit.orb.toFixed(2)+'° · '+hit.phase+'</small></div></article>';}).join("")+'<p class="day-caution">Tato mapa ukazuje geometrickou blízkost tranzitu k nativním bodům. Není pořadníkem důležitosti ani předpovědí události.</p>':'<div class="day-empty">V pracovních orbech není v místní poledne těsný hlavní aspekt k nativní mapě.</div>';}
-  function renderNumbers(data){var universal=data.universal,personal=data.personal,themeU=universal.theme||{},themeP=personal&&personal.theme||{};$("day-universal-number").innerHTML='<span>Univerzální den</span><b>'+universal.label+'</b><small>'+esc(themeU.title||"")+' · '+esc(themeU.keys||"")+'</small><p>'+esc(themeU.question||"")+'</p>';$("day-personal-number").innerHTML=personal?'<span>Osobní den</span><b>'+personal.label+'</b><small>'+esc(themeP.title||"")+' · '+esc(themeP.keys||"")+'</small><p>'+esc(themeP.question||"")+'</p>':'<span>Osobní den</span><b>—</b><small>po vytvoření osobní mapy</small><p>Výpočet se doplní ze stejného lokálního profilu.</p>';}
+  function renderPersonal(personal){var box=$("day-personal"),meta=$("day-personal-meta");if(!personal.profile){meta.textContent="Bez osobního profilu";box.innerHTML='<div class="day-empty"><p>Vytvoř si osobní mapu pro zobrazení tranzitů k nativu.</p><a class="day-button quiet" href="./?view=map">Vytvořit osobní mapu →</a></div>';return;}meta.textContent=(personal.profile.name||"Můj profil");var hits=personal.hits.slice(0,10);box.innerHTML=hits.length?hits.map(function(hit){return '<article class="day-personal-hit"><span style="color:'+hit.transit.color+'">'+hit.transit.glyph+'</span><i style="color:'+hit.color+'">'+hit.glyph+'</i><span style="color:'+hit.natal.color+'">'+hit.natal.glyph+'</span><div><b>'+hit.transit.name+' · '+hit.name.toLowerCase()+' · nativní '+hit.natal.name+'</b><small>orb '+hit.orb.toFixed(2)+'° · '+hit.phase+'</small></div></article>';}).join(""):'<div class="day-empty">V pracovních orbech není v místní poledne těsný hlavní aspekt k nativní mapě.</div>';}
+  function renderNumbers(data){var universal=data.universal,personal=data.personal,themeU=universal.theme||{},themeP=personal&&personal.theme||{};$("day-universal-number").innerHTML='<span>Univerzální den</span><b>'+universal.label+'</b><small>'+esc(themeU.title||"")+' · '+esc(themeU.keys||"")+'</small><p>'+esc(themeU.question||"")+'</p>';$("day-personal-number").innerHTML=personal?'<span>Osobní den</span><b>'+personal.label+'</b><small>'+esc(themeP.title||"")+' · '+esc(themeP.keys||"")+'</small><p>'+esc(themeP.question||"")+'</p>':'<span>Osobní den</span><b>—</b><small>po vytvoření osobní mapy</small><p>Vytvoř si osobní mapu.</p>';}
   function renderCalendars(data){var items=[["G","Gregoriánský",data.gregorian.long,data.gregorian.numeric,"#8fd8ff"],["፲፫","Etiopský",data.ethiopic.long,"solární kalendář · 13 měsíců","#f0a36c"],["J","Juliánský",data.julian.long,data.julian.numeric,"#bdebd4"]];$("day-calendars").innerHTML=items.map(function(item){return '<article class="day-calendar" style="--cal-accent:'+item[4]+'"><i>'+item[0]+'</i><span>'+item[1]+'</span><b>'+esc(item[2])+'</b><small>'+esc(item[3])+'</small></article>';}).join("");}
-  function setLinks(){var encoded=encodeURIComponent(state.dateKey),year=state.dateKey.slice(0,4),vedic=$("day-vedic-link"),maya=$("day-maya-link"),river=$("day-river-link"),life=$("day-life-link"),back=$("day-back");if(vedic)vedic.href="vedic.html?view=sky&date="+encoded;if(maya)maya.href="maya.html?view=gear&date="+encoded;if(river)river.href="timeline.html?start="+encoded+"&range=quarter";if(life)life.href="life.html?year="+year;if(back)back.href="./?view=numero#num-calendar-card";}
-  function updateUrl(){try{var url=new URL(location.href);url.searchParams.set("date",state.dateKey);history.replaceState(null,"",url);}catch(e){}}
+  function setLinks(){
+    var encoded=encodeURIComponent(state.dateKey),year=state.dateKey.slice(0,4),context=D.timelineContext(state.dateKey,state.river);
+    $("day-vedic-link").href="vedic.html?view=sky&date="+encoded;
+    $("day-maya-link").href="maya.html?view=gear&date="+encoded;
+    $("day-river-link").href="timeline.html?start="+context.start+"&range="+context.range+"&mode="+context.mode;
+    $("day-life-link").href="life.html?year="+year;
+    $("day-back").href="./?view=now&date="+encoded+"#time-travel-title";
+    if(state.river)state.river=context;
+  }
+  function updateUrl(){try{
+    var url=new URL("day.html",location.href);url.searchParams.set("date",state.dateKey);
+    if(state.river){url.searchParams.set("start",state.river.start);url.searchParams.set("range",state.river.range);url.searchParams.set("mode",state.river.mode);}
+    history.replaceState(null,"",url);
+  }catch(e){}}
   function render(){
     if(!A){$("day-app").innerHTML='<div class="day-fatal">Astronomický výpočtový modul se nepodařilo načíst.</div>';return;}
     var bounds=D.dayBounds(state.dateKey,state.timezone),moment=new Date(D.zonedLocalToUtc(state.dateKey,"12:00",state.timezone)),points=D.snapshot(A,moment),aspectList=D.aspects(points),phase=D.moonPhase(A,moment),sun=points[0],moon=points[1],ruler=D.dayRuler(state.dateKey),events=D.dailyEvents(A,state.dateKey,state.timezone),personal=D.personalResonance(A,moment,state.profile),numbers=D.numerology(state.dateKey,state.profile),calendarData=D.calendars(state.dateKey),dateLabel=fmtDate(state.dateKey);dateLabel=dateLabel.charAt(0).toUpperCase()+dateLabel.slice(1);
-    document.title="Orloj · "+dateLabel;$("day-date").value=state.dateKey;$("day-title").textContent=dateLabel;$("day-context").textContent=(state.observer?state.observer.place:"Místo pozorování není nastavené")+" · "+state.timezone+" · občanský den "+bounds.hours+" h";$("day-build").textContent="Profil dne · v11.13";
-    $("day-moon-disc").innerHTML=moonDisc(phase,96);$("day-moon-title").textContent=phase.name;$("day-moon-copy").textContent="Měsíc "+moon.sign.name+" "+D.fmtDeg(moon.sign.degree)+" · "+Math.round(phase.illumination*100)+" % osvětlení";
-    $("day-sun-value").textContent=sun.sign.name+" "+D.fmtDeg(sun.sign.degree);$("day-year-day").textContent=D.dayOfYear(state.dateKey)+". den roku";$("day-year-week").textContent=D.isoWeek(state.dateKey)+". týden roku · ISO 8601";$("day-ruler-glyph").textContent=ruler.glyph;$("day-ruler-glyph").style.color=ruler.color;$("day-ruler-value").textContent=ruler.name;$("day-ruler-copy").textContent="chaldejský rytmus · "+ruler.theme;$("day-number-value").textContent=numbers.personal?numbers.personal.label:numbers.universal.label;$("day-number-label").textContent=numbers.personal?"osobní den":"univerzální den";
-    $("day-wheel").innerHTML=wheel(points,aspectList);$("day-noon-label").textContent="Mapa pro 12:00 · "+state.timezone;renderPlanets(points);renderAspects(aspectList);renderEvents(events);renderPersonal(personal);renderNumbers(numbers);renderCalendars(calendarData);setLinks();updateUrl();
+    document.title="Orloj · "+dateLabel;$("day-date").value=state.dateKey;$("day-date-label").textContent=new Intl.DateTimeFormat("cs-CZ",{timeZone:"UTC",day:"numeric",month:"long",year:"numeric"}).format(D.civilDate(state.dateKey));$("day-weekday").textContent=new Intl.DateTimeFormat("cs-CZ",{timeZone:"UTC",weekday:"long"}).format(D.civilDate(state.dateKey));$("day-selected-date").dateTime=state.dateKey;$("day-date").setAttribute("aria-label","Vybrat datum: "+dateLabel);$("day-context").textContent=(state.observer?state.observer.place:"Místo pozorování není nastavené")+" · "+state.timezone+" · občanský den "+bounds.hours+" h";$("day-build").textContent="Profil dne · v11.13";
+    var appearance=D.moonAppearance(phase.illumination),panel=$("day-moon-summary");
+    panel.style.setProperty("--moon-wash",appearance.wash);panel.style.setProperty("--moon-border",appearance.border);panel.style.setProperty("--moon-inset",appearance.inset);panel.style.setProperty("--moon-glow",appearance.glow);panel.style.setProperty("--moon-glow-size",appearance.glowSize+"px");
+    $("day-moon-disc").innerHTML=moonDisc(phase,96);$("day-moon-title").textContent=phase.name;$("day-moon-copy").textContent=moon.sign.glyph+" "+moon.sign.name+" "+D.fmtDeg(moon.sign.degree);
+    $("day-sun-value").textContent=sun.sign.name+" "+D.fmtDeg(sun.sign.degree);$("day-year-day").textContent=D.dayOfYear(state.dateKey)+". den roku";$("day-year-week").textContent=D.isoWeek(state.dateKey)+". týden roku";$("day-ruler-glyph").textContent=ruler.glyph;$("day-ruler-glyph").style.color=ruler.color;$("day-ruler-value").textContent=ruler.name;$("day-ruler-copy").textContent="chaldejský rytmus · "+ruler.theme;$("day-number-value").textContent=numbers.personal?numbers.personal.label:numbers.universal.label;$("day-number-label").textContent=numbers.personal?"osobní den":"univerzální den";
+    $("day-wheel").innerHTML=wheel(points,aspectList);$("day-noon-label").textContent="12:00 · "+state.timezone;renderPlanets(points);renderAspects(aspectList);renderEvents(events);renderPersonal(personal);renderNumbers(numbers);renderCalendars(calendarData);setLinks();updateUrl();
   }
-  function chooseDate(key){if(!D.parseDateKey(key))return;state.dateKey=key;render();window.scrollTo({top:0,behavior:"smooth"});}
-  function bind(){$("day-prev").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,-1));});$("day-next").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,1));});$("day-today").addEventListener("click",function(){chooseDate(D.dateKeyAt(new Date(),state.timezone));});$("day-date").addEventListener("change",function(){chooseDate(this.value);});$("day-share").addEventListener("click",function(){var button=this,url=new URL(location.href);url.searchParams.set("date",state.dateKey);var done=function(){button.textContent="Odkaz zkopírován ✓";setTimeout(function(){button.textContent="Sdílet den";},1800);};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url.toString()).then(done).catch(function(){prompt("Zkopíruj odkaz:",url.toString());});else prompt("Zkopíruj odkaz:",url.toString());});}
-  function init(){state.observer=loadObserver();state.profile=loadProfile();state.timezone=resolvedTimezone();var requested;try{requested=new URL(location.href).searchParams.get("date");}catch(e){}state.dateKey=D.parseDateKey(requested)?requested:D.dateKeyAt(new Date(),state.timezone);bind();render();}
+  function chooseDate(key){
+    if(!D.parseDateKey(key)){$("day-date").value=state.dateKey;return;}
+    if(key===state.dateKey)return;
+    state.dateKey=key;render();
+  }
+  function bind(){
+    $("day-prev").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,-1));});
+    $("day-next").addEventListener("click",function(){chooseDate(D.shiftDateKey(state.dateKey,1));});
+    $("day-today").addEventListener("click",function(){chooseDate(D.dateKeyAt(new Date(),state.timezone));});
+    var input=$("day-date");
+    input.addEventListener("change",function(){chooseDate(this.value);});
+    input.addEventListener("click",function(){if(typeof this.showPicker==="function")try{this.showPicker();}catch(e){/* Native control remains available (including iOS). */}});
+    input.addEventListener("keydown",function(event){
+      if(event.key==="Enter"||event.key===" "){
+        if(typeof this.showPicker==="function")try{this.showPicker();event.preventDefault();return;}catch(e){}
+        this.parentElement.classList.add("editing");
+      }else if(event.key==="Escape"){this.parentElement.classList.remove("editing");this.value=state.dateKey;}
+      else if(event.key.length===1)this.parentElement.classList.add("editing");
+    });
+    input.addEventListener("blur",function(){this.parentElement.classList.remove("editing");this.value=state.dateKey;});
+    $("day-share").addEventListener("click",function(){
+      var button=this,url=new URL("day.html",location.href);url.searchParams.set("date",state.dateKey);
+      var done=function(){button.textContent="Odkaz zkopírován ✓";setTimeout(function(){button.textContent="Sdílet den";},1800);};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url.toString()).then(done).catch(function(){prompt("Zkopíruj odkaz:",url.toString());});
+      else prompt("Zkopíruj odkaz:",url.toString());
+    });
+  }
+  function init(){
+    state.observer=loadObserver();state.profile=loadProfile();state.timezone=resolvedTimezone();
+    var params=new URLSearchParams();try{params=new URL(location.href).searchParams;}catch(e){}
+    var requested=params.get("date");state.dateKey=D.parseDateKey(requested)?requested:D.dateKeyAt(new Date(),state.timezone);
+    if(params.has("start"))state.river=D.timelineContext(state.dateKey,{start:params.get("start"),range:params.get("range"),mode:params.get("mode")});
+    bind();render();
+  }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
