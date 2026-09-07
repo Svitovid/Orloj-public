@@ -6631,11 +6631,15 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function initTimeTravelUI(){
     var form=document.getElementById("time-travel-form"),input=document.getElementById("time-travel-date"),today=document.getElementById("time-travel-today"),river=document.getElementById("time-travel-river");if(!form||!input)return;
     function currentDay(){return jrKey(new Date());}
-    function selectedDay(){return /^\d{4}-\d{2}-\d{2}$/.test(input.value)?input.value:currentDay();}
-    input.value=currentDay();
-    form.addEventListener("submit",function(e){e.preventDefault();window.location.assign("day.html?date="+encodeURIComponent(selectedDay()));});
-    if(today)today.addEventListener("click",function(){input.value=currentDay();input.focus();});
-    if(river)river.addEventListener("click",function(){window.location.assign("timeline.html?start="+encodeURIComponent(selectedDay())+"&range=month&mode=simple");});
+    function validDay(key){if(!/^\d{4}-\d{2}-\d{2}$/.test(key||""))return false;var date=new Date(key+"T12:00:00Z");return isFinite(date.getTime())&&date.toISOString().slice(0,10)===key;}
+    function selectedDay(){return validDay(input.value)?input.value:currentDay();}
+    var requested=null;try{requested=new URL(location.href).searchParams.get("date");}catch(e){}
+    input.value=validDay(requested)?requested:currentDay();
+    function rememberDay(){try{var url=new URL(location.href);url.searchParams.set("date",selectedDay());history.replaceState(null,"",url);}catch(e){}}
+    input.addEventListener("change",rememberDay);
+    form.addEventListener("submit",function(e){e.preventDefault();rememberDay();window.location.assign("day.html?date="+encodeURIComponent(selectedDay()));});
+    if(today)today.addEventListener("click",function(){input.value=currentDay();rememberDay();input.focus();});
+    if(river)river.addEventListener("click",function(){rememberDay();window.location.assign("timeline.html?start="+encodeURIComponent(selectedDay())+"&range=month&mode=simple");});
   }
 
   initObserverUI();
@@ -6660,7 +6664,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async function () {
     try {
-      var cacheFlag = "orloj-public-v11-13-time-journey";
+      var cacheFlag = "orloj-public-v11-13-day-clarity";
       if (!localStorage.getItem(cacheFlag) && "caches" in window) {
         var keys = await caches.keys();
         await Promise.all(keys.map(function (key) { return caches.delete(key); }));
@@ -6672,7 +6676,7 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
         window.location.reload();
       });
-      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-time-journey", {
+      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-day-clarity", {
         updateViaCache: "none"
       });
       await registration.update();

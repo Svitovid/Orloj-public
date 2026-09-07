@@ -1,5 +1,5 @@
-/* Orloj Public v11.13 — Cesta časem */
-var CACHE = "orloj-public-v11-13-time-journey";
+/* Orloj Public v11.13 — Přehledný Profil dne */
+var CACHE = "orloj-public-v11-13-day-clarity";
 var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
@@ -50,6 +50,14 @@ self.addEventListener("fetch", function(event) {
             if (/\/tarot\.html$/.test(requestURL.pathname)) return caches.match("./tarot.html");
             return caches.match("./index.html");
           }
+          // Precache uses canonical paths; HTML requests versioned JS and CSS.
+          // Only known static assets may fall back without the query string.
+          var asset = ASSETS.find(function(path) {
+            return new URL(path, self.location.href).pathname === requestURL.pathname;
+          });
+          if (asset) return caches.open(CACHE).then(function(cache) {
+            return cache.match(asset).then(function(response) { return response || Response.error(); });
+          });
           return Response.error();
         });
       })
