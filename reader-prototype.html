@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f3e8">
+  <title>Orloj Reader · Desktop prototype</title>
+  <link rel="stylesheet" href="reader-prototype.css">
+</head>
+<body>
+  <main class="reader-shell">
+    <header class="reader-nav glass">
+      <div class="brand"><span class="brand-mark">✧</span><span>ORLOJ</span></div>
+      <div class="date-nav" aria-label="Volba dne">
+        <button id="prev" aria-label="Předchozí den">‹</button>
+        <label class="date-picker"><span id="date-label">—</span><input id="date-input" type="date" aria-label="Vybrat datum"></label>
+        <button id="next" aria-label="Následující den">›</button>
+      </div>
+      <button id="today" class="today">Dnes</button>
+    </header>
+
+    <section class="folio paper">
+      <div class="ambient-glow" aria-hidden="true"></div>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">PROFIL DNE</p>
+          <h1 id="weekday">—</h1>
+          <p class="big-date" id="full-date">—</p>
+          <div class="meta-row">
+            <span id="year-day">—</span>
+            <span class="dot">•</span>
+            <span id="year-week">—</span>
+          </div>
+        </div>
+
+        <div class="ruler-card glass">
+          <span class="small-label">Vládce dne</span>
+          <div class="ruler-main"><span id="ruler-glyph">—</span><b id="ruler-name">—</b></div>
+          <p id="ruler-theme">—</p>
+        </div>
+      </section>
+
+      <section class="cosmic-grid">
+        <article class="moon-panel glass" id="moon-panel">
+          <div class="moon-wrap" aria-hidden="true"><div class="moon-disc" id="moon-disc"></div></div>
+          <div class="moon-copy">
+            <span class="small-label">Měsíc</span>
+            <h2 id="moon-phase">—</h2>
+            <p id="moon-position">—</p>
+            <div class="illumination"><span>Osvětlení</span><b id="moon-illumination">—</b></div>
+          </div>
+        </article>
+
+        <article class="sun-panel">
+          <span class="small-label">Slunce</span>
+          <h2 id="sun-position">—</h2>
+          <p>Tropická poloha pro místní poledne.</p>
+          <div class="solar-orbit" aria-hidden="true"><span>☉</span></div>
+        </article>
+      </section>
+
+      <section class="depth-row">
+        <button class="depth-card"><span>Obloha</span><b>Planety a aspekty</b><i>↗</i></button>
+        <button class="depth-card"><span>Čas</span><b>Časová řeka</b><i>↗</i></button>
+        <button class="depth-card"><span>Osobní vrstva</span><b>Tranzity</b><i>↗</i></button>
+        <button class="depth-card"><span>Symbol</span><b>Výklad a rytmus</b><i>↗</i></button>
+      </section>
+
+      <footer class="folio-footer">
+        <span>Orloj Reader · desktop visual prototype</span>
+        <span>Pansophia Institute</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="astronomy-engine.min.js"></script>
+  <script>
+    (function(){
+      const SIGNS=["Beran","Býk","Blíženci","Rak","Lev","Panna","Váhy","Štír","Střelec","Kozoroh","Vodnář","Ryby"];
+      const GLYPHS=["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+      const RULERS=[
+        {name:"Slunce",glyph:"☉",theme:"vitalita · střed · viditelnost"},
+        {name:"Měsíc",glyph:"☽",theme:"péče · citlivost · vnitřní rytmus"},
+        {name:"Mars",glyph:"♂",theme:"akce · odvaha · jasný řez"},
+        {name:"Merkur",glyph:"☿",theme:"slovo · učení · výměna"},
+        {name:"Jupiter",glyph:"♃",theme:"růst · důvěra · širší perspektiva"},
+        {name:"Venuše",glyph:"♀",theme:"vztahy · krása · vyrovnání"},
+        {name:"Saturn",glyph:"♄",theme:"řád · odpovědnost · dokončení"}
+      ];
+      const phaseNames=["Nov","Dorůstající srpek","První čtvrť","Dorůstající Měsíc","Úplněk","Couvající Měsíc","Poslední čtvrť","Couvající srpek"];
+      const $=id=>document.getElementById(id);
+      const pad=n=>String(n).padStart(2,"0");
+      const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+      const fromKey=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12,0,0)};
+      function dayOfYear(d){const start=new Date(d.getFullYear(),0,0);return Math.floor((d-start)/86400000)}
+      function isoWeek(d){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));x.setUTCDate(x.getUTCDate()+4-(x.getUTCDay()||7));const start=new Date(Date.UTC(x.getUTCFullYear(),0,1));return Math.ceil((((x-start)/86400000)+1)/7)}
+      function eclipticLon(body,d){const v=Astronomy.GeoVector(body,d,true);return ((Astronomy.Ecliptic(v).elon%360)+360)%360}
+      function sign(lon){const i=Math.floor(lon/30),deg=lon-i*30;return {name:SIGNS[i],glyph:GLYPHS[i],degree:deg}}
+      function degreeText(v){let d=Math.floor(v),m=Math.round((v-d)*60);if(m===60){d++;m=0}return d+"°"+pad(m)+"′"}
+      function phase(d){const a=((Astronomy.MoonPhase(d)%360)+360)%360;const illum=(1-Math.cos(a*Math.PI/180))/2;const i=Math.floor((a+22.5)/45)%8;return {angle:a,illum:illum,name:phaseNames[i]}}
+      function render(date){
+        $("date-input").value=key(date);
+        $("date-label").textContent=new Intl.DateTimeFormat("cs-CZ",{day:"numeric",month:"long",year:"numeric"}).format(date);
+        $("weekday").textContent=new Intl.DateTimeFormat("cs-CZ",{weekday:"long"}).format(date);
+        $("full-date").textContent=new Intl.DateTimeFormat("cs-CZ",{day:"numeric",month:"long",year:"numeric"}).format(date);
+        $("year-day").textContent=dayOfYear(date)+". den roku";
+        $("year-week").textContent=isoWeek(date)+". týden";
+        const r=RULERS[date.getDay()];$("ruler-glyph").textContent=r.glyph;$("ruler-name").textContent=r.name;$("ruler-theme").textContent=r.theme;
+        const moon=sign(eclipticLon("Moon",date)),sun=sign(eclipticLon("Sun",date)),ph=phase(date);
+        $("moon-phase").textContent=ph.name;$("moon-position").textContent=moon.glyph+" "+moon.name+" · "+degreeText(moon.degree);$("moon-illumination").textContent=Math.round(ph.illum*100)+" %";
+        $("sun-position").textContent=sun.glyph+" "+sun.name+" · "+degreeText(sun.degree);
+        document.documentElement.style.setProperty("--moon-light",String(.12+ph.illum*.88));
+        document.documentElement.style.setProperty("--moon-glow",String(.08+ph.illum*.42));
+      }
+      let current=new Date();
+      $("prev").onclick=()=>{current.setDate(current.getDate()-1);render(current)};
+      $("next").onclick=()=>{current.setDate(current.getDate()+1);render(current)};
+      $("today").onclick=()=>{current=new Date();render(current)};
+      $("date-input").onchange=e=>{if(e.target.value){current=fromKey(e.target.value);render(current)}};
+      render(current);
+    })();
+  </script>
+</body>
+</html>
