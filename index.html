@@ -2115,6 +2115,23 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 @media(max-width:720px){.orloj-context-grid{grid-template-columns:1fr}.hub-module-grid,.map-status-grid{grid-template-columns:1fr}.hub-module{min-height:132px}.tabs.primary-tabs button{min-height:47px!important}.horizon-window-switch{width:100%}.symbol-philosophy-hero{grid-template-columns:1fr}.symbol-orbit{width:min(88%,300px)}.symbol-three-faces,.symbol-reading-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.orloj-context-grid{gap:6px}.observer-bar,.public-profile-bar{padding:10px 11px}.observer-copy small,.public-profile-copy small{display:none}.tabs.primary-tabs{position:sticky!important;top:calc(env(safe-area-inset-top,0px) + 6px)!important}.tabs.primary-tabs button{display:grid;gap:1px;padding:5px 3px!important;font-size:10px!important}.primary-tab-glyph{width:auto;height:19px;font-size:14px}.hub-hero{padding:22px 18px!important}.hub-module-grid{gap:7px}.hub-module{min-height:125px;padding:14px}.study-search{grid-template-columns:1fr}.study-search span{display:none}.context-rail{margin-right:-2px;margin-left:-2px}.symbol-philosophy-hero{padding:22px 18px 20px}.symbol-philosophy-body{padding:0 18px 22px}.symbol-philosophy-lead{font-size:13.5px}.symbol-journey{grid-template-columns:1fr 1fr}.symbol-journey-step{min-height:114px}.symbol-journey-step:nth-child(2n):after{display:none}.symbol-journey-step:nth-child(3):after{display:block}.symbol-grammar{grid-template-columns:1fr 1fr}.symbol-reading-head{display:block}.symbol-reading-formula{justify-content:flex-start;margin-top:8px}}
 
+/* On phones, the live reading and its primary action precede the sky graphic. */
+@media(max-width:760px){
+  .now-copy{order:-1}
+  .now-visual{order:0}
+  .now-primary-action,.now-secondary-action{min-height:44px;font-size:14px;line-height:1.3}
+  .now-lead{font-size:16px;line-height:1.5}
+}
+@media(max-width:480px){
+  .tabs.primary-tabs button{font-size:12px!important}
+  .now-instrument{padding:20px 16px}
+  .now-visual{min-height:220px;margin-top:10px}
+  .now-orbit{width:min(100%,240px)}
+  .now-actions{gap:8px}
+  .now-primary-action{width:100%;justify-content:center}
+  .now-secondary-action{font-size:13px}
+}
+
 /* v10.10 · Domy: exact cusps first, symbolic reading second. */
 
 </style>

@@ -201,3 +201,39 @@ html[data-theme="light"] .day-number-card>span,html[data-theme="light"] .day-num
   .day-event{gap:7px;padding:10px 6px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.day-moon-summary{transition:none}}
+
+/* The day profile is a reading surface on a phone: keep its data legible. */
+@media(max-width:680px){
+  .day-toplinks{width:100%;justify-content:space-between;gap:4px 10px}
+  .day-toplinks a{font-size:13px}
+  .day-date-controls{grid-template-columns:48px minmax(0,1fr) 48px}
+  .day-date-controls>button{width:48px;min-height:48px}
+  .day-summary>.day-moon-summary{min-height:118px}
+  .day-section-head>span{font-size:12px;line-height:1.35}
+  .day-card-kicker,.day-layer{font-size:12px;letter-spacing:.06em}
+  .day-planet{grid-template-columns:28px minmax(0,1fr) 18px;min-height:56px;padding:9px}
+  .day-planet b,.day-aspect b,.day-personal-hit b{font-size:14px;line-height:1.35}
+  .day-planet small,.day-aspect small,.day-personal-hit small{font-size:12px;line-height:1.4}
+  .day-planet em,.day-event time{font-size:12px}
+  .day-aspect{grid-template-columns:72px minmax(0,1fr);min-height:54px}
+  .day-event b{font-size:14px;line-height:1.4}
+  .day-event p,.day-empty,.day-tradition-door p{font-size:13px;line-height:1.5}
+  .day-personal-hit{min-height:58px;gap:7px}
+  .day-number-card>span,.day-calendar>span,.day-method-grid span{font-size:12px}
+  .day-number-card>small,.day-calendar>small,.day-method-grid p{font-size:13px;line-height:1.5}
+  .day-number-card>p{font-size:15px}
+  .day-button{min-height:44px;font-size:13px;white-space:normal;text-align:center}
+  .day-method-card>summary{min-height:44px}
+  .day-sources,.day-footer{font-size:12px}
+}
+@media(max-width:420px){
+  .day-toplinks{justify-content:flex-start}
+  .day-back{width:100%}
+  .day-toplinks .day-river-link{min-height:36px}
+  .day-date-picker{padding:8px 18px}
+  .day-moon-summary p{font-size:14px}
+  .day-summary-tile>span,.day-summary-tile>small{font-size:13px}
+  .day-summary-tile>b{font-size:20px}
+  .day-planets{grid-template-columns:1fr 1fr}
+  .day-personal-hit{grid-template-columns:23px 18px 23px minmax(0,1fr)}
+}
