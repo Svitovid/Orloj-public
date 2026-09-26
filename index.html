@@ -3868,8 +3868,164 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     else if(trip.part===p.id){context.push("účastník triplicity");}
     var bound=tradBoundOf(p.lon);if(bound===p.id){positives.push("vlastní hranice");score+=2;}
     var face=tradFaceOf(p.lon);if(face===p.id){positives.push("vlastní tvář");score+=1;}
-... 22384 bytes omitted ...
-==activeHouse?"true":"false")+'" class="house-map-option'+(h===activeHouse?" on":"")+'" data-natal-house="'+h+'" type="button"><span class="house-map-title"><b>'+h+'. '+HOUSE_GUIDES[h-1].title+'</b><i>'+TRAD_GLYPHS[ruler]+'</i></span><span class="house-map-cusp">'+hs.cz+' '+fmtDeg(hs.deg)+'</span>'+houseMapGlyphs(planets)+'</button>';
+    var inSect=tradInSect(N,p.id);context.push(inSect?"v sektě":"mimo sektu");
+    var ang=tradAngularity(p.house);context.push(ang.name);
+    if(p.retro&&["sun","moon"].indexOf(p.id)<0)negatives.push("retrográdní");
+    var solar=tradSolarState(N,p);if(solar){(solar.cls==="good"?positives:negatives).push(solar.name);}
+    if(!positives.length)context.push("bez vlastní důstojnosti");
+    return {score:score,positive:positives,negative:negatives,context:context,bound:bound,face:face,trip:activeTrip,sect:inSect,angularity:ang,solar:solar};
+  }
+  function tradScoreClass(n){return n>0?"pos":n<0?"neg":"";}
+  function tradScoreText(n){return (n>0?"+":"")+n;}
+  function tradChips(items,cls){var h="";for(var i=0;i<items.length;i++)h+='<span class="trad-chip '+(cls||"")+'>'+items[i]+'</span>';return h;}
+  function renderTraditionalCondition(){
+    var el=document.getElementById("n-condition");if(!el)return;var N=activeP().natal,S=tradSect(N);
+    var h='<div class="trad-sect"><div><div class="ts-main">'+S.name+' · světlo sekty '+S.light+'</div><div class="ts-sub">Přirozený benefik: '+S.benefic+' · náročnější malefik mimo sektu: '+S.contrary+'</div></div><div class="trad-chipset"><span class="trad-chip gold">sekta</span><span class="trad-chip">egyptské hranice</span><span class="trad-chip">důstojnosti</span></div></div><div class="trad-list">';
+    N.list.slice(0,7).forEach(function(p){var c=tradCondition(N,p);var sum=[];if(c.positive.length)sum=sum.concat(c.positive.slice(0,2));if(c.negative.length)sum=sum.concat(c.negative.slice(0,1));if(!sum.length)sum.push(c.context[0]);
+      h+='<details class="trad-row"><summary><span class="trad-glyph" style="color:'+p.ac+'">'+p.sym+'</span><span><span class="trad-name">'+p.name+'</span><span class="trad-pos">'+p.sign+' '+p.deg+' · '+p.house+'. dům · '+sum.join(' · ')+'</span></span><span class="trad-score '+tradScoreClass(c.score)+'">'+tradScoreText(c.score)+'</span></summary><div class="trad-body"><div class="trad-chipset">'+tradChips(c.positive,"good")+tradChips(c.negative,"warn")+tradChips(c.context,"")+'</div><div class="trad-line"><b>Správa stupně:</b> hranice '+TRAD_NAMES[c.bound]+' · tvář '+TRAD_NAMES[c.face]+' · aktivní vládce triplicity '+TRAD_NAMES[c.trip]+'.</div>'+(c.solar?'<div class="trad-line"><b>Vztah ke Slunci:</b> '+c.solar.detail+'.</div>':'')+'<div class="trad-method">Skóre: domicil +5, exaltace +4, triplicita +3, hranice +2, tvář +1, exil −5, pád −4. Sekta a dům se zobrazují zvlášť a do tohoto čísla se nepřičítají.</div></div></details>';
+    });
+    h+='</div>';el.innerHTML=h;
+  }
+  function tradDispositionChain(N,start){var chain=[],seen={},cur=start,final=null,cycle=null;for(var i=0;i<14;i++){if(seen[cur]!==undefined){cycle=chain.slice(seen[cur]);break;}seen[cur]=chain.length;chain.push(cur);var p=tradPlanet(N,cur);if(!p)break;var next=tradRulerOfLon(p.lon);if(next===cur){final=cur;break;}cur=next;}return {chain:chain,final:final,cycle:cycle};}
+  function tradChainHTML(chain){var h="";for(var i=0;i<chain.length;i++){if(i)h+='<span style="color:rgba(var(--ink-rgb),.25)">→</span>';h+='<span class="node" style="color:'+TRAD_COLOR[chain[i]]+'">'+TRAD_GLYPHS[chain[i]]+' '+TRAD_NAMES[chain[i]]+'</span>';}return h;}
+  function tradMutualReceptions(N){var ids=["sun","moon","mercury","venus","mars","jupiter","saturn"],out=[];for(var i=0;i<ids.length;i++)for(var j=i+1;j<ids.length;j++){var a=tradPlanet(N,ids[i]),b=tradPlanet(N,ids[j]);if(tradRulerOfLon(a.lon)===b.id&&tradRulerOfLon(b.lon)===a.id)out.push([a.id,b.id]);}return out;}
+  function hermeticLots(N){
+    var S=tradSect(N),sun=tradPlanet(N,"sun").lon,moon=tradPlanet(N,"moon").lon;
+    var fortune=rev(N.asc+(S.day?moon-sun:sun-moon));
+    var spirit=rev(N.asc+(S.day?sun-moon:moon-sun));
+    return {fortune:fortune,spirit:spirit,sect:S};
+  }
+  function renderHermeticLots(){
+    var el=document.getElementById("n-lots");if(!el)return;var N=activeP().natal,L=hermeticLots(N);
+    function lotCard(glyph,name,lon,scope){
+      var sg=signOf(lon),house=houseOf(lon,N.cusp),r=tradRulerOfLon(lon),rp=tradPlanet(N,r);
+      return '<article class="lot-card"><div class="lot-head"><div class="lot-glyph">'+glyph+'</div><div><div class="lot-name">'+name+'</div><div class="lot-pos">'+sg.cz+' '+fmtDeg(sg.deg)+' · '+house+'. dům</div></div></div><div class="lot-facts"><b>Vládce:</b> '+TRAD_GLYPHS[r]+' '+TRAD_NAMES[r]+' v '+rp.house+'. domě.<br><b>Tradiční okruh:</b> '+scope+'</div></article>';
+    }
+    el.innerHTML='<div class="lot-grid">'+lotCard('⊗','Los Štěstěny',L.fortune,'tělo, okolnosti a materiální podmínky')+lotCard('⊙','Los Ducha',L.spirit,'vůle, záměr, jednání a povolání')+'</div>';
+  }
+  function renderDispositors(){
+    var el=document.getElementById("n-dispositors");if(!el)return;var N=activeP().natal,ascR=tradRulerOfLon(N.asc),rp=tradPlanet(N,ascR),cond=tradCondition(N,rp),chain=tradDispositionChain(N,ascR);
+    var h='<div class="trad-focus"><div class="tf-g" style="color:'+TRAD_COLOR[ascR]+'">'+TRAD_GLYPHS[ascR]+'</div><div><div class="tf-k">Vládce Ascendentu</div><div class="tf-v">'+TRAD_NAMES[ascR]+' · '+rp.sign+' '+rp.deg+'</div><div class="tf-s">'+rp.house+'. dům · tradiční skóre '+tradScoreText(cond.score)+' · '+(cond.sect?'v sektě':'mimo sektu')+'</div></div></div>';
+    h+='<div class="disp-chain"><b>Řetězec vládce chartu:</b>'+tradChainHTML(chain.chain)+(chain.final?'<span class="trad-chip good">konečný dispozitor</span>':chain.cycle?'<span class="trad-chip gold">uzavřený okruh</span>':'')+'</div>';
+    var keys=[{id:"asc",name:"Ascendent",lon:N.asc,g:"AC"},{id:"sun",name:"Slunce"},{id:"moon",name:"Měsíc"},{id:"mercury",name:"Merkur"},{id:"venus",name:"Venuše"},{id:"mars",name:"Mars"},{id:"jupiter",name:"Jupiter"},{id:"saturn",name:"Saturn"},{id:"uranus",name:"Uran"},{id:"neptune",name:"Neptun"},{id:"pluto",name:"Pluto"}];
+    h+='<div class="disp-grid" style="margin-top:11px">';keys.forEach(function(k){var lon=k.lon!==undefined?k.lon:tradPlanet(N,k.id).lon,r=tradRulerOfLon(lon),rr=tradPlanet(N,r);h+='<div class="disp-row"><div class="disp-from">'+(k.g||TRAD_GLYPHS[k.id])+' '+k.name+'</div><div class="disp-arrow">→</div><div class="disp-to"><span style="color:'+TRAD_COLOR[r]+'">'+TRAD_GLYPHS[r]+' '+TRAD_NAMES[r]+'</span> · '+rr.house+'. dům</div></div>';});h+='</div>';
+    var mr=tradMutualReceptions(N);if(mr.length){h+='<div class="trad-line"><b>Vzájemná recepce:</b> ';for(var i=0;i<mr.length;i++){if(i)h+=' · ';h+='<span style="color:'+TRAD_COLOR[mr[i][0]]+'">'+TRAD_GLYPHS[mr[i][0]]+' '+TRAD_NAMES[mr[i][0]]+'</span> ↔ <span style="color:'+TRAD_COLOR[mr[i][1]]+'">'+TRAD_GLYPHS[mr[i][1]]+' '+TRAD_NAMES[mr[i][1]]+'</span>';}h+='.</div>';}
+    h+='<details class="section-more"><summary>Vládci domů</summary><div class="house-lords">';for(var d=1;d<=12;d++){var r2=tradRulerOfLon(N.cusp[d]),pr=tradPlanet(N,r2);h+='<div class="house-lord"><span class="hl-n">'+d+'.</span><span class="hl-r" style="color:'+TRAD_COLOR[r2]+'">'+TRAD_GLYPHS[r2]+' '+TRAD_NAMES[r2]+'</span><span class="hl-p">'+pr.house+'. dům</span></div>';}h+='</div></details>';
+    el.innerHTML=h;
+  }
+
+  function natalPlacedPositions(data){
+    return placedWheelPositions(data,"lon",88,10,23,6);
+  }
+
+  var HOUSE_AXES=[
+    {a:1,b:7,title:"Já ↔ druzí",left:"Já a tělo",right:"Vztahy",copy:"Vlastní identita, tělo a způsob vstupu do života se setkávají s partnerstvím, smlouvou a zkušeností druhého člověka."},
+    {a:2,b:8,title:"Moje ↔ sdílené",left:"Vlastní zdroje",right:"Sdílení a proměna",copy:"Vlastní hodnoty, majetek a sebehodnota stojí proti sdíleným zdrojům, závazkům, intimitě a hluboké proměně."},
+    {a:3,b:9,title:"Blízké ↔ vzdálené",left:"Řeč a okolí",right:"Smysl a obzor",copy:"Každodenní poznávání, řeč a blízké prostředí se doplňují se studiem, vírou, cestami a širším obrazem světa."},
+    {a:4,b:10,title:"Kořeny ↔ veřejný směr",left:"Domov a nitro",right:"Povolání a role",copy:"Soukromý základ, rodina a pocit domova se vyvažují s povoláním, pověstí, odpovědností a viditelným přínosem."},
+    {a:5,b:11,title:"Tvorba ↔ společenství",left:"Radost a dílo",right:"Přátelé a vize",copy:"Osobní tvořivost, hra a radost se setkávají s přátelstvím, skupinami, společnou budoucností a tím, co přesahuje jednotlivce."},
+    {a:6,b:12,title:"Řád ↔ ústraní",left:"Práce a návyky",right:"Ticho a nevědomí",copy:"Každodenní práce, zdraví a služba potřebují rovnováhu s ústraním, uzavíráním, sny a obnovou mimo viditelný svět."}
+  ];
+  var HOUSE_GUIDES=[
+    {title:"Já a tělo",copy:"První dům začíná Ascendentem. Popisuje způsob, jak člověk spontánně vstupuje do situace, jak nese své tělo a jaký první dojem vytváří."},
+    {title:"Zdroje a hodnota",copy:"Druhý dům se vztahuje k vlastním zdrojům, schopnostem, praktické hodnotě a tomu, co člověk považuje za své."},
+    {title:"Řeč a blízké okolí",copy:"Třetí dům sleduje učení, komunikaci, sourozence, krátké cesty a bezprostřední prostředí, v němž se člověk učí orientovat."},
+    {title:"Kořeny a domov",copy:"Čtvrtý dům začíná u IC. Ukazuje soukromý základ, domov, rodinnou paměť a místo, odkud člověk čerpá pocit vnitřního ukotvení."},
+    {title:"Tvorba a radost",copy:"Pátý dům souvisí s vlastní tvorbou, hrou, láskou, dětmi a ochotou vložit do světa něco osobního."},
+    {title:"Řád a každodennost",copy:"Šestý dům mapuje rytmus práce, služby, návyků, péče o tělo a praktické rozdělení dne."},
+    {title:"Vztahy a zrcadlo",copy:"Sedmý dům začíná Descendentem. Patří sem partnerství, dohody, otevřené střety a zkušenost druhého člověka jako protějšku."},
+    {title:"Sdílení a proměna",copy:"Osmý dům se týká sdílených zdrojů, závazků, intimity, krizí a proměn, které nejdou řešit jen z pozice samostatného já."},
+    {title:"Smysl a obzor",copy:"Devátý dům otevírá dlouhé cesty, vyšší studium, víru, právo a hledání širšího rámce, v němž jednotlivé zkušenosti dávají smysl."},
+    {title:"Veřejný směr",copy:"Desátý dům začíná u MC. Vztahuje se k povolání, pověsti, odpovědnosti, autoritě a tomu, co je z člověka viditelné ve světě."},
+    {title:"Společenství a vize",copy:"Jedenáctý dům spojuje přátelství, skupiny, spolupráci, dlouhodobé cíle a obrazy budoucnosti, které přesahují soukromý život."},
+    {title:"Ústraní a vnitřní život",copy:"Dvanáctý dům uzavírá cyklus domů. Nese témata ústraní, snů, skrytých vzorců, soucitu a obnovy mimo běžnou společenskou roli."}
+  ];
+  var QUARTER_STAGES=[
+    {roman:"I",title:"Vznik já",verb:"Vznikám",signs:[0,1,2],houses:[1,2,3],path:"impuls → hodnota → pojmenování",copy:"První čtvrtina zakládá přítomnost jednotlivce: nejprve vznikne pohyb, potom vztah k vlastní hodnotě a nakonec schopnost zkušenost pojmenovat.",color:"#f0a36c"},
+    {roman:"II",title:"Rozvinutí já",verb:"Rozvíjím se",signs:[3,4,5],houses:[4,5,6],path:"kořeny → tvorba → dovednost",copy:"Druhá čtvrtina dává vznikajícímu já zázemí, tvůrčí výraz a praktický tvar. To, co začalo jako možnost, se učí nést každodenní život.",color:"#d8c46d"},
+    {roman:"III",title:"Setkání s druhými",verb:"Setkávám se",signs:[6,7,8],houses:[7,8,9],path:"vztah → sdílení → smysl",copy:"Třetí čtvrtina překračuje izolované já. Druhý člověk, společné závazky a širší obzor proměňují dosavadní představu o sobě.",color:"#8fd8ff"},
+    {roman:"IV",title:"Začlenění do celku",verb:"Začleňuji se",signs:[9,10,11],houses:[10,11,12],path:"role → společenství → přesah",copy:"Čtvrtá čtvrtina zasazuje zkušenost do veřejné role, kolektivní budoucnosti a prostoru, kde se starý cyklus uzavírá před novým začátkem.",color:"#b9a7e8"}
+  ];
+  var QUARTER_BOUNDS=[["ASC","IC"],["IC","DSC"],["DSC","MC"],["MC","ASC"]];
+  function quarterPlanets(N,q){return N.list.filter(function(p){return q.houses.indexOf(p.house)>=0;});}
+  function quarterPosition(lon){var s=signOf(lon);return s.cz+" "+fmtDeg(s.deg);}
+  function quarterRange(N,index){var q=QUARTER_STAGES[index],from=q.houses[0],to=q.houses[2]%12+1;return QUARTER_BOUNDS[index][0]+" "+quarterPosition(N.cusp[from])+" → "+QUARTER_BOUNDS[index][1]+" "+quarterPosition(N.cusp[to]);}
+  function quarterWheelSvg(N,mode,selected){
+    var s='<svg viewBox="0 0 320 320" role="img" aria-label="Čtyři '+(mode==="natal"?'osobní kvadranty domů':'výukové čtvrtiny zvěrokruhu')+'"><circle cx="160" cy="160" r="142" fill="rgba(var(--ink-rgb),.008)" stroke="rgba(var(--ink-rgb),.09)"/><circle cx="160" cy="160" r="58" fill="rgba(5,8,13,.82)" stroke="rgba(var(--ink-rgb),.09)"/>';
+    QUARTER_STAGES.forEach(function(q,i){
+      var start=mode==="natal"?N.cusp[q.houses[0]]:i*90,end=mode==="natal"?N.cusp[q.houses[2]%12+1]:(i+1)*90,on=i===selected,mid=rev(start+rev(end-start)/2),label=polar(mid,82);
+      s+='<g class="quarter-sector" data-quarter-index="'+i+'" role="button" tabindex="0" aria-label="'+q.roman+'. čtvrtina: '+q.title+'"><path d="'+ringSectorPath(start,end,59,141)+'" fill="'+q.color+'" fill-opacity="'+(on?'.18':'.055')+'" stroke="'+q.color+'" stroke-opacity="'+(on?'.72':'.20')+'" stroke-width="'+(on?'1.5':'.65')+'"/><text x="'+label.x.toFixed(2)+'" y="'+label.y.toFixed(2)+'" text-anchor="middle" dominant-baseline="middle" fill="'+q.color+'" font-size="'+(on?'16':'12')+'" font-weight="850">'+q.roman+'</text></g>';
+    });
+    if(mode==="zodiac"){
+      for(var z=0;z<12;z++){var p=polar(z*30+15,123);s+=zodiacGroup(z,p.x,p.y,12,'rgba(238,240,244,.70)');}
+    }else{
+      for(var h=1;h<=12;h++){var next=N.cusp[h%12+1],mid=rev(N.cusp[h]+rev(next-N.cusp[h])/2),p=polar(mid,121);s+='<text x="'+p.x.toFixed(2)+'" y="'+p.y.toFixed(2)+'" text-anchor="middle" dominant-baseline="middle" fill="rgba(var(--ink-rgb),.62)" font-size="9" font-weight="760">'+h+'</text>';}
+      [["ASC",N.cusp[1]],["IC",N.cusp[4]],["DSC",N.cusp[7]],["MC",N.cusp[10]]].forEach(function(a){var x=polar(a[1],151);s+='<text x="'+x.x.toFixed(2)+'" y="'+x.y.toFixed(2)+'" text-anchor="middle" dominant-baseline="middle" fill="#bdebd4" font-size="8" font-weight="830">'+a[0]+'</text>';});
+    }
+    s+='<text x="160" y="155" text-anchor="middle" fill="rgba(var(--ink-rgb),.78)" font-size="10" font-weight="820">'+(mode==="natal"?'12 DOMŮ':'12 ZNAMENÍ')+'</text><text x="160" y="170" text-anchor="middle" fill="rgba(var(--ink-rgb),.36)" font-size="8" font-weight="700">4 FÁZE</text></svg>';
+    return s;
+  }
+  function renderQuarterCompass(N){
+    var W=document.getElementById("n-quarter-wheel"),L=document.getElementById("n-quarter-stages"),D=document.getElementById("n-quarter-detail"),buttons=document.querySelectorAll("[data-quarter-mode]");if(!W||!L||!D)return;
+    var mode=state.quarterMode==="natal"&&PROFILE_READY?"natal":"zodiac",selected=Math.max(0,Math.min(3,state.quarterIndex||0)),q=QUARTER_STAGES[selected];state.quarterMode=mode;
+    Array.prototype.forEach.call(buttons,function(b){var target=b.getAttribute("data-quarter-mode"),on=target===mode,needsProfile=target==="natal"&&!PROFILE_READY;b.setAttribute("aria-pressed",on?"true":"false");b.setAttribute("aria-disabled",needsProfile?"true":"false");b.title=needsProfile?"Nejprve vytvoř osobní profil":"";b.onclick=function(){if(needsProfile){openPublicProfileSetup(false);return;}state.quarterMode=target;renderNatal();};});
+    W.innerHTML=quarterWheelSvg(N,mode,selected);
+    function select(index){state.quarterIndex=index;if(state.quarterMode==="natal"){state.natalHouse=QUARTER_STAGES[index].houses[0];state.natalAxis=houseAxisIndex(state.natalHouse);}renderNatal();}
+    Array.prototype.forEach.call(W.querySelectorAll("[data-quarter-index]"),function(g){function choose(){select(parseInt(g.getAttribute("data-quarter-index"),10));}g.addEventListener("click",choose);g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();choose();}});});
+    var html="";QUARTER_STAGES.forEach(function(stage,i){var on=i===selected,planets=quarterPlanets(N,stage);html+='<button class="quarter-stage'+(on?' on':'')+'" style="--quarter-color:'+stage.color+'" data-quarter-stage="'+i+'" aria-pressed="'+(on?'true':'false')+'" type="button"><span class="quarter-stage-no">'+stage.roman+'</span><span><b>'+stage.title+'</b><span>'+stage.path+'</span><small>'+(mode==="natal"?stage.houses[0]+'.–'+stage.houses[2]+'. dům · '+csCount(planets.length,["planeta","planety","planet"]):TROP_CZ[stage.signs[0]]+' · '+TROP_CZ[stage.signs[1]]+' · '+TROP_CZ[stage.signs[2]])+'</small></span></button>';});L.innerHTML=html;
+    Array.prototype.forEach.call(L.querySelectorAll("[data-quarter-stage]"),function(b){b.addEventListener("click",function(){select(parseInt(b.getAttribute("data-quarter-stage"),10));});});
+    var planets=quarterPlanets(N,q),fact=mode==="natal"?quarterRange(N,selected):q.signs.map(function(i){return TROP_CZ[i];}).join(" · ")+" · "+(selected*90)+"°–"+((selected+1)*90)+"°",occupancy=mode==="natal"?(planets.length?planets.map(function(p){return p.sym+" "+p.name;}).join(" · "):"bez planet; čte se přes hroty a vládce"):q.houses[0]+".–"+q.houses[2]+". dům jako výuková analogie";
+    D.setAttribute("style","--quarter-color:"+q.color);D.innerHTML='<div class="quarter-detail-code">'+q.roman+'</div><div class="quarter-detail-copy"><b>'+q.verb+' · '+q.title+'</b><p>'+q.copy+'</p></div><div class="quarter-detail-facts"><span>'+(mode==="natal"?'Skutečné hranice':'Výuková čtvrtina')+'</span><b>'+fact+'</b><span style="margin-top:7px">'+(mode==="natal"?'Obsazení':'Most k domům')+'</span><b>'+occupancy+'</b></div>';
+  }
+  function houseAxisIndex(h){return (Math.max(1,Math.min(12,h))-1)%6;}
+  function activeNatalAxis(N){
+    if(state.natalHouse!==null&&state.natalHouse>=1&&state.natalHouse<=12)return houseAxisIndex(state.natalHouse);
+    if(state.natalAxis!==null&&state.natalAxis>=0&&state.natalAxis<6)return state.natalAxis;
+    var selected=N.list.filter(function(x){return x.id===state.natalSel;})[0]||N.list[0];
+    return selected?houseAxisIndex(selected.house):0;
+  }
+  function activeNatalHouse(N){
+    if(state.natalHouse!==null&&state.natalHouse>=1&&state.natalHouse<=12)return state.natalHouse;
+    var selected=N.list.filter(function(x){return x.id===state.natalSel;})[0]||N.list[0];
+    return selected?selected.house:1;
+  }
+  function houseAxisPlanets(N,h){return N.list.filter(function(p){return p.house===h;});}
+  function houseAxisGlyphs(list){
+    if(!list.length)return '<span class="house-axis-planets empty">bez planet</span>';
+    return '<span class="house-axis-planets">'+list.map(function(p){return '<span style="color:'+p.ac+'" title="'+p.name+'">'+p.sym+'</span>';}).join('')+'</span>';
+  }
+  function houseAxisNames(list){
+    if(!list.length)return "bez planet";
+    return list.map(function(p){return '<span style="color:'+p.ac+'">'+p.sym+'</span> '+p.name;}).join(" · ");
+  }
+  function houseMapGlyphs(list){
+    if(!list.length)return '<span class="house-map-planets empty">bez planet</span>';
+    return '<span class="house-map-planets">'+list.map(function(p){return '<span style="color:'+p.ac+'" title="'+p.name+'">'+p.sym+'</span>';}).join("")+'</span>';
+  }
+  function houseCuspLabel(N,h){var s=signOf(N.cusp[h]);return s.cz+' '+fmtDeg(s.deg);}
+  function renderHouseAxes(N){
+    var C=document.getElementById("n-house-axes"),D=document.getElementById("n-house-axis-detail"),R=document.getElementById("n-house-reference"),M=document.getElementById("n-house-map"),H=document.getElementById("n-house-detail");if(!C||!D||!R||!M||!H)return;
+    var selected=activeNatalAxis(N),html="";
+    HOUSE_AXES.forEach(function(ax,i){
+      var left=houseAxisPlanets(N,ax.a),right=houseAxisPlanets(N,ax.b),count=left.length+right.length;
+      html+='<button aria-pressed="'+(i===selected?"true":"false")+'" class="house-axis-option'+(i===selected?" on":"")+'" data-house-axis="'+i+'" type="button">'+
+        '<span class="house-axis-name"><b>'+ax.title+'</b><small>'+count+' '+(count===1?"planeta":count>1&&count<5?"planety":"planet")+'</small></span>'+
+        '<span class="house-axis-diagram"><span class="house-axis-pole"><span class="house-axis-no">'+ax.a+'</span><span class="house-axis-pole-copy"><span class="house-axis-pole-title">'+ax.left+'</span>'+houseAxisGlyphs(left)+'</span></span>'+
+        '<span class="house-axis-bridge"><span class="house-axis-occupancy">'+ax.a+'—'+ax.b+'</span></span>'+
+        '<span class="house-axis-pole right"><span class="house-axis-pole-copy"><span class="house-axis-pole-title">'+ax.right+'</span>'+houseAxisGlyphs(right)+'</span><span class="house-axis-no">'+ax.b+'</span></span></span></button>';
+    });
+    C.innerHTML=html;
+    Array.prototype.forEach.call(C.querySelectorAll("[data-house-axis]"),function(b){
+      b.addEventListener("click",function(){var axis=parseInt(b.getAttribute("data-house-axis"),10);state.natalAxis=axis;state.natalHouse=HOUSE_AXES[axis].a;renderNatal();});
+    });
+    var ax=HOUSE_AXES[selected],lp=houseAxisPlanets(N,ax.a),rp=houseAxisPlanets(N,ax.b),total=lp.length+rp.length;
+    D.innerHTML='<div class="house-axis-detail-code">'+ax.a+' ↔ '+ax.b+'</div><div><div class="house-axis-detail-title">'+ax.title+'</div><div class="house-axis-detail-copy">'+ax.copy+' Tuto osu nyní obsazují '+total+' z '+N.list.length+' zobrazených planet.</div><div class="house-axis-detail-poles"><span><b>'+ax.a+'. dům</b> '+houseAxisNames(lp)+'</span><span><b>'+ax.b+'. dům</b> '+houseAxisNames(rp)+'</span></div></div>';
+    var asc=signOf(N.asc),mc=signOf(N.mc);
+    R.innerHTML='<div class="house-reference-mark">AC</div><div><b>Výchozí konstrukce chartu · Placidus</b><span>Ascendent <b>'+asc.cz+' '+fmtDeg(asc.deg)+'</b> otevírá 1. dům; MC <b>'+mc.cz+' '+fmtDeg(mc.deg)+'</b> určuje 10. dům. Hroty a obsazení níže patří přesně k tomuto profilu.</span></div>';
+    var activeHouse=activeNatalHouse(N),map="";
+    for(var h=1;h<=12;h++){
+      var hs=signOf(N.cusp[h]),planets=houseAxisPlanets(N,h),ruler=tradRulerOfLon(N.cusp[h]);
+      map+='<button aria-pressed="'+(h===activeHouse?"true":"false")+'" class="house-map-option'+(h===activeHouse?" on":"")+'" data-natal-house="'+h+'" type="button"><span class="house-map-title"><b>'+h+'. '+HOUSE_GUIDES[h-1].title+'</b><i>'+TRAD_GLYPHS[ruler]+'</i></span><span class="house-map-cusp">'+hs.cz+' '+fmtDeg(hs.deg)+'</span>'+houseMapGlyphs(planets)+'</button>';
     }
     M.innerHTML=map;
     Array.prototype.forEach.call(M.querySelectorAll("[data-natal-house]"),function(b){b.addEventListener("click",function(){var h=parseInt(b.getAttribute("data-natal-house"),10);state.natalHouse=h;state.natalAxis=houseAxisIndex(h);renderNatal();});});
