@@ -2116,11 +2116,41 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 @media(max-width:480px){.orloj-context-grid{gap:6px}.observer-bar,.public-profile-bar{padding:10px 11px}.observer-copy small,.public-profile-copy small{display:none}.tabs.primary-tabs{position:sticky!important;top:calc(env(safe-area-inset-top,0px) + 6px)!important}.tabs.primary-tabs button{display:grid;gap:1px;padding:5px 3px!important;font-size:10px!important}.primary-tab-glyph{width:auto;height:19px;font-size:14px}.hub-hero{padding:22px 18px!important}.hub-module-grid{gap:7px}.hub-module{min-height:125px;padding:14px}.study-search{grid-template-columns:1fr}.study-search span{display:none}.context-rail{margin-right:-2px;margin-left:-2px}.symbol-philosophy-hero{padding:22px 18px 20px}.symbol-philosophy-body{padding:0 18px 22px}.symbol-philosophy-lead{font-size:13.5px}.symbol-journey{grid-template-columns:1fr 1fr}.symbol-journey-step{min-height:114px}.symbol-journey-step:nth-child(2n):after{display:none}.symbol-journey-step:nth-child(3):after{display:block}.symbol-grammar{grid-template-columns:1fr 1fr}.symbol-reading-head{display:block}.symbol-reading-formula{justify-content:flex-start;margin-top:8px}}
 
 /* On phones, the live reading and its primary action precede the sky graphic. */
+.mobile-profile-control,.mobile-settings,.now-mobile-more,.now-essentials{display:none}
 @media(max-width:760px){
   .now-copy{order:-1}
   .now-visual{order:0}
+  .now-mobile-more{order:1;display:block;min-width:0}
+  .now-mobile-more>summary{min-height:44px;display:grid;place-items:center;color:rgba(var(--ink-rgb),.68);font-size:13px;font-weight:700;cursor:pointer;list-style:none}
+  .now-mobile-more>summary::-webkit-details-marker{display:none}
+  .now-mobile-more>summary:after{content:" ↓"}
+  .now-mobile-more[open]>summary:after{content:" ↑"}
+  .now-mobile-more>div{display:flex;flex-wrap:wrap;gap:8px;padding:6px 0 2px}
+  .now-mobile-more a,.now-mobile-more button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid rgba(var(--ink-rgb),.15);border-radius:13px;background:rgba(var(--ink-rgb),.035);color:var(--ink-primary);font:inherit;font-size:13px;text-decoration:none;cursor:pointer}
+  .now-lead,.now-factline,.now-actions .now-secondary-action{display:none}
+  .now-essentials{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+  .now-essentials>div{min-width:0;padding:11px 12px;border:1px solid rgba(var(--ink-rgb),.11);border-radius:14px;background:rgba(var(--ink-rgb),.035)}
+  .now-essentials .now-next{grid-column:1/-1}
+  .now-essentials span{display:block;color:rgba(var(--ink-rgb),.55);font-size:12px;line-height:1.25}
+  .now-essentials b{display:block;margin-top:5px;color:var(--ink-primary);font-size:15px;line-height:1.3;font-weight:680;overflow-wrap:anywhere}
   .now-primary-action,.now-secondary-action{min-height:44px;font-size:14px;line-height:1.3}
   .now-lead{font-size:16px;line-height:1.5}
+}
+@media(max-width:600px){
+  .orloj-context-grid{display:none}
+  .head{position:relative;z-index:30}
+  .head .eyebrow{display:none}
+  .orloj-mode-controls{grid-template-columns:repeat(4,44px);align-items:center}
+  #exhibit-toggle{display:none}
+  .mobile-profile-control{display:grid;place-items:center}
+  .mobile-profile-control svg,.mobile-settings svg{width:20px;height:20px}
+  .mobile-settings{position:relative;display:block}
+  .mobile-settings>summary{display:grid;place-items:center;width:44px;min-height:44px;border:1px solid rgba(var(--ink-rgb),.14);border-radius:14px;background:rgba(var(--ink-rgb),.035);color:var(--ink-primary);cursor:pointer;list-style:none}
+  .mobile-settings>summary::-webkit-details-marker{display:none}
+  .mobile-settings-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:100;width:max-content;min-width:210px;padding:7px;border:1px solid rgba(var(--ink-rgb),.18);border-radius:16px;background:var(--paper-soft);box-shadow:0 15px 40px rgba(0,0,0,.4)}
+  .mobile-settings-menu button{display:block;width:100%;min-height:44px;padding:9px 12px;border:0;border-radius:10px;background:transparent;color:var(--ink-primary);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+  .mobile-settings-menu button:hover,.mobile-settings-menu button:focus-visible{background:rgba(var(--ink-rgb),.09)}
+  .mobile-profile-control:focus-visible,.mobile-settings>summary:focus-visible,.now-mobile-more>summary:focus-visible{outline:2px solid #8fd8ff;outline-offset:2px}
 }
 @media(max-width:480px){
   .tabs.primary-tabs button{font-size:12px!important}
@@ -2131,6 +2161,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   .now-primary-action{width:100%;justify-content:center}
   .now-secondary-action{font-size:13px}
 }
+@media(max-width:380px){.head h1{font-size:32px!important}.orloj-mode-controls{grid-template-columns:repeat(4,40px);gap:4px}.orloj-mode-button,.mobile-settings>summary{width:40px;min-height:40px}}
 
 /* v10.10 · Domy: exact cusps first, symbolic reading second. */
 
@@ -2139,7 +2170,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 </head>
 <body>
 <div class="wrap">
-<div class="head"><div><p class="eyebrow">Obloha · čísla · cykly času</p><h1>Orloj</h1></div><div class="head-side"><div class="meta"><b>Živý přehled dne</b><i>osobní údaje zůstávají v zařízení</i></div><div class="orloj-mode-controls" aria-label="Vzhled a režim" data-i18n-aria="shell.controls"><button class="orloj-mode-button" id="theme-toggle" type="button" aria-label="Změnit vzhled"><span class="orloj-mode-icon" id="theme-toggle-icon">◐</span><span id="theme-toggle-label">Auto</span></button><button class="orloj-mode-button" id="exhibit-toggle" type="button"><span class="orloj-mode-icon">▣</span><span>Obraz</span></button><button aria-pressed="false" class="orloj-mode-button language-toggle" id="language-toggle" type="button"><span class="orloj-mode-icon" id="language-toggle-code">CZ</span><span data-i18n="shell.language" id="language-toggle-label">Jazyk</span></button></div></div></div>
+<div class="head"><div><p class="eyebrow">Obloha · čísla · cykly času</p><h1>Orloj</h1></div><div class="head-side"><div class="meta"><b>Živý přehled dne</b><i>osobní údaje zůstávají v zařízení</i></div><div class="orloj-mode-controls" aria-label="Vzhled a režim" data-i18n-aria="shell.controls"><button class="orloj-mode-button" id="theme-toggle" type="button" aria-label="Změnit vzhled"><span class="orloj-mode-icon" id="theme-toggle-icon">◐</span><span id="theme-toggle-label">Auto</span></button><button class="orloj-mode-button" id="exhibit-toggle" type="button"><span class="orloj-mode-icon">▣</span><span>Obraz</span></button><button aria-pressed="false" class="orloj-mode-button language-toggle" id="language-toggle" type="button"><span class="orloj-mode-icon" id="language-toggle-code">CZ</span><span data-i18n="shell.language" id="language-toggle-label">Jazyk</span></button><button class="orloj-mode-button mobile-profile-control" id="mobile-profile-edit" type="button" aria-label="Osobní profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.2 20c.4-3.8 2.8-6 6.8-6s6.4 2.2 6.8 6" stroke-linecap="round"/></svg></button><details class="mobile-settings"><summary aria-label="Nastavení Orloje" title="Nastavení Orloje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2m0 14.4v2M2.8 12h2m14.4 0h2M5.5 5.5l1.4 1.4m10.2 10.2 1.4 1.4m0-13-1.4 1.4M6.9 17.1l-1.4 1.4" stroke-linecap="round"/></svg></summary><div class="mobile-settings-menu"><button id="mobile-observer-edit" type="button">Místo pozorování</button><button id="mobile-exhibit-toggle" type="button">Obrazový režim</button></div></details></div></div></div>
 <div class="orloj-context-grid">
 <section aria-live="polite" class="observer-bar" id="observer-bar">
 <div class="observer-mark">⌾</div>
@@ -2170,9 +2201,11 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 	    <h2 id="now-title">—<span id="now-subtitle">—</span></h2>
 	    <p class="now-lead" id="now-lead">Orloj se právě ladí na skutečná data oblohy.</p>
 	    <div class="now-factline" id="now-factline">—</div>
+        <div class="now-essentials" aria-label="Rytmus dne"><div><span>Vládce dne</span><b id="now-ruler">—</b></div><div><span id="now-number-label">Číslo dne</span><b id="now-number">—</b></div><div class="now-next"><span>Nejbližší práh</span><b id="now-next-threshold">—</b></div></div>
     <div class="now-actions"><a class="now-primary-action" href="day.html">Otevřít Profil dne →</a><a class="now-secondary-action" href="timeline.html">Časová řeka</a><a class="now-secondary-action" href="life.html">Životní kronika</a><button class="now-secondary-action" data-open-tab="horizont" type="button">Horizont</button><button class="now-secondary-action" data-now-open-depth type="button">Dnešní vrstvy</button><button class="now-secondary-action" data-open-tab="denik" type="button">Zapsat pozorování</button></div>
 	  </div>
 	  <div class="now-visual"><div class="now-orbit" id="now-orbit" aria-live="polite"></div></div>
+	  <details class="now-mobile-more"><summary>Další cesty</summary><div><a href="timeline.html">Časová řeka</a><a href="life.html">Životní kronika</a><button data-open-tab="horizont" type="button">Horizont</button><button data-now-open-depth type="button">Dnešní vrstvy</button><button data-open-tab="denik" type="button">Zapsat pozorování</button></div></details>
 	</section>
 
 	<section class="time-travel" aria-labelledby="time-travel-title">
@@ -3565,6 +3598,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function updatePublicProfileBar(){
     var P=activeP(),n=document.getElementById("public-profile-name"),m=document.getElementById("public-profile-meta");if(!n||!m)return;
     if(PROFILE_READY){n.textContent=P.label;m.textContent=P.bornTxt+" · "+P.place;}else{n.textContent="Zadej údaje narození";m.textContent="Horoskop, Human Design, tranzity a osobní cykly se dopočítají pro tebe.";}
+    var mobile=document.getElementById("mobile-profile-edit");if(mobile)mobile.setAttribute("aria-label",PROFILE_READY?"Osobní profil: "+P.label:"Nastavit osobní profil");
   }
   function applyPublicProfileData(data,persist){
     data.utc=zonedLocalToUtc(data.date,data.time,data.timezone);PROFILES[0]=publicProfileFromData(data);PROFILE_READY=true;state.profile=0;state.natOpen=null;state.natalSel="sun";state.natalAxis=null;state.natalHouse=null;state.trOpen=-1;state.trSelected=0;state.vyOpen=-1;state.taOpen=null;state.lmOpen=-1;state.naOpen=-1;state.hdStep=1;state.hdCenter=null;state.hdChannel=null;state.hdGate=null;state.hdTimeOffset=0;if(persist)savePublicProfileData(data);updatePublicProfileBar();
@@ -4495,6 +4529,12 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     if(clock)clock.textContent=horizonDay(nowMs)+" · "+todayTime(now);
     if(lead)lead.textContent="Živý bod orientace: Měsíc právě prochází znamením "+moonSign.cz+". Pod ním jsou tři pohyby, které mají nejbližší ověřitelný práh.";
     if(facts)facts.innerHTML='<b>Fakt</b><span class="now-fact-dot"></span><span>tropická ekliptikální délka</span><span class="now-fact-dot"></span><span>'+(OBSERVER_READY?escapeHtml(OBSERVER.place):"bez místních os")+'</span><span class="now-fact-dot"></span><span class="now-change">Od včerejška · '+nowChangeSinceYesterday(now,data,ph)+'</span>';
+    var civil=observerCivilDate(now),ruler=TODAY_RULERS[civil.getDay()],number=PROFILE_READY?reduceNum(pdRaw(activeP().bd,civil)):reduceNum(udRaw(civil));
+    var rulerNode=document.getElementById("now-ruler"),numberNode=document.getElementById("now-number"),numberLabel=document.getElementById("now-number-label"),nextNode=document.getElementById("now-next-threshold");
+    if(rulerNode){rulerNode.textContent=ruler[1]+" "+ruler[0];rulerNode.style.color=ruler[2];}
+    if(numberNode)numberNode.textContent=number;
+    if(numberLabel)numberLabel.textContent=PROFILE_READY?"Osobní den":"Číslo dne";
+    if(nextNode)nextNode.textContent=threshold?horizonEventTitle(threshold)+" · "+horizonDate(threshold.at):"—";
     if(orbit)orbit.innerHTML=nowOrbitSVG(data,ph,now);
     var lunar={title:"Lunární rytmus",glyph:"☽",color:"#d8e5ff",state:moonStream.state,copy:ph.name+" · Měsíc "+moonSign.cz,fact:Math.round(ph.illum*100)+" % osvětlení · přesná poloha "+moonSign.cz+" "+fmtDeg(moonSign.deg)+". Další lunární práh: "+(nextL?horizonEventTitle(nextL)+" · "+horizonDate(nextL.at):"—")+".",tradition:moonStream.tradition,question:moonStream.question,event:nextL};
     var planet=turn?{title:"Planetární pohyb",glyph:turn.glyph,color:turn.color,state:motionStream[0],copy:turn.name+" · "+motionStream[1],fact:turn.name+" je nyní ve fázi „"+motionStageName(turn.cycle.stage)+"“. Nejbližší bod: "+turn.cycle.nextLabel+" · "+horizonDate(turn.cycle.nextAt)+".",tradition:motionStream[2]+" "+turn.name+" je zde jazykem pro "+((PDEEP[turn.id]&&PDEEP[turn.id].prin)||"symbolický princip")+".",question:HORIZON_QUESTIONS[turn.id]||"Co se zde vyplatí sledovat bez ukvapeného závěru?",event:station}:{title:"Planetární pohyb",glyph:"↔",color:"#f0b985",state:"Rozbíhá se",copy:"Planety v přímém pohybu",fact:"Planety jsou mezi nejbližšími obraty.",tradition:"Astrologická tradice sleduje rytmus pohybu planet.",question:"Kde je dobré rozlišit směr od pouhé rychlosti?"};
@@ -4503,7 +4543,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     container.innerHTML=items.map(function(item,i){var open=state.nowSignalOpen===i;return '<article class="now-signal'+(open?' is-open':'')+'" style="--now-accent:'+item.color+'"><button class="now-signal-button" data-now-signal="'+i+'" type="button" aria-expanded="'+(open?'true':'false')+'"><span class="now-signal-top"><span class="now-signal-name"><i class="now-signal-glyph">'+item.glyph+'</i>'+item.title+'</span><span class="now-signal-state">'+item.state+'</span></span><b>'+item.copy+'</b><p>'+item.fact+'</p><span class="now-signal-more">'+(open?'Skrýt vrstvy ↑':'Fakt · tradice · otázka ↓')+'</span></button>'+(open?'<div class="now-signal-detail">'+horizonStreamDetail(item)+(item.event?'<button class="now-signal-horizon" data-now-horizon="'+item.event.at+'" type="button">Zobrazit tento práh v Horizontu →</button>':'')+'</div>':'')+'</article>';}).join("");
     Array.prototype.forEach.call(container.querySelectorAll("[data-now-signal]"),function(button){button.addEventListener("click",function(){var i=parseInt(button.getAttribute("data-now-signal"),10);state.nowSignalOpen=state.nowSignalOpen===i?-1:i;renderNowInstrument(now,data,ph,moon);});});
     Array.prototype.forEach.call(container.querySelectorAll("[data-now-horizon]"),function(button){button.addEventListener("click",function(){focusHorizonMoment(parseFloat(button.getAttribute("data-now-horizon")));activateTab("horizont",true);});});
-    var depthButton=document.querySelector("[data-now-open-depth]");if(depthButton)depthButton.onclick=function(){var depth=document.getElementById("today-day-layers");if(depth){depth.open=true;setTimeout(function(){depth.scrollIntoView({behavior:"smooth",block:"start"});},0);}};
+    Array.prototype.forEach.call(document.querySelectorAll("[data-now-open-depth]"),function(depthButton){depthButton.onclick=function(){var depth=document.getElementById("today-day-layers");if(depth){depth.open=true;setTimeout(function(){depth.scrollIntoView({behavior:"smooth",block:"start"});},0);}};});
   }
   function renderTodayOverview(){
     var root=document.getElementById("panel-today");if(!root)return;
@@ -6574,6 +6614,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function closeObserverSetup(){var modal=document.getElementById("observer-modal");if(modal)modal.classList.add("hidden");showObserverMessage("");}
   function refreshObserverViews(){renderTodayOverview();render();renderPlanetHours();renderPlanetMotion();renderMapHub();skyTint();}
   function initObserverUI(){var edit=document.getElementById("observer-edit"),close=document.getElementById("observer-close"),cancel=document.getElementById("observer-cancel"),search=document.getElementById("observer-place-search"),query=document.getElementById("observer-place-query"),device=document.getElementById("observer-use-device"),form=document.getElementById("observer-form");if(!edit||!form)return;edit.addEventListener("click",openObserverSetup);close.addEventListener("click",closeObserverSetup);cancel.addEventListener("click",closeObserverSetup);
+    var mobileEdit=document.getElementById("mobile-observer-edit"),mobileExhibit=document.getElementById("mobile-exhibit-toggle"),mobileSettings=document.querySelector(".mobile-settings");if(mobileEdit)mobileEdit.addEventListener("click",function(){if(mobileSettings)mobileSettings.open=false;openObserverSetup();});if(mobileExhibit)mobileExhibit.addEventListener("click",function(){if(mobileSettings)mobileSettings.open=false;document.getElementById("exhibit-toggle").click();});
     async function findObserverPlace(){var q=query.value.trim(),R=document.getElementById("observer-place-results");if(q.length<2){showObserverMessage("Napiš alespoň dvě písmena názvu místa.");return;}showObserverMessage("Hledám místo…",true);R.innerHTML="";try{var url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=6&language=cs&format=json",res=await fetch(url);if(!res.ok)throw new Error("network");var data=await res.json(),items=data.results||[];if(!items.length){showObserverMessage("Místo se nepodařilo najít. Zkus doplnit zemi nebo použij ruční souřadnice.");return;}showObserverMessage("");items.forEach(function(x){var place=x.name+(x.admin1?", "+x.admin1:"")+(x.country?", "+x.country:"");var b=document.createElement("button");b.type="button";b.className="place-result";b.innerHTML='<span><b>'+escapeHtml(place)+'</b><small>'+Number(x.latitude).toFixed(4)+'°, '+Number(x.longitude).toFixed(4)+'°</small></span><span>'+escapeHtml(x.timezone)+'</span>';b.addEventListener("click",function(){setObserverPickedPlace(place,x.latitude,x.longitude,x.timezone);});R.appendChild(b);});}catch(e){showObserverMessage("Vyhledávání místa je nyní nedostupné. Souřadnice a pásmo lze zadat ručně.");}}
     search.addEventListener("click",findObserverPlace);query.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();findObserverPlace();}});device.addEventListener("click",function(){if(!navigator.geolocation){showObserverMessage("Tento prohlížeč neposkytuje polohu zařízení.");return;}showObserverMessage("Čekám na povolení polohy…",true);navigator.geolocation.getCurrentPosition(function(pos){setObserverPickedPlace("Aktuální poloha",pos.coords.latitude,pos.coords.longitude,Intl.DateTimeFormat().resolvedOptions().timeZone||observerTimeZone());},function(){showObserverMessage("Polohu se nepodařilo získat. Město lze vyhledat nebo zadat ručně.");},{enableHighAccuracy:false,timeout:12000,maximumAge:300000});});
     form.addEventListener("submit",function(e){e.preventDefault();var place=query.value.trim(),lat=parseFloat(document.getElementById("observer-lat-input").value),lon=parseFloat(document.getElementById("observer-lon-input").value),tz=document.getElementById("observer-tz-input").value.trim();if(!place){showObserverMessage("Doplň název místa.");return;}if(!isFinite(lat)||lat<-90||lat>90||!isFinite(lon)||lon<-180||lon>180){showObserverMessage("Vyber místo nebo zadej platné souřadnice.");return;}if(!validTimeZone(tz)){showObserverMessage("Časové pásmo není platné. Použij např. Europe/Prague.");return;}applyObserverData({place:place,lat:lat,lon:lon,timezone:tz},true);closeObserverSetup();refreshObserverViews();});updateObserverBar();}
@@ -6600,6 +6641,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function initPublicProfileUI(){
     var edit=document.getElementById("public-profile-edit"),close=document.getElementById("profile-close"),cancel=document.getElementById("profile-cancel"),search=document.getElementById("profile-place-search"),query=document.getElementById("profile-place-query"),form=document.getElementById("profile-form");
     edit.addEventListener("click",function(){openPublicProfileSetup(false);});close.addEventListener("click",closePublicProfileSetup);cancel.addEventListener("click",closePublicProfileSetup);
+    var mobileEdit=document.getElementById("mobile-profile-edit");if(mobileEdit)mobileEdit.addEventListener("click",function(){openPublicProfileSetup(false);});
     async function findPlace(){
       var q=query.value.trim(),R=document.getElementById("profile-place-results");if(q.length<2){showProfileMessage("Napiš alespoň dvě písmena názvu místa.");return;}showProfileMessage("Hledám místo…",true);R.innerHTML="";
       try{var url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=6&language=cs&format=json";var res=await fetch(url);if(!res.ok)throw new Error("network");var data=await res.json(),items=data.results||[];if(!items.length){showProfileMessage("Místo se nepodařilo najít. Zkus doplnit zemi nebo použij ruční souřadnice.");return;}showProfileMessage("");items.forEach(function(x){var place=x.name+(x.admin1?", "+x.admin1:"")+(x.country?", "+x.country:"");var b=document.createElement("button");b.type="button";b.className="place-result";b.innerHTML='<span><b>'+place.replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];})+'</b><small>'+Number(x.latitude).toFixed(4)+'°, '+Number(x.longitude).toFixed(4)+'°</small></span><span>'+x.timezone+'</span>';b.addEventListener("click",function(){setPickedPlace(place,x.latitude,x.longitude,x.timezone);});R.appendChild(b);});}
