@@ -63,6 +63,14 @@ test("day controls update all values across leap day without scrolling", () => {
   assert.equal(p.elements.get("day-date").value, "2024-03-01");
 });
 
+test("day profile does not substitute universal numerology for a missing personal profile", () => {
+  const p = page("day", "date=2026-09-27");
+  assert.equal(p.elements.get("day-number-label").textContent, "osobní den");
+  assert.equal(p.elements.get("day-number-value").textContent, "—");
+  assert.match(p.elements.get("day-personal-number").innerHTML, /Vytvořit osobní mapu/);
+  assert.equal(p.elements.has("day-universal-number"), false);
+});
+
 test("date selection opens the native picker and survives its absence or rejection", () => {
   const p = page("day", "date=2026-09-07"), input = p.elements.get("day-date");
   let opened = 0, prevented = 0;
