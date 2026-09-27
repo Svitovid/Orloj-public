@@ -2133,6 +2133,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   .now-essentials .now-next{grid-column:1/-1}
   .now-essentials span{display:block;color:rgba(var(--ink-rgb),.55);font-size:12px;line-height:1.25}
   .now-essentials b{display:block;margin-top:5px;color:var(--ink-primary);font-size:15px;line-height:1.3;font-weight:680;overflow-wrap:anywhere}
+  .now-instrument{box-shadow:inset 0 0 110px rgba(218,232,255,var(--moon-wash,0)),0 20px 70px rgba(0,0,0,.17)}
   .now-primary-action,.now-secondary-action{min-height:44px;font-size:14px;line-height:1.3}
   .now-lead{font-size:16px;line-height:1.5}
 }
@@ -2170,7 +2171,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 </head>
 <body>
 <div class="wrap">
-<div class="head"><div><p class="eyebrow">Obloha · čísla · cykly času</p><h1>Orloj</h1></div><div class="head-side"><div class="meta"><b>Živý přehled dne</b><i>osobní údaje zůstávají v zařízení</i></div><div class="orloj-mode-controls" aria-label="Vzhled a režim" data-i18n-aria="shell.controls"><button class="orloj-mode-button" id="theme-toggle" type="button" aria-label="Změnit vzhled"><span class="orloj-mode-icon" id="theme-toggle-icon">◐</span><span id="theme-toggle-label">Auto</span></button><button class="orloj-mode-button" id="exhibit-toggle" type="button"><span class="orloj-mode-icon">▣</span><span>Obraz</span></button><button aria-pressed="false" class="orloj-mode-button language-toggle" id="language-toggle" type="button"><span class="orloj-mode-icon" id="language-toggle-code">CZ</span><span data-i18n="shell.language" id="language-toggle-label">Jazyk</span></button><button class="orloj-mode-button mobile-profile-control" id="mobile-profile-edit" type="button" aria-label="Osobní profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.2 20c.4-3.8 2.8-6 6.8-6s6.4 2.2 6.8 6" stroke-linecap="round"/></svg></button><details class="mobile-settings"><summary aria-label="Nastavení Orloje" title="Nastavení Orloje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2m0 14.4v2M2.8 12h2m14.4 0h2M5.5 5.5l1.4 1.4m10.2 10.2 1.4 1.4m0-13-1.4 1.4M6.9 17.1l-1.4 1.4" stroke-linecap="round"/></svg></summary><div class="mobile-settings-menu"><button id="mobile-observer-edit" type="button">Místo pozorování</button><button id="mobile-exhibit-toggle" type="button">Obrazový režim</button></div></details></div></div></div>
+<div class="head"><div><p class="eyebrow">Obloha · čísla · cykly času</p><h1>Orloj</h1></div><div class="head-side"><div class="meta"><b>Živý přehled dne</b><i>osobní údaje zůstávají v zařízení</i></div><div class="orloj-mode-controls" aria-label="Vzhled a režim" data-i18n-aria="shell.controls"><button class="orloj-mode-button" id="theme-toggle" type="button" aria-label="Změnit vzhled"><span class="orloj-mode-icon" id="theme-toggle-icon">◐</span><span id="theme-toggle-label">Auto</span></button><button class="orloj-mode-button" id="exhibit-toggle" type="button"><span class="orloj-mode-icon">▣</span><span>Obraz</span></button><button aria-pressed="false" class="orloj-mode-button language-toggle" id="language-toggle" type="button"><span class="orloj-mode-icon" id="language-toggle-code">CZ</span><span data-i18n="shell.language" id="language-toggle-label">Jazyk</span></button><button class="orloj-mode-button mobile-profile-control" id="mobile-profile-edit" type="button" aria-label="Osobní profil" data-i18n-aria="now.profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.2 20c.4-3.8 2.8-6 6.8-6s6.4 2.2 6.8 6" stroke-linecap="round"/></svg></button><details class="mobile-settings"><summary aria-label="Nastavení Orloje" title="Nastavení Orloje" data-i18n-aria="now.settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2m0 14.4v2M2.8 12h2m14.4 0h2M5.5 5.5l1.4 1.4m10.2 10.2 1.4 1.4m0-13-1.4 1.4M6.9 17.1l-1.4 1.4" stroke-linecap="round"/></svg></summary><div class="mobile-settings-menu"><button id="mobile-observer-edit" type="button" data-i18n="now.location">Místo pozorování</button><button id="mobile-exhibit-toggle" type="button" data-i18n="now.exhibit">Obrazový režim</button></div></details></div></div></div>
 <div class="orloj-context-grid">
 <section aria-live="polite" class="observer-bar" id="observer-bar">
 <div class="observer-mark">⌾</div>
@@ -2197,15 +2198,15 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 <div class="panel" id="panel-today">
 	<section class="now-instrument" aria-labelledby="now-title">
 	  <div class="now-copy">
-	    <div class="now-kicker-row"><span class="now-live">Nyní · živá obloha</span><i class="now-kicker-divider" aria-hidden="true"></i><span id="now-clock">—</span></div>
+	    <div class="now-kicker-row"><span class="now-live" data-i18n="now.live">Nyní · živá obloha</span><i class="now-kicker-divider" aria-hidden="true"></i><span id="now-clock">—</span></div>
 	    <h2 id="now-title">—<span id="now-subtitle">—</span></h2>
 	    <p class="now-lead" id="now-lead">Orloj se právě ladí na skutečná data oblohy.</p>
 	    <div class="now-factline" id="now-factline">—</div>
-        <div class="now-essentials" aria-label="Rytmus dne"><div><span>Vládce dne</span><b id="now-ruler">—</b></div><div><span id="now-number-label">Číslo dne</span><b id="now-number">—</b></div><div class="now-next"><span>Nejbližší práh</span><b id="now-next-threshold">—</b></div></div>
-    <div class="now-actions"><a class="now-primary-action" href="day.html">Otevřít Profil dne →</a><a class="now-secondary-action" href="timeline.html">Časová řeka</a><a class="now-secondary-action" href="life.html">Životní kronika</a><button class="now-secondary-action" data-open-tab="horizont" type="button">Horizont</button><button class="now-secondary-action" data-now-open-depth type="button">Dnešní vrstvy</button><button class="now-secondary-action" data-open-tab="denik" type="button">Zapsat pozorování</button></div>
+        <div class="now-essentials" aria-label="Rytmus dne"><div><span data-i18n="now.ruler">Vládce dne</span><b id="now-ruler">—</b></div><div><span id="now-number-label" data-i18n="now.personalNumber">Osobní den</span><b id="now-number">—</b></div><div class="now-next"><span data-i18n="now.threshold">Nejbližší práh</span><b id="now-next-threshold">—</b></div></div>
+    <div class="now-actions"><a class="now-primary-action" data-i18n="now.dayProfile" href="day.html">Otevřít Profil dne →</a><a class="now-secondary-action" href="timeline.html">Časová řeka</a><a class="now-secondary-action" href="life.html">Životní kronika</a><button class="now-secondary-action" data-open-tab="horizont" type="button">Horizont</button><button class="now-secondary-action" data-now-open-depth type="button">Dnešní vrstvy</button><button class="now-secondary-action" data-open-tab="denik" type="button">Zapsat pozorování</button></div>
 	  </div>
 	  <div class="now-visual"><div class="now-orbit" id="now-orbit" aria-live="polite"></div></div>
-	  <details class="now-mobile-more"><summary>Další cesty</summary><div><a href="timeline.html">Časová řeka</a><a href="life.html">Životní kronika</a><button data-open-tab="horizont" type="button">Horizont</button><button data-now-open-depth type="button">Dnešní vrstvy</button><button data-open-tab="denik" type="button">Zapsat pozorování</button></div></details>
+	  <details class="now-mobile-more"><summary data-i18n="now.more">Další cesty</summary><div><a href="timeline.html" data-i18n="now.river">Časová řeka</a><a href="life.html" data-i18n="now.life">Životní kronika</a><button data-open-tab="horizont" type="button" data-i18n="tab.horizon">Horizont</button><button data-now-open-depth type="button" data-i18n="now.layers">Dnešní vrstvy</button><button data-open-tab="denik" type="button" data-i18n="now.journal">Zapsat pozorování</button></div></details>
 	</section>
 
 	<section class="time-travel" aria-labelledby="time-travel-title">
@@ -3202,6 +3203,21 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     cs:{
       "shell.controls":"Vzhled a režim",
       "shell.language":"Jazyk",
+      "now.profile":"Osobní profil",
+      "now.settings":"Nastavení Orloje",
+      "now.location":"Místo pozorování",
+      "now.exhibit":"Obrazový režim",
+      "now.ruler":"Vládce dne",
+      "now.number":"Číslo dne",
+      "now.personalNumber":"Osobní den",
+      "now.threshold":"Nejbližší práh",
+      "now.dayProfile":"Otevřít Profil dne →",
+      "now.more":"Další cesty",
+      "now.river":"Časová řeka",
+      "now.life":"Životní kronika",
+      "now.layers":"Dnešní vrstvy",
+      "now.journal":"Zapsat pozorování",
+      "now.live":"Nyní · živá obloha",
       "shell.footer":"<b>Orloj · Public v11.13 · Cesta časem</b> · osobní observatoř času · připravuje Pansophia Institute · údaje zůstávají v zařízení",
       "tab.now":"Nyní",
       "tab.map":"Moje mapa",
@@ -3251,6 +3267,21 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     en:{
       "shell.controls":"Appearance and mode",
       "shell.language":"Language",
+      "now.profile":"Personal profile",
+      "now.settings":"Orloj settings",
+      "now.location":"Observation location",
+      "now.exhibit":"Exhibition mode",
+      "now.ruler":"Day ruler",
+      "now.number":"Day number",
+      "now.personalNumber":"Personal day",
+      "now.threshold":"Next threshold",
+      "now.dayProfile":"Open day profile →",
+      "now.more":"More paths",
+      "now.river":"Time river",
+      "now.life":"Life chronicle",
+      "now.layers":"Today's layers",
+      "now.journal":"Write an observation",
+      "now.live":"Now · live sky",
       "shell.footer":"<b>Orloj · Public v11.13 · Time journey</b> · personal observatory of time · prepared by Pansophia Institute · data remains on this device",
       "tab.now":"Now",
       "tab.map":"My map",
@@ -3319,7 +3350,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
       btn.setAttribute("aria-pressed",APP_LANG==="en"?"true":"false");btn.setAttribute("aria-label",label);btn.title=label;
     }
     if(save!==false)try{localStorage.setItem("orloj-language",APP_LANG);}catch(e){}
-    if(rerender!==false){renderCal();renderNumCalendar();renderWorldCalendars();}
+    if(rerender!==false){renderCal();renderNumCalendar();renderWorldCalendars();renderTodayOverview();updatePublicProfileBar();}
   }
   function initLanguageUI(){
     applyLanguage(APP_LANG,false,false);
@@ -3598,7 +3629,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function updatePublicProfileBar(){
     var P=activeP(),n=document.getElementById("public-profile-name"),m=document.getElementById("public-profile-meta");if(!n||!m)return;
     if(PROFILE_READY){n.textContent=P.label;m.textContent=P.bornTxt+" · "+P.place;}else{n.textContent="Zadej údaje narození";m.textContent="Horoskop, Human Design, tranzity a osobní cykly se dopočítají pro tebe.";}
-    var mobile=document.getElementById("mobile-profile-edit");if(mobile)mobile.setAttribute("aria-label",PROFILE_READY?"Osobní profil: "+P.label:"Nastavit osobní profil");
+    var mobile=document.getElementById("mobile-profile-edit");if(mobile)mobile.setAttribute("aria-label",PROFILE_READY?tr("now.profile")+": "+P.label:tr("now.profile"));
   }
   function applyPublicProfileData(data,persist){
     data.utc=zonedLocalToUtc(data.date,data.time,data.timezone);PROFILES[0]=publicProfileFromData(data);PROFILE_READY=true;state.profile=0;state.natOpen=null;state.natalSel="sun";state.natalAxis=null;state.natalHouse=null;state.trOpen=-1;state.trSelected=0;state.vyOpen=-1;state.taOpen=null;state.lmOpen=-1;state.naOpen=-1;state.hdStep=1;state.hdCenter=null;state.hdChannel=null;state.hdGate=null;state.hdTimeOffset=0;if(persist)savePublicProfileData(data);updatePublicProfileBar();
@@ -4446,6 +4477,15 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     ["Venuše","♀","#f4a8c7","vztahy, krása a vyrovnání"],
     ["Saturn","♄","#c8b68b","řád, odpovědnost a dokončení"]
   ];
+  var NOW_PHASE_EN={"Nov":"New Moon","Dorůstající srpek":"Waxing crescent","První čtvrť":"First quarter","Dorůstající měsíc":"Waxing gibbous","Úplněk":"Full Moon","Couvající měsíc":"Waning gibbous","Poslední čtvrť":"Last quarter","Couvající srpek":"Waning crescent"};
+  var NOW_RULER_EN=["Sun","Moon","Mars","Mercury","Jupiter","Venus","Saturn"];
+  var NOW_PLANET_EN={sun:"Sun",moon:"Moon",mercury:"Mercury",venus:"Venus",mars:"Mars",jupiter:"Jupiter",saturn:"Saturn",uranus:"Uranus",neptune:"Neptune",pluto:"Pluto"};
+  function nowThresholdText(e){
+    if(!e)return"—";
+    if(APP_LANG!=="en")return horizonEventTitle(e)+" · "+horizonDate(e.at);
+    var title=e.kind==="lunar"?(e.eclipse?(e.eclipse.type==="S"?"Solar eclipse":"Lunar eclipse"):(e.phase.key==="new"?"New Moon":e.phase.key==="full"?"Full Moon":e.phase.key==="first"?"First quarter":"Last quarter")):e.kind==="season"?"Seasonal turning point":e.kind==="ingress"?(NOW_PLANET_EN[e.planet.id]||e.planet.name)+" enters "+e.sign.name:(NOW_PLANET_EN[e.planet.id]||e.planet.name)+" stations "+(e.toDirect?"direct":"retrograde");
+    return title+" · "+new Intl.DateTimeFormat("en-GB",{timeZone:observerTimeZone(),day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(e.at));
+  }
   var TODAY_MOON_CUE=[
     "prvnímu kroku a přímé reakci","zpomalení, tělu a tomu, co má skutečnou hodnotu","rozhovoru, pohybu a spojování informací","domovu, bezpečí a citlivému vnímání","tvořivosti, srdci a zdravému sebevyjádření","řádu, péči o tělo a drobným opravám","rovnováze, vztahům a kultivaci prostoru","hloubce, pravdě a tomu, co probíhá pod povrchem","smyslu, studiu a širšímu výhledu","dlouhodobému cíli, odpovědnosti a stavbě","nadhledu, novým spojením a budoucnosti","snění, soucitu, odpočinku a jemným signálům"
   ];
@@ -4513,28 +4553,29 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     var horizonButton=root.querySelector("[data-time-threshold-horizon]");if(horizonButton)horizonButton.onclick=function(){var target=primary||next;if(target)focusHorizonMoment(target.at);activateTab("horizont",true);};
   }
   function nowOrbitSVG(data,ph,now){
-    var pos=placedWheelPositions(data,"wheel",119,8.5,17,4),moon=data.filter(function(p){return p.id==="moon";})[0],s='<svg viewBox="0 0 320 320" role="img" aria-label="Živá ekliptikální mapa. '+(moon?"Měsíc "+moon.sign+" "+moon.deg:"Aktuální obloha")+'">';
+    var pos=placedWheelPositions(data,"wheel",119,8.5,17,4),moon=data.filter(function(p){return p.id==="moon";})[0],moonSignEn=moon?TROP[TROP_CZ.indexOf(moon.sign)]:null,s='<svg viewBox="0 0 320 320" role="img" aria-label="'+(APP_LANG==="en"?(moon?"Live ecliptic map. Moon in "+(moonSignEn||moon.sign)+" "+moon.deg:"Live sky"):(moon?"Živá ekliptikální mapa. Měsíc "+moon.sign+" "+moon.deg:"Aktuální obloha"))+'">';
     s+='<defs><filter id="now-orbit-glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="2.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><radialGradient id="now-orbit-field" cx="50%" cy="50%"><stop offset="0" stop-color="#9dbce7" stop-opacity=".055"/><stop offset=".68" stop-color="#79a8dd" stop-opacity=".012"/><stop offset="1" stop-color="#79a8dd" stop-opacity="0"/></radialGradient></defs>';
     s+='<circle cx="160" cy="160" r="154" fill="url(#now-orbit-field)" stroke="rgba(215,229,245,.18)" stroke-width=".7"/><circle cx="160" cy="160" r="139" fill="none" stroke="rgba(215,229,245,.10)" stroke-width=".6"/><circle cx="160" cy="160" r="119" fill="none" stroke="rgba(215,229,245,.075)" stroke-width=".6"/><circle cx="160" cy="160" r="72" fill="none" stroke="rgba(215,229,245,.075)" stroke-width=".55"/>';
     s+='<g class="now-orbit-sweep"><circle cx="160" cy="160" r="147" fill="none" stroke="rgba(165,205,242,.28)" stroke-width="1.1" stroke-dasharray="2 25" stroke-linecap="round"/></g>';
     for(var z=0;z<12;z++){var a=z*30,ia=polar(a,139),oa=polar(a,154),lab=polar(a+15,146);s+='<line x1="'+ia.x.toFixed(1)+'" y1="'+ia.y.toFixed(1)+'" x2="'+oa.x.toFixed(1)+'" y2="'+oa.y.toFixed(1)+'" stroke="rgba(215,229,245,.20)" stroke-width=".65"/>'+zodiacGroup(z,lab.x,lab.y,12,"#dce5ef",.62);}
     data.forEach(function(p,i){var q=pos[p.id],anchor=polar(p.wheel,133),cls=p.id==="moon"?"now-orbit-node moon":"now-orbit-node";if(q.lane>0)s+='<line x1="'+anchor.x.toFixed(1)+'" y1="'+anchor.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'" stroke="'+p.ac+'" stroke-opacity=".30" stroke-width=".8"/>';s+='<g class="'+cls+'" style="--now-delay:'+(i*.31).toFixed(2)+'s"><circle cx="'+q.x.toFixed(1)+'" cy="'+q.y.toFixed(1)+'" r="'+(p.id==="moon"?10.7:8.5)+'" fill="rgba(8,12,19,.92)" stroke="'+p.ac+'" stroke-opacity=".92" stroke-width="1.15" filter="url(#now-orbit-glow)"/><text x="'+q.x.toFixed(1)+'" y="'+(q.y+.4).toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="'+p.ac+'" font-size="'+(p.id==="moon"?12.4:10.6)+'" font-weight="680">'+p.sym+'</text></g>';});
-    return s+'</svg><div class="now-orbit-core"><div class="moon-disc">'+moonDisc(ph.illum,ph.waxing,76)+'</div><span>teď</span><b>'+todayTime(now)+'</b></div><div class="now-orbit-caption">Ekliptika · poloha planet</div>';
+    return s+'</svg><div class="now-orbit-core"><div class="moon-disc">'+moonDisc(ph.illum,ph.waxing,76)+'</div><span>'+(APP_LANG==="en"?"now":"teď")+'</span><b>'+todayTime(now)+'</b></div><div class="now-orbit-caption">'+(APP_LANG==="en"?"Ecliptic · planets":"Ekliptika · poloha planet")+'</div>';
   }
   function renderNowInstrument(now,data,ph,moon){
     var nowMs=now.getTime(),moonLon=rev(geo("moon",now).lon),moonSign=signOf(moonLon),events=horizonEvents(nowMs,nowMs+46*864e5),nextL=events.filter(function(e){return e.kind==="lunar";})[0],threshold=events[0],motions=MOTION_PLANETS.map(function(x){var cycle=motionCycle(x[0],nowMs);return{id:x[0],name:x[1],glyph:x[2],color:x[3],cycle:cycle};}).filter(function(x){return x.cycle.nextAt;}).sort(function(a,b){return a.cycle.nextAt-b.cycle.nextAt;}),turn=motions[0],moonStream=horizonLunarStream(ph),motionStream=turn?horizonMotionStreamStage(turn.cycle.stage):["Rozbíhá se","přímý pohyb mezi obratovými body.","Astrologická tradice pracuje s rytmem pohybu planet."],station=turn?events.filter(function(e){return e.kind==="station"&&e.planet.id===turn.id;})[0]:null,thresholdStream=horizonThresholdStream(threshold);
     var title=document.getElementById("now-title"),subtitle=document.getElementById("now-subtitle"),clock=document.getElementById("now-clock"),lead=document.getElementById("now-lead"),facts=document.getElementById("now-factline"),orbit=document.getElementById("now-orbit");
-    if(title)title.firstChild.nodeValue="Měsíc "+SIGN_IN[Math.floor(moonLon/30)];
-    if(subtitle)subtitle.textContent=ph.name+" · "+Math.round(ph.illum*100)+" % osvětlení · "+fmtDeg(moonSign.deg);
-    if(clock)clock.textContent=horizonDay(nowMs)+" · "+todayTime(now);
+    if(title)title.firstChild.nodeValue=APP_LANG==="en"?"Moon in "+moonSign.name:"Měsíc "+SIGN_IN[Math.floor(moonLon/30)];
+    if(subtitle)subtitle.textContent=(APP_LANG==="en"?NOW_PHASE_EN[ph.name]:ph.name)+" · "+fmtDeg(moonSign.deg);
+    if(clock)clock.textContent=(APP_LANG==="en"?new Intl.DateTimeFormat("en-GB",{timeZone:observerTimeZone(),day:"numeric",month:"short",year:"numeric"}).format(now):horizonDay(nowMs))+" · "+todayTime(now);
     if(lead)lead.textContent="Živý bod orientace: Měsíc právě prochází znamením "+moonSign.cz+". Pod ním jsou tři pohyby, které mají nejbližší ověřitelný práh.";
     if(facts)facts.innerHTML='<b>Fakt</b><span class="now-fact-dot"></span><span>tropická ekliptikální délka</span><span class="now-fact-dot"></span><span>'+(OBSERVER_READY?escapeHtml(OBSERVER.place):"bez místních os")+'</span><span class="now-fact-dot"></span><span class="now-change">Od včerejška · '+nowChangeSinceYesterday(now,data,ph)+'</span>';
-    var civil=observerCivilDate(now),ruler=TODAY_RULERS[civil.getDay()],number=PROFILE_READY?reduceNum(pdRaw(activeP().bd,civil)):reduceNum(udRaw(civil));
+    var civil=observerCivilDate(now),ruler=TODAY_RULERS[civil.getDay()],number=PROFILE_READY?numC(pdRaw(activeP().bd,civil)):"—";
     var rulerNode=document.getElementById("now-ruler"),numberNode=document.getElementById("now-number"),numberLabel=document.getElementById("now-number-label"),nextNode=document.getElementById("now-next-threshold");
-    if(rulerNode){rulerNode.textContent=ruler[1]+" "+ruler[0];rulerNode.style.color=ruler[2];}
+    if(rulerNode){rulerNode.textContent=ruler[1]+" "+(APP_LANG==="en"?NOW_RULER_EN[civil.getDay()]:ruler[0]);rulerNode.style.color=ruler[2];}
     if(numberNode)numberNode.textContent=number;
-    if(numberLabel)numberLabel.textContent=PROFILE_READY?"Osobní den":"Číslo dne";
-    if(nextNode)nextNode.textContent=threshold?horizonEventTitle(threshold)+" · "+horizonDate(threshold.at):"—";
+    if(numberLabel)numberLabel.textContent=tr("now.personalNumber");
+    if(nextNode)nextNode.textContent=(threshold?horizonEventGlyph(threshold).glyph+" ":"")+nowThresholdText(threshold);
+    var hero=document.querySelector(".now-instrument");if(hero)hero.style.setProperty("--moon-wash",(Math.max(0,ph.illum-.08)*.18/.92).toFixed(3));
     if(orbit)orbit.innerHTML=nowOrbitSVG(data,ph,now);
     var lunar={title:"Lunární rytmus",glyph:"☽",color:"#d8e5ff",state:moonStream.state,copy:ph.name+" · Měsíc "+moonSign.cz,fact:Math.round(ph.illum*100)+" % osvětlení · přesná poloha "+moonSign.cz+" "+fmtDeg(moonSign.deg)+". Další lunární práh: "+(nextL?horizonEventTitle(nextL)+" · "+horizonDate(nextL.at):"—")+".",tradition:moonStream.tradition,question:moonStream.question,event:nextL};
     var planet=turn?{title:"Planetární pohyb",glyph:turn.glyph,color:turn.color,state:motionStream[0],copy:turn.name+" · "+motionStream[1],fact:turn.name+" je nyní ve fázi „"+motionStageName(turn.cycle.stage)+"“. Nejbližší bod: "+turn.cycle.nextLabel+" · "+horizonDate(turn.cycle.nextAt)+".",tradition:motionStream[2]+" "+turn.name+" je zde jazykem pro "+((PDEEP[turn.id]&&PDEEP[turn.id].prin)||"symbolický princip")+".",question:HORIZON_QUESTIONS[turn.id]||"Co se zde vyplatí sledovat bez ukvapeného závěru?",event:station}:{title:"Planetární pohyb",glyph:"↔",color:"#f0b985",state:"Rozbíhá se",copy:"Planety v přímém pohybu",fact:"Planety jsou mezi nejbližšími obraty.",tradition:"Astrologická tradice sleduje rytmus pohybu planet.",question:"Kde je dobré rozlišit směr od pouhé rychlosti?"};
