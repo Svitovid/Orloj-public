@@ -9,7 +9,7 @@
   <meta name="description" content="Profil zvoleného dne v Orloji: obloha, přesné časové prahy, západní aspekty, osobní rezonance, numerologie a kalendáře.">
   <title>Orloj · Profil dne</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="day-profile.css?v=public-v11-13-day-clarity">
+  <link rel="stylesheet" href="day-profile.css?v=public-v11-13-mobile-reading">
   <script>
   (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
   </script>
@@ -17,7 +17,7 @@
 <body>
 <main class="day-shell" id="day-app">
   <header class="day-topbar">
-    <div class="day-toplinks"><a class="day-back" id="day-back" href="./?view=numero#num-calendar-card">← Zpět do Orloje</a><a class="day-river-link" id="day-river-link" href="timeline.html">Časová řeka</a><a class="day-river-link" id="day-life-link" href="life.html">Životní kronika →</a></div>
+    <div class="day-toplinks"><a class="day-back" id="day-back" href="./?view=now">← Zpět do Orloje</a></div>
     <span class="day-build" id="day-build">Profil dne · v11.13</span>
   </header>
 
@@ -41,7 +41,7 @@
     <article class="day-summary-tile"><span>Slunce</span><b id="day-sun-value">—</b></article>
     <article class="day-summary-tile rhythm"><span>Rok</span><b id="day-year-day">—</b><small id="day-year-week">—</small></article>
     <article class="day-summary-tile ruler"><span>Vládce dne</span><b><i id="day-ruler-glyph" aria-hidden="true">—</i> <span id="day-ruler-value">—</span></b></article>
-    <article class="day-summary-tile number"><span id="day-number-label">Číslo dne</span><b id="day-number-value">—</b></article>
+    <article class="day-summary-tile number"><span id="day-number-label">Osobní den</span><b id="day-number-value">—</b></article>
   </section>
 
   <section class="day-section day-sky-section" aria-labelledby="day-sky-title">
@@ -76,7 +76,6 @@
       <div><h2 id="day-number-title">Číselný rytmus</h2></div>
     </div>
     <div class="day-number-grid">
-      <article class="day-number-card universal" id="day-universal-number"></article>
       <article class="day-number-card personal" id="day-personal-number"></article>
     </div>
   </section>
@@ -110,9 +109,9 @@
     <div class="day-sources"><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine · výpočtové jádro ↗</a><span>Kalendáře · Intl/ICU</span><span>Profil narození · pouze localStorage</span></div>
   </details>
 
-  <footer class="day-footer"><div class="day-footer-actions"><button id="day-today" type="button">Dnes</button><button id="day-share" type="button">Sdílet den</button></div><b>Orloj · Profil dne v11.13</b> · Pansophia Institute</footer>
+  <footer class="day-footer"><nav class="day-footer-links" aria-label="Další cesty"><a class="day-river-link" id="day-river-link" href="timeline.html">Časová řeka</a><a class="day-river-link" id="day-life-link" href="life.html">Životní kronika →</a></nav><div class="day-footer-actions"><button id="day-today" type="button">Dnes</button><button id="day-share" type="button">Sdílet den</button></div><b>Orloj · Profil dne v11.13</b> · Pansophia Institute</footer>
 </main>
 <script src="astronomy-engine.min.js?v=public-v11-13"></script>
-<script src="day-profile.js?v=public-v11-13-day-clarity"></script>
+<script src="day-profile.js?v=public-v11-13-mobile-reading"></script>
 </body>
 </html>
