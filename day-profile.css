@@ -91,7 +91,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .day-empty{grid-column:1/-1;padding:15px;border:1px dashed rgba(143,216,255,.16);border-radius:14px;color:rgba(238,242,247,.48);font-size:11px;line-height:1.5}
 .day-empty b{color:rgba(238,242,247,.72)}
 .day-empty p{margin:6px 0 0}
-.day-number-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.day-number-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:16px}
 .day-number-card{position:relative;overflow:hidden;min-height:180px;padding:19px;border:1px solid rgba(238,242,247,.07);border-radius:18px;background:rgba(238,242,247,.012)}
 .day-number-card:after{content:"";position:absolute;width:130px;height:130px;right:-74px;bottom:-75px;border:1px solid rgba(240,201,156,.1);border-radius:50%;box-shadow:0 0 0 18px rgba(240,201,156,.018)}
 .day-number-card>span{display:block;color:rgba(238,242,247,.38);font-size:8px;font-weight:790;letter-spacing:.1em;text-transform:uppercase}
@@ -99,6 +99,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .day-number-card>small{display:block;margin-top:10px;color:rgba(238,242,247,.49);font-size:10px;line-height:1.45}
 .day-number-card>p{max-width:500px;margin:13px 0 0;color:#e6d2a8;font:italic 12px/1.48 var(--serif)}
 .day-number-card.personal{border-color:rgba(240,163,108,.1)}
+.day-number-card a{color:var(--blue);font:600 14px/1.5 var(--sans)}
 .day-calendars{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}
 .day-calendar{position:relative;min-height:165px;padding:17px;border:1px solid color-mix(in srgb,var(--cal-accent) 18%,transparent);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--cal-accent) 4%,transparent),rgba(238,242,247,.009))}
 .day-calendar>i{display:grid;place-items:center;width:37px;height:37px;border:1px solid color-mix(in srgb,var(--cal-accent) 35%,transparent);border-radius:50%;color:var(--cal-accent);font:normal 15px/1 var(--serif)}
@@ -168,6 +169,7 @@ html[data-theme="light"] .day-number-card>p{color:#70501d}
 .day-footer-actions{display:flex;gap:12px;justify-content:center;margin-bottom:18px}
 .day-footer-actions button{min-height:44px;padding:10px 16px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:12px;cursor:pointer}
 .day-footer-actions button:hover{color:var(--ink);border-color:var(--blue)}
+.day-footer-links{display:flex;justify-content:center;gap:12px 24px;flex-wrap:wrap;margin-bottom:18px}.day-footer-links a{display:inline-flex;align-items:center;min-height:44px}
 html[data-theme="light"] .day-summary>.day-moon-summary{background:radial-gradient(ellipse at 5% 50%,rgba(216,229,255,var(--moon-wash,0)),transparent 75%),#0d121b;border-color:rgba(216,229,255,var(--moon-border,.09))}
 html[data-theme="light"] .day-moon-summary h2{color:#eef2f7}
 html[data-theme="light"] .day-moon-summary p{color:#a9b6c9}
@@ -228,12 +230,26 @@ html[data-theme="light"] .day-number-card>span,html[data-theme="light"] .day-num
 }
 @media(max-width:420px){
   .day-toplinks{justify-content:flex-start}
-  .day-back{width:100%}
-  .day-toplinks .day-river-link{min-height:36px}
   .day-date-picker{padding:8px 18px}
   .day-moon-summary p{font-size:14px}
   .day-summary-tile>span,.day-summary-tile>small{font-size:13px}
   .day-summary-tile>b{font-size:20px}
   .day-planets{grid-template-columns:1fr 1fr}
   .day-personal-hit{grid-template-columns:23px 18px 23px minmax(0,1fr)}
+}
+@media(max-width:680px){
+  .day-toplinks{width:auto}
+  .day-topbar{min-height:52px}
+  .day-hero{margin-top:8px}
+  .day-summary{margin-top:8px}
+  .day-summary>article{min-height:78px;padding:12px 14px}
+  .day-summary>.day-moon-summary{min-height:108px;padding:14px 16px;gap:16px}
+  .day-moon-disc{width:76px;height:76px}
+  .day-summary-tile>b{margin-top:5px;line-height:1.2}
+  .day-summary-tile>small{margin-top:3px;line-height:1.25}
+}
+@media(max-width:420px){
+  .day-moon-disc{width:72px;height:72px}
+  .day-summary>article{padding:11px 12px}
+  .day-summary>.day-moon-summary{padding:12px 14px;gap:14px}
 }
