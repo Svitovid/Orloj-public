@@ -885,7 +885,7 @@ details[open]>summary:after{content:'−'}
 .numcal-cell.selected{border-color:rgba(240,163,108,.72);background:rgba(240,163,108,.085);box-shadow:0 0 0 1px rgba(240,163,108,.12) inset}
 .numcal-date{font-size:11px;font-weight:760;color:rgba(var(--ink-rgb),.60);line-height:1}
 .numcal-cell.today .numcal-date{color:#d9f1ff}
-.numcal-pair{display:grid;grid-template-columns:1fr;gap:4px;width:100%}
+.numcal-pair{display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%}
 .numcal-num{min-width:0;border-radius:9px;padding:5px 1px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;background:rgba(var(--ink-rgb),.035)}
 .numcal-num i{font-style:normal;font-size:7px;font-weight:800;letter-spacing:.06em;color:rgba(var(--ink-rgb),.34);margin-bottom:4px}
 .numcal-num strong{font-size:15px;letter-spacing:-.03em}
@@ -897,7 +897,7 @@ details[open]>summary:after{content:'−'}
 .numcal-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
 .numcal-detail{margin-top:13px;border-top:1px solid rgba(var(--ink-rgb),.07);padding-top:13px}
 .numcal-detail-date{font-size:13px;font-weight:740;color:var(--ink-warm);margin-bottom:10px}
-.numcal-detail-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.numcal-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .numcal-detail-item{border:1px solid rgba(var(--ink-rgb),.07);background:rgba(var(--ink-rgb),.025);border-radius:13px;padding:11px}
 .numcal-detail-item .k{font-size:9px;font-weight:780;letter-spacing:.09em;text-transform:uppercase;color:rgba(var(--ink-rgb),.38)}
 .numcal-detail-item .v{font-size:23px;font-weight:760;margin-top:6px;letter-spacing:-.04em}
@@ -2265,6 +2265,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     <div class="today-metric-label">Čísla dne</div>
     <div class="today-stat-list">
       <div><span>Datum</span><b id="today-number-date">—</b></div>
+      <div><span>Univerzální den</span><b id="today-number-universal">—</b></div>
       <div><span>Osobní den</span><b id="today-number-personal">—</b></div>
     </div>
   </article>
@@ -2289,6 +2290,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
       <div><span>Týden roku</span><b id="today-week">—</b></div>
       <div><span>Den roku</span><b id="today-year-day">—</b></div>
     </div>
+    <div class="today-date-sum" id="today-date-sum">—</div>
   </article>
   <article class="today-metric today-theme-metric">
     <div class="today-metric-icon today-compass-icon" aria-hidden="true"><span></span></div>
@@ -2678,6 +2680,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 <div class="ntoday">
 <div><div class="td" id="num-todaydate">—</div><div class="tk">Denní čísla se počítají z dnešního data a tvého data narození.</div></div>
 <div class="tnums">
+<div style="text-align:center;"><div class="v" id="num-ud">—</div><div class="k">Univerzální den</div></div>
 <div style="text-align:center;"><div class="v" id="num-pd">—</div><div class="k">Osobní den</div></div>
 </div>
 </div>
@@ -2685,7 +2688,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 <div class="card" id="num-active-card">
 <h2 class="section-title">Aktivní čísla</h2>
 <div id="num-mean"></div>
-<details class="method-note"><summary>Více informací</summary><p class="prelim">Zápis 40/4 zachovává výpočetní součet i výsledný kořen; obdobně 11/2, 22/4 a 33/6. Mistrovská čísla 11, 22 a 33 se uvnitř výpočtu neredukují. U osobního roku se nejdřív sečtou číslice měsíce, dne a roku, teprve potom se sčítá celek — například 12 + 27 + 2026 → 3 + 9 + 10 = 22/4. Různé numerologické školy vykládají složená čísla odlišně; Orloj proto odděluje jistý výpočet od interpretační tradice.</p><p class="prelim"><b>Kalendářní osobní měsíc</b> běží od 1. do posledního dne měsíce. <b>Narozeninový cyklus</b> běží od dne narození do dne před jeho dalším opakováním — například při narození 27. dne od 27. do 26. Oba modely jsou zde vedle sebe jako oddělené systémy.</p></details></div>
+<details class="method-note"><summary>Více informací</summary><p class="prelim">Zápis 40/4 zachovává výpočetní součet i výsledný kořen; obdobně 11/2, 22/4 a 33/6. U univerzálního dne se nejdřív sečtou číslice měsíce, dne a roku bez meziredukce — například 29. 7. 2026 → 7 + 11 + 10 = 28/1. Mistrovská čísla 11, 22 a 33 se uvnitř výpočtu neredukují. U osobního roku se stejným principem nejdřív sečtou číslice měsíce, dne a roku, teprve potom se sčítá celek — například 12 + 27 + 2026 → 3 + 9 + 10 = 22/4. Různé numerologické školy vykládají složená čísla odlišně; Orloj proto odděluje jistý výpočet od interpretační tradice.</p><p class="prelim"><b>Kalendářní osobní měsíc</b> běží od 1. do posledního dne měsíce. <b>Narozeninový cyklus</b> běží od dne narození do dne před jeho dalším opakováním — například při narození 27. dne od 27. do 26. Oba modely jsou zde vedle sebe jako oddělené systémy.</p></details></div>
 <div class="card" id="number-library-card">
 <h2 class="section-title">Knihovna čísel</h2>
 <div id="number-library"></div>
@@ -2861,7 +2864,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 <div class="card worldcal-hero">
 <div class="worldcal-head">
 <div><div class="worldcal-kicker" data-i18n="world.kicker">Pansofický atlas času</div><h2 data-i18n="world.title">Kalendáře světa</h2><p data-i18n="world.intro">Jeden okamžik může mít v různých kulturách odlišné číslo dne, měsíce i roku. Vyber datum a porovnej, jak jej zapisují solární, lunární a lunisolární kalendáře.</p></div>
-<div class="worldcal-today"><span data-i18n="world.selectedDate">Vybrané datum</span><strong id="worldcal-selected-label">—</strong></div>
+<div class="worldcal-today"><span data-i18n="world.selectedDate">Vybrané datum</span><strong id="worldcal-selected-label">—</strong><small id="worldcal-universal-day">—</small></div>
 </div>
 <div class="worldcal-controls">
 <button aria-label="Předchozí den" data-i18n="world.previousDayText" data-i18n-aria="world.previousDay" id="worldcal-prev" type="button">−1 den</button>
@@ -2873,6 +2876,11 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 </div>
 <div aria-live="polite" class="worldcal-resonance" id="worldcal-resonance"></div>
 </div>
+<section aria-live="polite" class="card worldcal-universal-card" id="worldcal-universal-card">
+<div class="worldcal-universal-head"><div><div class="worldcal-universal-kicker">Numerologická vrstva · gregoriánské datum</div><h3 id="worldcal-universal-title">Univerzální den</h3><p id="worldcal-universal-copy">Číslo vychází ze zvoleného občanského data; kalendáře vedle něj ukazují jiné kulturní zápisy téhož dne.</p></div><div class="worldcal-universal-value"><b id="worldcal-universal-value">—</b><span id="worldcal-universal-label">složené číslo / kořen</span></div></div>
+<div class="worldcal-universal-formula" id="worldcal-universal-formula">—</div>
+<p class="worldcal-universal-note" id="worldcal-universal-note">Mistrovská čísla 11, 22 a 33 se při výpočtu mezikroků neredukují.</p>
+</section>
 <div class="worldcal-grid" id="worldcal-grid"></div>
 <a class="tradition-door maya-tradition-door" href="maya.html"><span class="tradition-door-mark">13</span><span><span>Samostatný kalendářní systém</span><b>Vstoupit do mayského kalendária</b><small>Tzolk’in, Haab, Kalendářní kolo a Dlouhý počet na vlastní stránce s vlastní volbou data.</small></span><i class="tradition-door-arrow">→</i></a>
 <div class="card">
@@ -3814,30 +3822,30 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function numCalMeaning(n){var root=reduceNum(n);if(APP_LANG==="en")return NUMCAL_MEANING_EN[root]||"";var x=NUMBER_DEEP[String(root)];return x?(x.cycle||x.principle):"";}
   function renderNumCalendar(){
     var titleEl=document.getElementById("num-cal-title"),body=document.getElementById("num-cal-body");if(!titleEl||!body)return;
-    var today=new Date(),first=new Date(NUMCAL.y,NUMCAL.m,1,12),days=new Date(NUMCAL.y,NUMCAL.m+1,0,12).getDate();
+    var bd=activeP().bd,today=new Date(),first=new Date(NUMCAL.y,NUMCAL.m,1,12),days=new Date(NUMCAL.y,NUMCAL.m+1,0,12).getDate();
     titleEl.textContent=calendarMonthTitle(first);
-    if(!PROFILE_READY){body.innerHTML='<div class="numcal-detail">'+(APP_LANG==="en"?"Add your birth date to see your personal day across the calendar.":"Zadej datum narození a kalendář ukáže tvůj osobní den.")+' <button class="numcal-profile-link" id="numcal-profile-setup" type="button">'+(APP_LANG==="en"?"Create personal map →":"Vytvořit osobní mapu →")+'</button></div>';document.getElementById("numcal-profile-setup").onclick=function(){openPublicProfileSetup(false);};return;}
-    var bd=activeP().bd;
     var selected=state.numCalSelected||numCalKey(today),selParts=selected.split('-');
     if((+selParts[0])!==NUMCAL.y||(+selParts[1]-1)!==NUMCAL.m)selected=numCalKey(first);
     var dow=APP_LANG==="en"?["MON","TUE","WED","THU","FRI","SAT","SUN"]:["PO","ÚT","ST","ČT","PÁ","SO","NE"],h='<div class="numcal-grid">';
     dow.forEach(function(x){h+='<div class="numcal-dow">'+x+'</div>';});
     var pad=(first.getDay()+6)%7;for(var i=0;i<pad;i++)h+='<div class="numcal-empty"></div>';
     for(var d=1;d<=days;d++){
-      var dt=new Date(NUMCAL.y,NUMCAL.m,d,12),key=numCalKey(dt),praw=pdRaw(bd,dt),pv=reduceNum(praw);
+      var dt=new Date(NUMCAL.y,NUMCAL.m,d,12),key=numCalKey(dt),praw=pdRaw(bd,dt),uraw=udRaw(dt),pv=reduceNum(praw),uv=reduceNum(uraw);
       var isToday=key===numCalKey(today),isSel=key===selected;
-      var aria=APP_LANG==="en"?"Day "+d+": personal "+numC(praw):d+". den: osobní "+numC(praw);
+      var aria=APP_LANG==="en"?"Day "+d+": personal "+pv+", universal "+uv:d+". den: osobní "+pv+", univerzální "+uv;
       h+='<a class="numcal-cell'+(isToday?' today':'')+(isSel?' selected':'')+'" data-numcal="'+key+'" href="day.html?date='+key+'" aria-label="'+aria+(APP_LANG==="en"?'. Open day profile.':'. Otevřít profil dne.')+'">'+
         '<span class="numcal-date">'+d+'</span><span class="numcal-pair">'+
         '<span class="numcal-num personal"><i>'+(APP_LANG==="en"?"P":"O")+'</i><strong>'+pv+'</strong><span class="numcal-compound">'+numCalCompound(praw)+'</span></span>'+
+        '<span class="numcal-num universal"><i>U</i><strong>'+uv+'</strong><span class="numcal-compound">'+numCalCompound(uraw)+'</span></span>'+
         '</span></a>';
     }
-    h+='</div><div class="numcal-legend"><span><i style="background:#f0a36c"></i>'+(APP_LANG==="en"?"P · personal day":"O · osobní den")+'</span></div>';
+    h+='</div><div class="numcal-legend"><span><i style="background:#f0a36c"></i>'+(APP_LANG==="en"?"P · personal day":"O · osobní den")+'</span><span><i style="background:#8fd8ff"></i>'+(APP_LANG==="en"?"U · universal day":"U · univerzální den")+'</span></div>';
     var sp=selected.split('-'),sd=new Date(+sp[0],+sp[1]-1,+sp[2],12);if(sd.getFullYear()!==NUMCAL.y||sd.getMonth()!==NUMCAL.m)sd=first;
-    var spr=pdRaw(bd,sd);
+    var spr=pdRaw(bd,sd),sur=udRaw(sd);
     var pyc=pyRaw(bd,sd),pmc=pmRaw(bd,sd),bmc=birthdayMonthRaw(bd,sd);
     h+='<div class="numcal-detail"><div class="numcal-detail-date">'+calendarFullDate(sd)+'</div><div class="numcal-context"><span>'+(APP_LANG==="en"?"Personal year ":"Osobní rok ")+numC(pyc)+'</span><span>'+(APP_LANG==="en"?"Calendar month ":"Kalendářní měsíc ")+numC(pmc)+'</span><span>'+(APP_LANG==="en"?"Birthday cycle ":"Narozeninový cyklus ")+numC(bmc)+'</span></div><div class="numcal-detail-grid">'+
       '<div class="numcal-detail-item personal"><div class="k">'+(APP_LANG==="en"?"Personal day":"Osobní den")+'</div><div class="v">'+numC(spr)+'</div><p>'+numCalMeaning(spr)+'</p></div>'+
+      '<div class="numcal-detail-item universal"><div class="k">'+(APP_LANG==="en"?"Universal day":"Univerzální den")+'</div><div class="v">'+numC(sur)+'</div><p>'+numCalMeaning(sur)+'</p></div>'+
       '</div><a class="numcal-profile-link" href="day.html?date='+numCalKey(sd)+'">'+(APP_LANG==="en"?"Open the full day profile →":"Otevřít celý Profil dne →")+'</a></div>';
     body.innerHTML=h;
   }
@@ -3849,7 +3857,6 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     renderNumCalendar();
   }
   function renderNumero(){var P=activeP(),bd=P.bd,now=new Date();
-    if(!PROFILE_READY){document.getElementById("numgrid").innerHTML='<div class="ncard"><div class="nh">Osobní čísla</div><p>Po zadání narození Orloj vypočítá tvé osobní rytmy.</p><button class="numcal-profile-link" id="numero-profile-setup" type="button">Vytvořit osobní mapu →</button></div>';document.getElementById("numero-profile-setup").onclick=function(){openPublicProfileSetup(false);};document.getElementById("nb-cal").textContent="—";document.getElementById("nb-date").textContent="Po zadání narození";document.getElementById("num-pd").textContent="—";document.getElementById("num-todaydate").textContent=fmtFull(now);document.getElementById("num-mean").innerHTML='<div class="numcal-detail">Osobní čísla se zobrazí po vytvoření mapy.</div>';renderNumberLibrary();renderNumberTarotBridge();renderNumCalendar();renderChineseLibrary();renderChineseElements();return;}
     var lp=lifePathOf(bd),py=personalYear(bd,now),pm=personalMonth(bd,now),bm=birthdayMonthRaw(bd,now);
     var c=chineseOf(bd.y);
     var si=Math.floor(rev(P.natal.list[0].lon)/30);
@@ -3862,17 +3869,19 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     Array.prototype.forEach.call(NG.querySelectorAll("[data-open-zodiac-study]"),function(b){b.addEventListener("click",function(){openZodiacStudy(parseInt(b.getAttribute("data-open-zodiac-study"),10));});});
     document.getElementById("nb-cal").innerHTML=bd.d+'<br>'+ROMAN[bd.m-1];
     document.getElementById("nb-date").textContent=new Intl.DateTimeFormat("cs-CZ",{day:"numeric",month:"long",year:"numeric"}).format(new Date(bd.y,bd.m-1,bd.d));
-    document.getElementById("num-pd").innerHTML=PROFILE_READY?numC(pdRaw(bd,now)):"—";
+    document.getElementById("num-ud").innerHTML=numC(udRaw(now));
+    document.getElementById("num-pd").innerHTML=numC(pdRaw(bd,now));
     document.getElementById("num-todaydate").textContent=fmtFull(now);
-    var br=reduceNum(bd.d),pr=pyRaw(bd,now),mr=pmRaw(bd,now),bmr=birthdayMonthRaw(bd,now),dr=pdRaw(bd,now);
-    document.getElementById("num-mean").innerHTML=PROFILE_READY?'<div class="num-active-list">'+
+    var br=reduceNum(bd.d),pr=pyRaw(bd,now),mr=pmRaw(bd,now),bmr=birthdayMonthRaw(bd,now),dr=pdRaw(bd,now),ur=udRaw(now);
+    document.getElementById("num-mean").innerHTML='<div class="num-active-list">'+
       numberActiveRow("Životní cesta",lpRaw(bd),numberReadingData(String(lp),NUMBER_DEEP[String(lp)]).principle)+
       numberActiveRow("Den narození",bd.d,numberReadingData(String(br),NUMBER_DEEP[String(br)]).principle)+
       numberActiveRow("Osobní rok",pr,(PY_TXT[reduceNum(pr)]||NUMBER_DEEP[String(reduceNum(pr))].cycle))+
       numberActiveRow("Kalendářní osobní měsíc",mr,NUMBER_DEEP[String(reduceNum(mr))].cycle)+
       numberActiveRow("Narozeninový cyklus",bmr,birthdayCycleLabel(bd,now)+" · "+NUMBER_DEEP[String(reduceNum(bmr))].cycle)+
       numberActiveRow("Osobní den",dr,NUMBER_DEEP[String(reduceNum(dr))].cycle)+
-      '</div>':'<div class="numcal-detail">Po zadání narození se zde zobrazí osobní čísla.</div>';
+      numberActiveRow("Univerzální den",ur,NUMBER_DEEP[String(reduceNum(ur))].cycle)+
+      '</div>';
     renderNumberLibrary();
     renderNumberTarotBridge();
     renderNumCalendar();
@@ -4446,8 +4455,12 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   }
   function renderWorldCalendars(){
     var grid=document.getElementById("worldcal-grid");if(!grid)return;
-    var label=document.getElementById("worldcal-selected-label"),input=document.getElementById("worldcal-date");
+    var label=document.getElementById("worldcal-selected-label"),universal=document.getElementById("worldcal-universal-day"),input=document.getElementById("worldcal-date");
     if(label)label.textContent=new Intl.DateTimeFormat(appLocale(),{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(WORLD_CAL_DATE);
+    var up=universalDayParts(WORLD_CAL_DATE),uraw=udRaw(WORLD_CAL_DATE),uroot=reduceNum(uraw),universalValue=document.getElementById("worldcal-universal-value"),universalFormula=document.getElementById("worldcal-universal-formula"),universalTitle=document.getElementById("worldcal-universal-title"),universalCopy=document.getElementById("worldcal-universal-copy"),universalLabel=document.getElementById("worldcal-universal-label"),universalNote=document.getElementById("worldcal-universal-note");
+    if(universal)universal.textContent=tr("world.universalDay")+" · "+numC(uraw);
+    if(universalTitle)universalTitle.textContent=worldCalUi("universalTitle");if(universalCopy)universalCopy.textContent=worldCalUi("universalCopy");if(universalLabel)universalLabel.textContent=worldCalUi("universalLabel");if(universalNote)universalNote.textContent=worldCalUi("universalNote");
+    if(universalValue)universalValue.textContent=numC(uraw);if(universalFormula)universalFormula.innerHTML='<span>'+worldCalUi("formula")+'</span><b>'+up.month+' + '+up.day+' + '+up.year+' = '+uraw+'</b><i>→</i><b>'+uroot+'</b><span>('+worldCalUi("root")+')</span>';
     if(input&&document.activeElement!==input)input.value=worldCalDateKey(WORLD_CAL_DATE);
     var html="",matches=[];
     WORLD_CALENDARS.forEach(function(item){var d=worldCalData(WORLD_CAL_DATE,item),title=worldCalField(item,"title"),match=d.day&&d.month&&d.day===d.month,isOpen=state.worldCalSelected===item.id;if(match)matches.push(title+" "+d.day+"/"+d.month);html+='<article class="card worldcal-card'+(isOpen?' active':'')+'" style="--cal-accent:'+item.accent+'"><div class="worldcal-card-head"><div><div class="worldcal-card-title">'+title+'</div><div class="worldcal-card-family">'+worldCalField(item,"family")+'</div></div><div class="worldcal-card-symbol">'+item.symbol+'</div></div><div class="worldcal-numeric">'+d.numeric+'</div><div class="worldcal-long">'+d.long+'</div>'+(d.native&&d.native!==d.long?'<div class="worldcal-native" dir="auto" lang="'+(item.nativeLocale||"")+'">'+d.native+'</div>':'')+(match?'<div class="worldcal-match">'+(APP_LANG==="en"?"matching day and month":"shoda dne a měsíce")+' · '+d.day+'/'+d.month+'</div>':'')+'<p class="worldcal-desc">'+worldCalField(item,"desc")+'</p><button class="worldcal-open" aria-expanded="'+(isOpen?"true":"false")+'" data-worldcal-open="'+item.id+'" type="button">'+worldCalUi(isOpen?"close":"open")+'</button></article>'+(isOpen?worldCalStudy(item,d):'');});
@@ -4616,13 +4629,14 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     if(heroMoon){heroMoon.classList.toggle("is-full-moon",isFullMoon);heroMoon.setAttribute("aria-label",isFullMoon?(APP_LANG==="en"?"Today's full moon · ":"Dnešní úplněk · ")+illuminationText:(APP_LANG==="en"?"Current Moon phase · ":"Aktuální fáze Měsíce · ")+ph.name);heroMoon.innerHTML=moonDisc(ph.illum,ph.waxing,82);}
     if(lunarEvent){lunarEvent.hidden=!isFullMoon;if(lunarTitle)lunarTitle.textContent=fullMoonText;if(lunarCopy)lunarCopy.textContent=APP_LANG==="en"?"the peak of the lunar cycle":"vrchol lunárního cyklu";if(lunarIllumination)lunarIllumination.textContent=illuminationText;}
     var ruler=TODAY_RULERS[civil.getDay()];
-    var pdRawValue=PROFILE_READY?pdRaw(P.bd,civil):null,pdRoot=PROFILE_READY?reduceNum(pdRawValue):null;
+    var pdRawValue=PROFILE_READY?pdRaw(P.bd,civil):null,pdRoot=PROFILE_READY?reduceNum(pdRawValue):null,udValue=udRaw(civil),udRoot=reduceNum(udValue);
     var personalLine=PROFILE_READY?" Osobní den <b>"+pdRoot+"</b> otevírá okruh: "+NUMBER_DEEP[String(pdRoot)].keys.join(", ")+".":" Po zadání narození se doplní osobní čísla a tranzity.";
     document.getElementById("today-message").innerHTML='<b>'+ruler[0]+'</b> udává základní rytmus dne. Měsíc <b>'+SIGN_IN[moonIndex]+'</b> obrací pozornost k '+TODAY_MOON_CUE[moonIndex]+'.'+personalLine;
     document.getElementById("today-moon-value").textContent=ph.name;
     document.getElementById("today-moon-sub").textContent="Měsíc "+SIGN_IN[moonIndex]+" · "+fmtDeg(moonSign.deg)+" · "+Math.round(ph.illum*100)+" % osvětlení";
     document.getElementById("today-number-date").textContent=civil.getDate()+". "+(civil.getMonth()+1)+". "+civil.getFullYear();
-    document.getElementById("today-number-personal").textContent=PROFILE_READY?numC(pdRawValue):"—";
+    document.getElementById("today-number-universal").textContent=numC(udValue);
+    document.getElementById("today-number-personal").textContent=PROFILE_READY?String(pdRoot):"po nastavení";
     document.getElementById("today-ruler-glyph").innerHTML='<span style="color:'+ruler[2]+'">'+ruler[1]+'</span>';
     document.getElementById("today-ruler-value").textContent=ruler[0];
     var hourText=ruler[3];try{var hours=planetHours(now),cur=hours.hours[hours.cur>=0?hours.cur:0];if(cur)hourText="Nyní "+cur.r[0]+" · do "+todayTime(cur.to)+" · "+PH_HINT[cur.r[0]];}catch(e){}
@@ -4633,15 +4647,16 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     document.getElementById("today-calendar-julian").textContent=julDate.unsupported?"Nedostupné":julParts.day+". "+julMonths[julParts.month-1]+" "+julParts.year;
     document.getElementById("today-week").textContent=String(isoWeekNumber(civil));
     document.getElementById("today-year-day").textContent=String(dayOfYearNumber(civil));
-    var focusData=PROFILE_READY?NUMBER_DEEP[String(pdRoot)]:null;
-    document.getElementById("today-theme-value").textContent=PROFILE_READY?"Osobní den "+numC(pdRawValue):"—";
-    document.getElementById("today-theme-sub").textContent=focusData?focusData.title:"Po zadání narození";
+    document.getElementById("today-date-sum").textContent="Univerzální den · "+universalDaySummary(civil);
+    var focusData=NUMBER_DEEP[String(PROFILE_READY?pdRoot:udRoot)];
+    document.getElementById("today-theme-value").textContent=(PROFILE_READY?"Osobní den ":"Univerzální den ")+(PROFILE_READY?pdRoot:udRoot);
+    document.getElementById("today-theme-sub").textContent=focusData.title;
     var marks=null,O=observerCoordinates();if(O){var A=angles({utc:now.getTime(),lat:O.lat,long:O.long});marks={asc:A.asc,mc:A.mc};}
     document.getElementById("today-wheel").innerHTML=todayMiniWheel(data,asp,marks);
     var strip="";data.slice(0,7).forEach(function(p){strip+='<div class="today-planet-chip"><i style="color:'+p.ac+'">'+p.sym+'</i><span><b>'+p.name+'</b> · '+p.sign+' '+p.deg+'</span></div>';});document.getElementById("today-planet-strip").innerHTML=strip;
-    document.getElementById("today-focus-title").textContent="Osobní téma dne"+(focusData?" · "+focusData.title:"");
-    document.getElementById("today-focus-copy").textContent=focusData?focusData.cycle:"Po zadání narození se zde zobrazí osobní číselný rytmus.";
-    var chips=focusData?(focusData.keys||[]).slice(0,3):[];if(PROFILE_READY)chips.push("osobní rok "+numC(pyRaw(P.bd,civil)));chips.push("Měsíc "+SIGN_IN[moonIndex]);document.getElementById("today-focus-chips").innerHTML=chips.map(function(x){return '<span class="today-focus-chip">'+x+'</span>';}).join("");
+    document.getElementById("today-focus-title").textContent=(PROFILE_READY?"Osobní téma dne":"Téma dne")+" · "+focusData.title;
+    document.getElementById("today-focus-copy").textContent=focusData.cycle;
+    var chips=(focusData.keys||[]).slice(0,3);if(PROFILE_READY)chips.push("osobní rok "+numC(pyRaw(P.bd,civil)));chips.push("Měsíc "+SIGN_IN[moonIndex]);document.getElementById("today-focus-chips").innerHTML=chips.map(function(x){return '<span class="today-focus-chip">'+x+'</span>';}).join("");
     var transitEl=document.getElementById("today-transit");
     if(PROFILE_READY){var trs=transits(now),tr=trs[0];transitEl.innerHTML=tr?'<span style="color:'+tr.t.ac+'">'+tr.t.sym+'</span><span class="asy" style="color:'+ASPCOL[tr.harm]+'">'+tr.sym+'</span><span style="color:'+tr.n.ac+'">'+tr.n.sym+'</span> <b>'+tr.t.name+'</b> '+tr.name.toLowerCase()+' <b>'+tr.n.name+'</b> · orb '+tr.orb.toFixed(1)+'° · '+tr.phase:'Dnes není v nastavených orbech výrazný hlavní tranzit.';}else transitEl.innerHTML='<span class="today-empty">Po zadání narození se zde zobrazí nejtěsnější osobní tranzit dne.</span>';
   }
@@ -4847,11 +4862,11 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function czGrid(){var me=activeP().bd.y,who=activeP().who,nowY=new Date().getFullYear(),h="";for(var b=0;b<12;b++){var years=[];for(var y=1948;y<=2031;y++)if(((y-4)%12+12)%12===b)years.push(y);var isMe=years.indexOf(me)>=0;h+='<div class="czcard'+(isMe?" me":"")+'"><div class="zh">'+CZ_AN[b][1]+'</div><div class="an">'+CZ_AN[b][0]+(isMe?' <span style="color:#f0a36c;font-size:11px;">· '+who+' rok</span>':'')+'</div><div class="tr">'+CZ_AN[b][2]+'</div><div class="czyears">';years.forEach(function(y){var c=chineseOf(y),cls=y===me?" hl":(y===nowY?" now":"");h+='<span class="czy'+cls+'"'+(cls?"":' style="color:'+c.el[1]+'"')+'>'+y+'</span>';});h+='</div></div>';}document.getElementById("cz-grid").innerHTML=h;}
   function renderChineseLibrary(){
     var C=document.getElementById("cz-library");if(!C)return;
-    var p=activeP(),personalIndex=PROFILE_READY?chineseOf(p.bd.y).b:-1,profileKey=p.who+"-"+p.bd.y;
-    if(PROFILE_READY&&state.czOpen===null&&state.czAutoProfile!==profileKey){state.czOpen=personalIndex;state.czAutoProfile=profileKey;}
+    var p=activeP(),personalIndex=chineseOf(p.bd.y).b,profileKey=p.who+"-"+p.bd.y;
+    if(state.czOpen===null&&state.czAutoProfile!==profileKey){state.czOpen=personalIndex;state.czAutoProfile=profileKey;}
     var h='<div class="czlibrary">';
     CZ_SIGN_DEEP.forEach(function(z,i){
-      var open=String(state.czOpen)===String(i),isPersonal=PROFILE_READY&&i===personalIndex;
+      var open=String(state.czOpen)===String(i),isPersonal=i===personalIndex;
       h+='<div class="czitem'+(isPersonal?' personal':'')+'" id="chinese-sign-'+i+'"><button class="czrow" data-cz="'+i+'"><span class="czsigil"><span><span class="han">'+z.han+'</span><span class="branch">'+z.branch+'</span></span></span><span class="czrow-main"><span class="czrow-title">'+z.name+' · '+z.title+(isPersonal?'<span class="czpersonal-tag">tvůj rok</span>':'')+'</span><span class="czrow-keys">'+z.keys.join(' · ')+'</span></span>'+chev(open)+'</button>';
       if(open){
         h+='<div class="czexp"><p><b>Princip.</b> '+z.principle+'</p><div class="czmeta"><span class="czchip">'+z.element+' · '+z.polarity+'</span><span class="czchip">'+z.hour+'</span><span class="czchip">'+z.season+'</span><span class="czchip">'+z.direction+'</span></div><div class="czfacts"><div class="czfact"><div class="cfk">Dar</div><div class="cfv">'+z.gift+'</div></div><div class="czfact"><div class="cfk">Stín</div><div class="cfv">'+z.shadow+'</div></div><div class="czfact"><div class="cfk">Vztahy</div><div class="cfv">'+z.relations+'</div></div><div class="czfact"><div class="cfk">Práce a tvorba</div><div class="cfv">'+z.work+'</div></div><div class="czfact"><div class="cfk">Duchovní úkol</div><div class="cfv">'+z.spirit+'</div></div><div class="czfact"><div class="cfk">Vztahy větví</div><div class="cfv">Trojice: '+z.trine+'. Šestá harmonie: '+z.harmony+'. Protilehlá osa: '+z.clash+'.</div></div></div><div class="czquestion">K meditaci: '+z.question+'</div></div>';
