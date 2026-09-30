@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Orloj">
+  <defs>
+    <radialGradient id="sky" cx="36%" cy="25%" r="92%">
+      <stop offset="0" stop-color="#182238"/>
+      <stop offset=".46" stop-color="#0c1320"/>
+      <stop offset="1" stop-color="#05070c"/>
+    </radialGradient>
+    <radialGradient id="sun" cx="35%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#fff1bd"/>
+      <stop offset=".42" stop-color="#efc77a"/>
+      <stop offset="1" stop-color="#bf7e37"/>
+    </radialGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" fill="url(#sky)"/>
+  <circle cx="256" cy="256" r="203" fill="none" stroke="#d9e3f0" stroke-opacity=".15" stroke-width="3"/>
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#e9c56f" stroke-width="8"/>
+  <circle cx="256" cy="256" r="132" fill="none" stroke="#9ab8d7" stroke-opacity=".42" stroke-width="3"/>
+  <path d="M116 305C163 166 317 126 395 215" fill="none" stroke="#77bed5" stroke-opacity=".7" stroke-width="5" stroke-linecap="round"/>
+  <path d="M146 352C242 405 355 351 379 250" fill="none" stroke="#a6c8ec" stroke-opacity=".42" stroke-width="3" stroke-linecap="round"/>
+  <g stroke="#e9edf4" stroke-opacity=".72" stroke-width="5" stroke-linecap="round">
+    <path d="M256 54v22"/><path d="M357 81l-11 19"/><path d="M431 155l-19 11"/><path d="M458 256h-22"/><path d="M431 357l-19-11"/><path d="M357 431l-11-19"/><path d="M256 458v-22"/><path d="M155 431l11-19"/><path d="M81 357l19-11"/><path d="M54 256h22"/><path d="M81 155l19 11"/><path d="M155 81l11 19"/>
+  </g>
+  <circle cx="256" cy="256" r="72" fill="#0a101a" stroke="#d9e3f0" stroke-opacity=".46" stroke-width="4"/>
+  <circle cx="256" cy="256" r="45" fill="url(#sun)" filter="url(#glow)"/>
+  <path d="M279 202a52 52 0 1 0 24 96a43 43 0 1 1-24-96Z" fill="#f4f7fc"/>
+  <circle cx="153" cy="210" r="17" fill="#09111b" stroke="#fa987b" stroke-width="6"/>
+  <circle cx="153" cy="210" r="5" fill="#fa987b"/>
+  <circle cx="373" cy="252" r="17" fill="#09111b" stroke="#e9c56f" stroke-width="6"/>
+  <circle cx="373" cy="252" r="5" fill="#e9c56f"/>
+  <circle cx="195" cy="355" r="17" fill="#09111b" stroke="#79d5e4" stroke-width="6"/>
+  <circle cx="195" cy="355" r="5" fill="#79d5e4"/>
+  <circle cx="256" cy="256" r="204" fill="none" stroke="#fff" stroke-opacity=".035" stroke-width="2"/>
+</svg>

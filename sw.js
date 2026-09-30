@@ -1,6 +1,6 @@
-/* Orloj Public v11.13 — Přehledný Profil dne */
+/* Orloj Public v11.13 — mobilní znak Orloje */
 var CACHE = "orloj-public-v11-13-mobile-reading";
-var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./IMG_3491.png", "./IMG_3492.png", "./assets/rws-hermit-1909.jpg"];
+var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./assets/orloj-app-icon.svg", "./assets/orloj-home-180.png", "./assets/orloj-app-icon-192.png", "./assets/orloj-app-icon-512.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
