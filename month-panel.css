@@ -1,0 +1,88 @@
+/* Compact month panel: factual sky above, symbolic numbers kept separate. */
+.month-panel {
+  --month-accent: #d8c48a;
+  min-width: 0;
+  scroll-margin-top: 82px;
+  padding: 22px;
+  border: 1px solid rgba(var(--ink-rgb), .12);
+  border-radius: 24px;
+  background: radial-gradient(420px 180px at 0 0, rgba(216,196,138,.055), transparent 75%), rgba(var(--ink-rgb), .018);
+}
+.month-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.month-kicker { color: var(--month-accent); font-size: 10px; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+.month-title { margin: 5px 0 0; font: 500 30px/1.15 Georgia, serif; color: var(--ink-primary); letter-spacing: -.035em; }
+.month-nav { display: flex; gap: 5px; flex: none; }
+.month-button { display: grid; place-items: center; min-width: 44px; min-height: 44px; border: 1px solid rgba(var(--ink-rgb), .16); border-radius: 13px; background: rgba(var(--ink-rgb), .025); color: var(--ink-primary); font: inherit; font-size: 22px; cursor: pointer; }
+.month-button:disabled { opacity: .4; cursor: default; }
+.month-button:not(:disabled):hover, .month-day:hover, .month-phase:hover { border-color: var(--month-accent); background: rgba(216,196,138,.07); }
+.month-context { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 14px; }
+.month-context > span { color: rgba(var(--ink-rgb), .6); font-size: 11px; overflow-wrap: anywhere; }
+.month-current { font-size: 12px; padding: 0 11px; min-height: 44px; color: var(--month-accent); }
+.month-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; align-items: start; }
+.month-rhythms { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.month-rhythm { min-width: 0; padding: 12px; border: 1px solid rgba(var(--ink-rgb), .1); border-radius: 14px; background: rgba(var(--ink-rgb), .018); }
+.month-rhythm > span { display: block; font-size: 11px; color: rgba(var(--ink-rgb), .7); }
+.month-rhythm b { display: block; margin-top: 4px; color: var(--month-accent); font-size: 25px; font-weight: 660; line-height: 1.2; }
+.month-rhythm-values { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.month-rhythm-values i { color: rgba(var(--ink-rgb), .58); font-size: 12px; font-style: normal; }
+.month-rhythm small { display: block; margin-top: 4px; color: rgba(var(--ink-rgb), .6); font-size: 10px; line-height: 1.35; }
+.month-tradition { margin: 6px 1px 16px; color: rgba(var(--ink-rgb), .58); font-size: 10px; }
+.month-label { margin: 0 0 8px; color: rgba(var(--ink-rgb), .8); font-size: 12px; font-weight: 740; }
+.month-phases { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.month-phase { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 8px; position: relative; padding: 12px 10px; min-width: 0; border: 1px solid rgba(var(--ink-rgb), .12); border-radius: 14px; color: inherit; text-decoration: none; }
+.month-phase-disc { padding-top: 2px; }
+.month-phase b { display: block; font-size: 13px; color: var(--ink-primary); }
+.month-phase time { display: block; margin-top: 4px; font-size: 11px; line-height: 1.4; color: rgba(var(--ink-rgb), .75); }
+.month-phase small { display: block; margin-top: 3px; color: rgba(var(--ink-rgb), .6); font-size: 10px; }
+.month-phase > i { position: absolute; right: 7px; top: 6px; color: rgba(var(--ink-rgb), .5); font: 11px sans-serif; }
+.month-calendar { min-width: 0; }
+.month-weekdays, .month-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px; }
+.month-weekdays { margin-bottom: 6px; color: rgba(var(--ink-rgb), .65); font-size: 11px; text-align: center; }
+.month-day { display: flex; position: relative; align-items: center; justify-content: center; flex-direction: column; gap: 5px; min-width: 0; min-height: 61px; border: 1px solid rgba(var(--ink-rgb), .06); border-radius: 10px; background: rgba(var(--ink-rgb), .018); color: var(--ink-primary); text-decoration: none; }
+.month-day > span { font-size: 14px; font-weight: 630; line-height: 1; }
+.month-day svg { display: block; }
+.month-day > i { position: absolute; width: 3px; height: 3px; bottom: 4px; right: 5px; border-radius: 50%; }
+.month-day.has-event > i { background: var(--month-accent); }
+.month-day.is-today { border-color: var(--month-accent); box-shadow: inset 0 0 0 1px var(--month-accent); background: rgba(216,196,138,.07); }
+.month-day.is-today > span { color: var(--month-accent); }
+.month-legend { margin: 9px 0 0; color: rgba(var(--ink-rgb), .65); font-size: 11px; line-height: 1.5; }
+.month-events-details { margin-top: 14px; border-top: 1px solid rgba(var(--ink-rgb), .12); }
+.month-events-details > summary { display: flex; justify-content: space-between; align-items: center; min-height: 48px; cursor: pointer; list-style: none; font-size: 13px; font-weight: 700; color: rgba(var(--ink-rgb), .85); }
+.month-events-details > summary::-webkit-details-marker { display: none; }
+.month-events-details > summary::after { content: "↓"; color: var(--month-accent); }
+.month-events-details[open] > summary::after { content: "↑"; }
+.month-events { display: grid; gap: 5px; }
+.month-event { display: grid; grid-template-columns: 114px 25px minmax(0,1fr) 12px; align-items: center; gap: 9px; min-height: 52px; padding: 9px; border: 1px solid rgba(var(--ink-rgb), .08); border-radius: 12px; color: inherit; text-decoration: none; }
+.month-event time { color: rgba(var(--ink-rgb), .75); font-size: 11px; line-height: 1.4; }
+.month-event-glyph { color: var(--month-accent); font-size: 18px; text-align: center; }
+.month-event b { display: block; color: rgba(var(--ink-rgb), .9); font-size: 12px; line-height: 1.4; }
+.month-event small { display: block; margin-top: 3px; color: rgba(var(--ink-rgb), .58); font-size: 10px; }
+.month-event > i { font-style: normal; color: rgba(var(--ink-rgb), .6); font-size: 12px; }
+.month-event:hover { border-color: var(--month-accent); }
+.month-river { display: inline-flex; align-items: center; min-height: 44px; margin-top: 8px; color: var(--month-accent); font-size: 12px; text-decoration: none; }
+.month-method { margin: 6px 0 0; color: rgba(var(--ink-rgb), .58); font-size: 10px; line-height: 1.6; }
+.month-method-details > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; color: rgba(var(--ink-rgb), .65); font-size: 11px; }
+.month-method-details > summary::-webkit-details-marker { display: none; }
+.month-method-details > summary::after { content: "+"; }
+.month-method-details[open] > summary::after { content: "−"; }
+.month-status { color: rgba(var(--ink-rgb), .75); font-size: 13px; line-height: 1.5; }
+.month-retry { padding: 0 12px; font-size: 13px; }
+.month-panel [hidden] { display: none !important; }
+.month-panel :is(a,button,summary):focus-visible { outline: 2px solid var(--month-accent); outline-offset: 3px; }
+html[data-theme="light"] .month-panel { --month-accent: #77552b; background: linear-gradient(145deg,rgba(255,253,249,.95),rgba(239,230,216,.8)); }
+@media(max-width:760px) {
+  .month-panel { padding: 18px 16px; }
+  .month-layout { grid-template-columns: 1fr; gap: 18px; }
+  .month-title { font-size: 28px; }
+  .month-calendar { width: 100%; max-width: 470px; justify-self: center; }
+  .month-method { font-size: 11px; }
+}
+@media(max-width:430px) {
+  .month-panel { padding: 17px 13px; border-radius: 21px; }
+  .month-head { gap: 6px; }
+  .month-title { font-size: 25px; }
+  .month-nav { gap: 3px; }
+  .month-event { grid-template-columns: 76px 21px minmax(0,1fr) 10px; gap: 6px; }
+  .month-rhythm { padding: 10px; }
+  .month-phase { padding: 11px 8px; gap: 6px; }
+}
