@@ -2176,6 +2176,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 
 </style>
 <link href="./human-design.css?v=public-v11-13" rel="stylesheet"/>
+<link href="./month-panel.css?v=public-v11-13-month-overview" rel="stylesheet"/>
 </head>
 <body>
 <div class="wrap">
@@ -2215,6 +2216,17 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 	  </div>
 	  <div class="now-visual"><div class="now-orbit" id="now-orbit" aria-live="polite"></div></div>
 	  <details class="now-mobile-more"><summary data-i18n="now.more">Další cesty</summary><div><a href="timeline.html" data-i18n="now.river">Časová řeka</a><a href="life.html" data-i18n="now.life">Životní kronika</a><button data-open-tab="horizont" type="button" data-i18n="tab.horizon">Horizont</button><button data-now-open-depth type="button" data-i18n="now.layers">Dnešní vrstvy</button><button data-open-tab="denik" type="button" data-i18n="now.journal">Zapsat pozorování</button></div></details>
+	</section>
+
+	<section class="month-panel" id="month-panel" aria-labelledby="month-title">
+	  <div class="month-head"><div><div class="month-kicker" id="month-kicker">Měsíční přehled</div><h2 class="month-title" id="month-title" aria-live="polite">Měsíc v Orloji</h2></div><nav class="month-nav" id="month-nav" aria-label="Měsíce"><button class="month-button" id="month-prev" type="button" aria-label="Předchozí měsíc">‹</button><button class="month-button" id="month-next" type="button" aria-label="Následující měsíc">›</button></nav></div>
+	  <div class="month-context"><span id="month-timezone"></span><button class="month-button month-current" id="month-current" type="button">Tento měsíc</button></div>
+	  <p class="month-status" id="month-status" role="status">Načítám měsíční přehled…</p><button class="month-button month-retry" id="month-retry" type="button" hidden>Obnovit přehled</button>
+	  <div id="month-body" hidden>
+	    <div class="month-layout"><div><div class="month-rhythms" id="month-rhythms"></div><p class="month-tradition" id="month-tradition"></p><h3 class="month-label" id="month-phases-label">Novy a úplňky</h3><div class="month-phases" id="month-phases"></div></div><div class="month-calendar" id="month-calendar" aria-label="Kalendář měsíce"><div class="month-weekdays" id="month-weekdays" aria-hidden="true"></div><div class="month-grid" id="month-grid"></div><p class="month-legend" id="month-legend"></p></div></div>
+	    <details class="month-events-details"><summary><span id="month-events-title">Události měsíce</span></summary><div class="month-events" id="month-events"></div></details>
+	    <a class="month-river" id="month-river" href="timeline.html?range=month&amp;mode=simple">Měsíc v Časové řece →</a><details class="month-method-details"><summary id="month-method-title">Výpočet a tradice</summary><p class="month-method" id="month-method"></p></details>
+	  </div>
 	</section>
 
 	<section class="time-travel" aria-labelledby="time-travel-title">
@@ -3201,6 +3213,8 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 </div>
 <script src="./astronomy-engine.min.js?v=public-v11-13"></script>
 <script src="./human-design.js?v=public-v11-13"></script>
+<script src="./day-profile.js?v=public-v11-13"></script>
+<script src="./month-panel.js?v=public-v11-13-month-overview"></script>
 <script>
 (function(){
   var RAD=Math.PI/180, toDeg=function(r){return r/RAD;}, sin=function(d){return Math.sin(d*RAD);}, cos=function(d){return Math.cos(d*RAD);};
@@ -4641,6 +4655,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     var ph=moonPhase(now),moonLon=rev(geo("moon",now).lon),moonSign=signOf(moonLon),moonIndex=Math.floor(moonLon/30);
     renderNowInstrument(now,data,ph,moon);
     renderTimeThreshold(now);
+    if(monthPanel)monthPanel.refresh();
     var isFullMoon=ph.name==="Úplněk",hero=root.querySelector(".today-hero"),heroMoon=document.getElementById("today-hero-moon"),lunarEvent=document.getElementById("today-lunar-event"),lunarIllumination=document.getElementById("today-lunar-event-illumination"),lunarTitle=document.getElementById("today-lunar-event-title"),lunarCopy=document.getElementById("today-lunar-event-copy"),fullMoonText=APP_LANG==="en"?"Full moon":"Úplněk",illuminationText=Math.round(ph.illum*100)+(APP_LANG==="en"?" % illuminated":" % osvětlení");
     if(hero)hero.classList.toggle("is-full-moon",isFullMoon);
     if(heroMoon){heroMoon.classList.toggle("is-full-moon",isFullMoon);heroMoon.setAttribute("aria-label",isFullMoon?(APP_LANG==="en"?"Today's full moon · ":"Dnešní úplněk · ")+illuminationText:(APP_LANG==="en"?"Current Moon phase · ":"Aktuální fáze Měsíce · ")+ph.name);heroMoon.innerHTML=moonDisc(ph.illum,ph.waxing,82);}
@@ -6772,6 +6787,16 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function closeExhibit(){var v=document.getElementById("exhibit-view");if(!v)return;v.hidden=true;v.setAttribute("aria-hidden","true");document.body.classList.remove("exhibit-open");clearInterval(exhibitTimer);exhibitTimer=null;if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(function(){});}
   function initExhibitUI(){var open=document.getElementById("exhibit-toggle"),close=document.getElementById("exhibit-close"),img=document.getElementById("exhibit-art-image");if(open)open.addEventListener("click",openExhibit);if(close)close.addEventListener("click",closeExhibit);if(img)img.addEventListener("error",function(){img.style.display="none";document.getElementById("exhibit-view").classList.add("image-failed");});document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!document.getElementById("threshold-modal").hidden)closeThreshold();else if(!document.getElementById("exhibit-view").hidden)closeExhibit();}});}
 
+  var monthPanel=null;
+  function monthPanelNumbers(key){
+    var p=window.OrlojDay.parseDateKey(key),date=new Date(0),P=activeP();date.setFullYear(p.year,p.month-1,p.day);date.setHours(12,0,0,0);
+    return{universalMonth:numC(reduceNum(digitSum(p.year))+reduceNum(p.month)),personalMonth:PROFILE_READY?numC(pmRaw(P.bd,date)):null,universalDay:numC(udRaw(date)),personalDay:PROFILE_READY?numC(pdRaw(P.bd,date)):null};
+  }
+  function initMonthPanelUI(){
+    if(!window.OrlojMonth)return;
+    monthPanel=window.OrlojMonth.mount({document:document,location:location,history:history,IntersectionObserver:window.IntersectionObserver,getContext:function(){return{Day:window.OrlojDay,Astronomy:window.Astronomy,now:new Date(),language:APP_LANG,timezone:observerTimeZone(),numbers:monthPanelNumbers};}});
+  }
+
   function initTimeTravelUI(){
     var form=document.getElementById("time-travel-form"),input=document.getElementById("time-travel-date"),today=document.getElementById("time-travel-today"),river=document.getElementById("time-travel-river");if(!form||!input)return;
     function currentDay(){return jrKey(new Date());}
@@ -6795,6 +6820,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   initExhibitUI();
   initLanguageUI();
   initTimeTravelUI();
+  initMonthPanelUI();
   initUsageHubs();
   initHorizonRangeUI();
   renderProfSw();render();skyTint();calInit();numCalInit();initWorldCalendars();
@@ -6820,7 +6846,7 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
         window.location.reload();
       });
-      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-day-clarity", {
+      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-month-overview", {
         updateViaCache: "none"
       });
       await registration.update();

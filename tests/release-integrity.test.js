@@ -26,8 +26,8 @@ test("release identifiers are consistently v11.13", () => {
   assert.match(timeline, /name="orloj-build" content="public-v11-13"/);
   assert.match(life, /name="orloj-build" content="public-v11-13"/);
   assert.match(index, /Orloj · Public v11\.13 · Cesta časem/);
-  assert.match(index, /sw\.js\?v=public-v11-13-day-clarity/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-13-mobile-reading"/);
+  assert.match(index, /sw\.js\?v=public-v11-13-month-overview/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-13-month-overview"/);
   assert.doesNotMatch(index + vedic + maya + day + timeline + life + worker, /public-v11-1[012]|orloj-public-v11-1[012]|v11\.1[012]/);
 });
 
