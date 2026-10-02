@@ -10,11 +10,11 @@
   <link rel="icon" href="assets/orloj-app-icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/orloj-home-180.png" sizes="180x180">
   <link rel="manifest" href="manifest.webmanifest?v=public-v11-13-home-icon">
-  <link rel="stylesheet" href="portrait.css?v=public-v11-13-portrait">
+  <link rel="stylesheet" href="portrait.css?v=public-v11-13-portrait-details">
   <script defer src="astronomy-engine.min.js?v=public-v11-13"></script>
   <script defer src="day-profile.js?v=public-v11-13-mobile-reading"></script>
   <script defer src="portrait-engine.js?v=public-v11-13-portrait"></script>
-  <script defer src="portrait.js?v=public-v11-13-portrait-save-image"></script>
+  <script defer src="portrait.js?v=public-v11-13-portrait-details"></script>
 </head>
 <body>
 <main class="portrait-shell">
@@ -28,9 +28,9 @@
     <section class="cycle" id="portrait-cycle" hidden></section>
     <details class="extras"><summary>Další body mapy</summary><div id="portrait-extras"></div></details>
   </section>
-  <section id="portrait-aspects" class="portrait-panel section" hidden><div class="section-head"><h2>Hlavní vazby vaší mapy</h2><span>Symbolické čtení</span></div><div class="readings" id="portrait-readings"></div><details class="extras"><summary>Všechny hlavní aspekty</summary><div id="portrait-all-aspects"></div></details></section>
+  <section id="portrait-aspects" class="portrait-panel section" hidden><div class="section-head"><h2>Hlavní vazby vaší mapy</h2><span>Symbolické čtení</span></div><div class="readings" id="portrait-readings"></div><details class="extras aspect-guide"><summary>Jak číst symboly a orb</summary><p>Aspekt je úhlová vzdálenost mezi dvěma body mapy. Orb označuje odchylku od přesného úhlu: menší číslo znamená přesnější vazbu, nikoli jistější výklad.</p><dl><div><dt>☌ Konjunkce · 0°</dt><dd>Spojení</dd></div><div><dt>✶ Sextil · 60°</dt><dd>Příležitost</dd></div><div><dt>□ Kvadratura · 90°</dt><dd>Napětí a výzva</dd></div><div><dt>△ Trigon · 120°</dt><dd>Soulad</dd></div><div><dt>☍ Opozice · 180°</dt><dd>Dva póly</dd></div></dl><p>Slovní významy jsou astrologická symbolika. Znak ≈ připomíná, že poloha z předlohy je orientační a přesnost orbu je tím omezená.</p></details><details class="extras"><summary>Všechny hlavní aspekty</summary><div id="portrait-all-aspects"></div></details></section>
   <section id="portrait-now" class="portrait-panel section" hidden><div class="section-head"><h2>Obloha právě teď</h2><time id="portrait-now-time"></time></div><div class="now-moon" id="portrait-now-moon"></div><h3>Dnešní vazby k osobní mapě</h3><div class="live-hits" id="portrait-live-hits"></div><a class="text-link" href="day.html">Otevřít celý Profil dne →</a></section>
-  <section class="actions"><button class="button" id="portrait-export" type="button">Stáhnout obrázek</button><button class="button quiet" id="portrait-share" type="button">Sdílet tuto mapu</button><a class="button quiet" href="./?view=map">Vytvořit vlastní Orloj →</a><p class="action-status" id="portrait-action-status" role="status"></p><a class="button quiet" id="portrait-file" hidden download>Uložit PNG</a></section>
+  <section class="actions"><button class="button" id="portrait-export" type="button">Stáhnout obrázek</button><button class="button quiet" id="portrait-share" type="button">Sdílet tuto mapu</button><a class="button quiet" href="./?view=map">Vytvořit vlastní Orloj →</a><p class="action-status" id="portrait-action-status" role="status"></p><a class="button quiet" id="portrait-file" hidden download>Uložit PNG</a><div class="share-link" id="portrait-share-link" hidden><label for="portrait-share-url">Odkaz na tuto konkrétní mapu</label><input id="portrait-share-url" type="url" readonly spellcheck="false" aria-describedby="portrait-share-hint"><small id="portrait-share-hint">Obsahuje jméno a polohy této mapy. Klepnutím vyberete celý odkaz; můžete jej zkopírovat i bez nabídky sdílení.</small></div></section>
   <details class="method"><summary>O této ukázce</summary><p>Mapa vychází z poloh na předloze. Symbol ≈ označuje orientační údaje. Aspekty jsou vypočítané z uvedených poloh; čtení nabízí astrologické podněty k zamyšlení. Domy, přesné tranzitní termíny a osobní čísla vyžadují potvrzené údaje narození.</p><p>Čínský rok je v této ukázce odvozený z poloh planet a není potvrzeným údajem narození.</p><p>Ukázka neukládá ani nepřepisuje osobní profil v tomto zařízení.</p><p>Čínský cyklus: <a href="https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2001e.pdf" target="_blank" rel="noopener noreferrer">Hong Kong Observatory</a>. Nebeské kmeny: <a href="https://www.emperors.edu/wp-content/uploads/masters/syllabi/OM315Notes.pdf" target="_blank" rel="noopener noreferrer">tabulka kmenů a větví</a>.</p></details>
   <footer>PANSOPHIA · ORLOJ NA MÍRU</footer>
   <noscript><p>Pro interaktivní mapu zapněte JavaScript. <a href="./">Otevřít Orloj</a></p></noscript>

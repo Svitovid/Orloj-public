@@ -17,18 +17,28 @@
     $('all-aspects').innerHTML=P.aspects(profile).map(function(a){return '<p><b>'+a.a.name+' '+a.glyph+' '+a.b.name+'</b><small>'+a.name+' · orb '+P.orbLabel(a)+'</small></p>';}).join('');
   }
   function drawNow(){
-    var now=new Date(),r=P.liveHits(A,now,profile),moon=r.points.find(function(p){return p.id==='moon';});$('now-time').dateTime=now.toISOString();$('now-time').textContent=new Intl.DateTimeFormat('cs-CZ',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}).format(now);
+    var now=new Date(),r=P.liveHits(A,now,profile),moon=r.points.find(function(p){return p.id==='moon';});$('now-time').dateTime=now.toISOString();$('now-time').textContent=new Intl.DateTimeFormat('cs-CZ',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Prague'}).format(now)+' · Praha';
     $('now-moon').innerHTML='<b>'+P.esc(r.moon.name)+'</b>'+Math.round(r.moon.illumination*100)+' % osvětlení<span>Luna '+P.esc(moon.sign.name)+' · '+D.fmtDeg(moon.sign.degree)+'</span>';
     $('live-hits').innerHTML=r.hits.map(function(h){return '<article class="live-hit"><i>'+h.transit.glyph+' '+h.glyph+' '+h.natal.glyph+'</i><div><b>'+h.transit.name+' · '+h.name.toLowerCase()+' · nativní '+h.natal.name+'</b><small>orb '+P.orbLabel(h)+(h.approx?' · orientační nativní poloha':'')+'</small></div></article>';}).join('')||'<p>V orbu 2° právě není těsný aspekt sledovaných planet k této mapě.</p>';
   }
   function panel(name){if(['map','aspects','now'].indexOf(name)<0)return;active=name;['map','aspects','now'].forEach(function(k){$(k).hidden=k!==name;});document.querySelectorAll('[data-panel]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.panel===name));});if(name==='now')drawNow();}
-  async function share(){var url=new URL(location.href);url.search='';url.hash=P.encode(profile);try{if(navigator.share){await navigator.share({title:document.title,url:url.href});status('Mapa je připravená ke sdílení.');}else if(navigator.clipboard){await navigator.clipboard.writeText(url.href);status('Odkaz na tuto mapu je zkopírovaný.');}else prompt('Odkaz na tuto mapu',url.href);}catch(e){if(e.name!=='AbortError')prompt('Odkaz na tuto mapu',url.href);}}
+  async function share(){
+    var url=new URL(location.href);url.search='';url.hash=P.encode(profile);
+    $('share-url').value=url.href;$('share-link').hidden=false;
+    try{
+      if(navigator.share){await navigator.share({title:document.title,url:url.href});status('Mapa byla předána nabídce sdílení.');}
+      else if(navigator.clipboard){await navigator.clipboard.writeText(url.href);status('Odkaz na tuto mapu je zkopírovaný.');}
+      else status('Odkaz je připravený níže ke zkopírování.');
+    }catch(e){status(e.name==='AbortError'?'Sdílení bylo zavřené. Odkaz zůstává připravený níže.':'Odkaz můžete zkopírovat z pole níže.');}
+  }
   async function exportImage(){
     var button=$('export');button.disabled=true;status('Připravuji obrázek…');var src;
     try{var svg=P.poster(profile);src=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));var img=new Image();await new Promise(function(resolve,reject){img.onload=resolve;img.onerror=reject;img.src=src;});var canvas=document.createElement('canvas');canvas.width=1600;canvas.height=2820;canvas.getContext('2d').drawImage(img,0,0);var blob=await new Promise(function(resolve){canvas.toBlob(resolve,'image/png');});if(!blob)throw Error('Export');var slug=(profile.name||'Osobni-mapa').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,40),file=new File([blob],'Orloj-'+slug+'.png',{type:'image/png'});if(fileUrl)URL.revokeObjectURL(fileUrl);fileUrl=URL.createObjectURL(blob);var link=$('file');link.href=fileUrl;link.download=file.name;link.hidden=false;if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:document.title});status('Obrázek je připravený ke sdílení.');}else{link.click();status('Obrázek je připravený. Můžete jej uložit jako PNG.');}}
     catch(e){status(e.name==='AbortError'?'Sdílení bylo zavřené. Obrázek můžete uložit jako PNG.':'Obrázek se nepodařilo připravit. Zkuste to znovu.');}finally{button.disabled=false;if(src)URL.revokeObjectURL(src);}
   }
   function load(){try{profile=P.decode(location.hash);$('notice').hidden=true;}catch(e){profile=P.validate(P.DEMO);$('notice').textContent='Odkaz se nepodařilo načíst. Zobrazuje se ukázková mapa.';$('notice').hidden=false;}draw();panel(active);}
-  document.querySelectorAll('[data-panel]').forEach(function(b){b.addEventListener('click',function(){panel(b.dataset.panel);});});$('share').addEventListener('click',share);$('export').addEventListener('click',exportImage);window.addEventListener('hashchange',function(){if(fileUrl)URL.revokeObjectURL(fileUrl);fileUrl=null;$('file').hidden=true;status('');load();});window.addEventListener('pagehide',function(){clearInterval(liveTimer);if(fileUrl)URL.revokeObjectURL(fileUrl);});load();liveTimer=setInterval(function(){if(active==='now'&&!document.hidden)drawNow();},60000);
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=public-v11-13-portrait',{scope:'./'}).catch(function(){});
+  function refreshLive(){if(active==='now'&&!document.hidden)drawNow();}
+  function startLive(){clearInterval(liveTimer);liveTimer=setInterval(refreshLive,60000);}
+  document.querySelectorAll('[data-panel]').forEach(function(b){b.addEventListener('click',function(){panel(b.dataset.panel);});});$('share').addEventListener('click',share);$('export').addEventListener('click',exportImage);$('share-url').addEventListener('click',function(){this.select();});window.addEventListener('hashchange',function(){if(fileUrl)URL.revokeObjectURL(fileUrl);fileUrl=null;$('file').hidden=true;$('share-link').hidden=true;$('share-url').value='';status('');load();});window.addEventListener('pagehide',function(e){clearInterval(liveTimer);if(!e.persisted&&fileUrl)URL.revokeObjectURL(fileUrl);});window.addEventListener('pageshow',function(e){if(e.persisted){startLive();refreshLive();}});document.addEventListener('visibilitychange',refreshLive);load();startLive();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=public-v11-13-portrait-details',{scope:'./'}).catch(function(){});
 })();

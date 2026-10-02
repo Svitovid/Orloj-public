@@ -1,5 +1,5 @@
 /* Orloj Public v11.13 — měsíční přehled a sdílená osobní mapa */
-var CACHE = "orloj-public-v11-13-portrait";
+var CACHE = "orloj-public-v11-13-portrait-details";
 var ASSETS = ["./", "./index.html", "./day.html", "./day-profile.js", "./day-profile.css", "./month-panel.js", "./month-panel.css", "./portrait.html", "./portrait-engine.js", "./portrait.js", "./portrait.css", "./timeline.html", "./timeline.js", "./timeline.css", "./life.html", "./life-chronicle.js", "./life-chronicle.css", "./vedic.html", "./vedic-astrology.js", "./vedic-astrology.css", "./maya.html", "./maya-calendar.js", "./maya-calendar.css", "./astronomy-engine.min.js", "./human-design.js", "./human-design.css", "./tarot.html", "./manifest.webmanifest", "./assets/orloj-app-icon.svg", "./assets/orloj-home-180.png", "./assets/orloj-app-icon-192.png", "./assets/orloj-app-icon-512.png", "./assets/rws-hermit-1909.jpg"];
 
 self.addEventListener("install", function(event) {
