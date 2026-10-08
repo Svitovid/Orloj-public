@@ -8,7 +8,7 @@
 
   var SCHEMA="orloj.temporal-context/1.0.0";
   var CATEGORIES=["macro","policy","network","treasury","machine-economy","other"];
-  var MATURITY=["production","pilot","memorandum","announcement","unknown"];
+  var MATURITY=["production","pilot","memorandum","marketing","announcement","unknown"];
 
   function asInstant(value,label){
     var d=value instanceof Date?new Date(value.getTime()):
