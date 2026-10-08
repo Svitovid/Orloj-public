@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Orloj × Purple Rain | Temporal Lens (preview)</title>
+<style>
+:root{color-scheme:dark;--paper:#eeecf6;--sub:#a5a5bb;--violet:#9886ff;--edge:rgba(215,207,255,.16)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse 55% 38% at 75% 10%,rgba(104,67,166,.3),transparent 80%),radial-gradient(ellipse 43% 34% at 8% 75%,rgba(38,73,122,.2),transparent 80%),#10101b;color:var(--paper);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1300px;margin:auto;padding:clamp(20px,4vw,65px)}header,.tools,.meta,.columns,.lanes,.legend{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.logo{font:600 12px/1.4 system-ui;letter-spacing:.25em;text-transform:uppercase}.logo i{color:#c3a4ff;font-size:23px;font-style:normal;margin-right:11px}.small{color:var(--sub);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+header{padding-bottom:35px;border-bottom:1px solid var(--edge)}.tools{gap:9px}button,input{font:inherit;color:inherit;border:1px solid var(--edge);background:rgba(255,255,255,.04);border-radius:12px;padding:10px 15px}button{cursor:pointer}button:hover,button:focus-visible{background:rgba(152,134,255,.13)}input{color-scheme:dark}button:focus-visible,input:focus-visible{outline:2px solid #b0a0ff;outline-offset:3px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:35px;align-items:center;padding:clamp(35px,6vw,80px) 0}
+h1{font:400 clamp(50px,8vw,118px)/1.02 Georgia,serif;letter-spacing:-.04em;margin:10px 0 20px}.hero p{max-width:575px;color:#b9b7cb}h2{font:400 30px/1.1 Georgia,serif;margin:12px 0 18px}h3{font:600 14px/1.3 system-ui;letter-spacing:.05em;margin:5px 0 12px}
+.orbit{width:min(100%,370px);aspect-ratio:1;position:relative;margin:auto;border-radius:50%;border:1px solid rgba(191,167,255,.28);box-shadow:0 0 0 30px rgba(176,152,255,.018),0 0 0 68px rgba(176,152,255,.012),inset 0 0 80px rgba(112,88,169,.06);display:grid;place-items:center}
+.orbit:before,.orbit:after{content:"";position:absolute;border:1px dashed rgba(191,167,255,.2);border-radius:50%;inset:11%}.orbit:after{inset:26%;border-style:solid;border-color:rgba(191,167,255,.12)}
+.orbit .center{text-align:center;z-index:1}.orbit .moon{display:block;font-size:53px;color:#d2c5ff;line-height:1.3;text-shadow:0 0 38px #7e6cda}.orbit .phase{font-size:13px;color:#bbb7d4}.orbit .number{font:400 32px Georgia,serif}
+.meta{justify-content:flex-start;gap:8px;color:#c2bdd4;font-size:13px}.meta span{border:1px solid var(--edge);border-radius:999px;padding:6px 11px}
+.legend{justify-content:flex-start;gap:20px;color:#c7c3d4;font-size:13px;margin:0 0 26px}.key{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:#a797ff}.key.off{background:#747288}.key.none{background:#6b99b0}
+.columns{align-items:stretch;gap:16px}.panel{flex:1 1 285px;min-width:0;padding:24px;background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.012));border:1px solid var(--edge);border-radius:21px}.big{font:400 28px Georgia,serif;margin:9px 0}.panel p{color:var(--sub);margin:9px 0}
+.section{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:52px 0 17px}.section h2{margin:0}.section .small{max-width:420px;text-align:right}
+.lanes{align-items:stretch;gap:12px}.lane{flex:1 1 230px;min-height:123px;padding:22px;border:1px solid var(--edge);border-radius:16px;background:rgba(8,8,22,.28)}.lane strong{display:block;font-weight:500}.lane p{font-size:12px;color:var(--sub);margin:10px 0 0}
+.switch{display:inline-flex;align-items:center;gap:9px;font-size:13px}.switch input{accent-color:#b4a1ff;width:16px;height:16px;margin:0}details{margin-top:44px;border-top:1px solid var(--edge);padding-top:18px;color:#aaa9bf}summary{cursor:pointer;color:#e0def1}details p{max-width:880px}
+footer{padding-top:32px;margin-top:54px;border-top:1px solid var(--edge);color:var(--sub);font-size:12px}
+@media(max-width:790px){.hero{grid-template-columns:1fr}.orbit{width:min(75vw,310px)}.section{align-items:flex-start;flex-direction:column}.section .small{text-align:left}header{align-items:flex-start}h1{font-size:clamp(53px,12vw,84px)}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="logo"><i>✧</i> ORLOJ <span style="opacity:.55">/</span> PURPLE RAIN <div class="small" style="margin:7px 0 0 38px">Temporal Lens · návrh v0</div></div>
+    <div class="tools" aria-label="Výběr data"><button id="prev" type="button" aria-label="Předchozí den">←</button><input id="day" type="date" aria-label="Vybrat den"><button id="next" type="button" aria-label="Následující den">→</button><button id="today" type="button">Dnes</button></div>
+  </header>
+
+  <section class="hero">
+    <div><div class="small">Intelligence of Time · časový kontext, nikoli cenová predikce</div><h1 id="heading">—</h1>
+      <p>Stejný čas, kterým žije Orloj, jako tichá orientační vrstva nad událostmi Purple Rain. Finanční rozhodnutí zůstávají v PR Boardu a vycházejí z jeho vlastních dat.</p>
+      <div class="meta"><span id="week">—</span><span id="ordinal">—</span><span>Europe/Prague</span></div>
+    </div>
+    <div class="orbit" aria-label="Astronomický motiv"><div class="center"><span class="moon">☾</span><div class="small">Lunární cyklus</div><div id="moon" class="number">—</div><div id="illuminated" class="phase">—</div></div></div>
+  </section>
+
+  <div class="legend"><span><i class="key"></i>Astronomický výpočet</span><span><i class="key none"></i>PR data nepřipojena</span><span><i class="key off"></i>Symbolika volitelná</span></div>
+
+  <section class="columns" aria-label="Časové vrstvy">
+    <article class="panel"><div class="small">01 / Přesný čas</div><div id="sun" class="big">—</div><p>Poloha Slunce na tropické ekliptice. Vypočteno stávajícím enginem Orloje.</p></article>
+    <article class="panel"><div class="small">02 / PR Event Window</div><div class="big">7 dní</div><p>Žádný ověřený feed není připojen. Jakmile jej dodá PR Work, zobrazí se zde události se zdroji a stavem adopce.</p></article>
+    <article class="panel"><div class="small">03 / Symbolické čtení</div>
+      <label class="switch"><input type="checkbox" id="symbols"> Zobrazit volitelnou vrstvu</label>
+      <div id="symbol-output" class="big" aria-live="polite">Vypnuto</div>
+      <p>Samostatná kulturní a interpretační rovina, nikoli investiční signál.</p></article>
+  </section>
+
+  <div class="section"><h2>Časová řeka PR</h2><div class="small">Rámec pro živé, zdrojované události · v tomto náhledu bez dat</div></div>
+  <section class="lanes" aria-label="Tematické osy">
+    <div class="lane"><strong>World / Policy</strong><p>Makroekonomika, regulace, geopolitika</p><p>Zdroj PR: nepřipojen</p></div>
+    <div class="lane"><strong>Networks</strong><p>XRPL, Flare a další infrastruktura</p><p>Zdroj PR: nepřipojen</p></div>
+    <div class="lane"><strong>Treasury</strong><p>Události kolem vaultů a likvidity</p><p>Osobní údaje se sem nepřenášejí</p></div>
+    <div class="lane"><strong>Machine Economy</strong><p>Technologie → produkce → ekonomická aktivita</p><p>Zdroj PR: nepřipojen</p></div>
+  </section>
+
+  <details><summary>Proč tyto informace vidím? · metodika a původ</summary>
+  <p>Datum a astronomické pozice se počítají z OrlojDay a Astronomy Engine. Události, maturity (produkce/pilot/memorandum/oznámení), tržní ceny ani investiční scénáře nejsou součástí Orloje; dodává je až ověřená datová vrstva Purple Rain. Symbolické asociace nemají prokázanou predikční schopnost pro ceny aktiv a jsou ve finančním režimu vypnuté. Tato stránka je návrh, ne živý PR Board.</p></details>
+  <footer>ORLOJ × PURPLE RAIN · Pansophia Institute · Izolovaný návrh · Veřejný Orloj zůstává beze změny</footer>
+</main>
+<script src="./astronomy-engine.min.js"></script>
+<script src="./day-profile.js"></script>
+<script src="./pr-temporal-context.js"></script>
+<script>
+(function(){
+  "use strict";
+  const D=window.OrlojDay,B=window.OrlojPRTemporal,A=window.Astronomy,zone="Europe/Prague",el=id=>document.getElementById(id);
+  if(!D||!B||!A){el("heading").textContent="Moduly Orloje nejsou dostupné";return;}
+  let dateKey=D.dateKeyAt(new Date(),zone);
+  function render(){
+    const at=new Date(D.zonedLocalToUtc(dateKey,"12:00",zone));
+    const ctx=B.createContext({at:at,timeZone:zone,dayEngine:D,astronomy:A,includeSymbolic:el("symbols").checked,events:[]});
+    el("day").value=dateKey;
+    el("heading").textContent=new Intl.DateTimeFormat("cs-CZ",{timeZone:"UTC",day:"numeric",month:"long",year:"numeric"}).format(D.civilDate(dateKey));
+    el("week").textContent=ctx.calendar.isoWeek+". týden";
+    el("ordinal").textContent=ctx.calendar.dayOfYear+". den roku";
+    el("moon").textContent=ctx.astronomy.lunar.name;
+    el("illuminated").textContent="Osvětlení ~"+Math.round(ctx.astronomy.lunar.illuminationFraction*100)+" %";
+    el("sun").textContent=ctx.astronomy.solar.zodiacSign;
+    el("symbol-output").textContent=ctx.symbolic?ctx.symbolic.universalDay+" · "+ctx.symbolic.weekdayRuler:"Vypnuto";
+  }
+  el("prev").addEventListener("click",()=>{dateKey=D.shiftDateKey(dateKey,-1);render();});
+  el("next").addEventListener("click",()=>{dateKey=D.shiftDateKey(dateKey,1);render();});
+  el("today").addEventListener("click",()=>{dateKey=D.dateKeyAt(new Date(),zone);render();});
+  el("day").addEventListener("change",e=>{if(D.parseDateKey(e.target.value)){dateKey=e.target.value;render();}});
+  el("symbols").addEventListener("change",render);
+  render();
+})();
+</script>
+</body>
+</html>
