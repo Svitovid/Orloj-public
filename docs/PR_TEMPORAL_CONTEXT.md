@@ -63,7 +63,7 @@ Input:
 Important: at and event timestamps must be absolute ISO 8601 instants with timezone offset or JavaScript Dates, not ambiguous local strings. The timeZone is an IANA zone.
 
 Event category values: macro, policy, network, treasury, machine-economy, other.
-Event maturity values: production, pilot, memorandum, announcement, unknown.
+Event maturity values: production, pilot, memorandum, marketing, announcement, unknown.
 Unknown values are normalized to safe defaults. Missing/non-HTTPS sources set sourceState = review_required.
 Maturity comes from the PR input and is NOT verified automatically: even a supplied production designation requires independent confirmation.
 
