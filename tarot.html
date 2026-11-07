@@ -81,8 +81,11 @@
     @media(max-width:680px){.shell{padding-left:13px;padding-right:13px}.topbar{padding-bottom:16px}.brand{display:none}.hero{grid-template-columns:1fr;padding:16px 4px 25px;gap:18px}.hero-note{width:max-content}.hero-copy{font-size:15px}.atlas-nav{align-items:flex-end}.atlas-nav h2{font-size:22px}.progress i{width:52px}.arcana-grid{grid-template-columns:repeat(6,minmax(44px,1fr));gap:6px;padding-bottom:24px}.arcana-card{min-height:62px}.study{border-radius:20px}.study-head{align-items:flex-start;padding:18px 16px}.study-head h2{font-size:36px}.study-meta{margin-top:11px}.study-actions{flex-direction:column;align-items:stretch}.image-control{min-height:32px;padding:7px 8px}.visual-side{min-height:570px;padding:14px}.viewport-shell{padding:10px}.image-viewport{width:min(100%,330px)}.gesture-note{font-size:9px}.lens-area,.detail-card,.mode-panel{padding-left:16px;padding-right:16px}.lens-area{padding-top:17px}.detail-card{padding-top:19px}.detail-card h3{font-size:31px}.modebar{position:sticky;bottom:0;z-index:3}.mode{padding:11px 4px;font-size:9px}.motif-list,.relation-grid,.source-grid{grid-template-columns:1fr}.timeline{margin-left:0;margin-right:0}.timeline-item{min-width:148px}.footer{display:block;padding:18px 4px 0}.footer p{margin:0 0 6px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
+<link rel="stylesheet" href="design-foundation.css">
+<script src="appearance.js"></script>
+<script src="symbol-registry.js"></script>
 </head>
-<body>
+<body class="of-reader">
   <a class="skip" href="#hermit-study">Přejít na studium Poustevníka</a>
   <main class="shell">
     <header class="topbar">
@@ -220,7 +223,7 @@
       var grid=byId("arcana-grid"),html="";
       ARCANA.forEach(function(item){var active=item[0]==="IX";html+='<button class="arcana-card '+(active?"active":"")+'" type="button" data-arcana="'+item[0]+'" aria-label="'+esc(item[0]+" · "+(state.lang==="cs"?item[1]:item[2]))+'"><i class="status" aria-hidden="true"></i><span class="num">'+item[0]+'</span><span class="name">'+esc(state.lang==="cs"?item[1]:item[2])+'</span></button>';});
       grid.innerHTML=html;
-      Array.prototype.forEach.call(grid.querySelectorAll("button"),function(btn){btn.addEventListener("click",function(){if(btn.getAttribute("data-arcana")==="IX"){byId("hermit-study").scrollIntoView({behavior:"smooth",block:"start"});}else{showToast(C[state.lang].comingSoon);}});});
+      Array.prototype.forEach.call(grid.querySelectorAll("button"),function(btn){btn.addEventListener("click",function(){if(btn.getAttribute("data-arcana")==="IX"){byId("hermit-study").scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}else{showToast(C[state.lang].comingSoon);}});});
     }
     function renderHotspots(){
       var root=byId("hotspots"),html="";
@@ -295,5 +298,6 @@
     init();
   })();
   </script>
+<script>OrlojAppearance.mount();</script>
 </body>
 </html>

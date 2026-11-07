@@ -12,16 +12,7 @@
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
 <meta content="Orloj" name="apple-mobile-web-app-title"/>
 <meta content="#0a0d13" name="theme-color"/>
-<script>
-(function(){
-  try{
-    var pref=localStorage.getItem("orloj-theme")||"system";
-    var resolved=pref==="system"?(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):pref;
-    document.documentElement.setAttribute("data-theme",resolved);
-    document.documentElement.setAttribute("data-theme-preference",pref);
-  }catch(e){document.documentElement.setAttribute("data-theme","dark");}
-})();
-</script>
+
 <meta content="Orloj Public v11.13" name="application-name"/>
 <meta content="public-v11-13" name="orloj-build"/>
 <link href="manifest.webmanifest?v=public-v11-13-home-icon" rel="manifest"/>
@@ -2178,6 +2169,9 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
 <link href="./human-design.css?v=public-v11-13" rel="stylesheet"/>
 <link href="./month-panel.css?v=public-v11-13-month-overview" rel="stylesheet"/>
 <link href="./fourth-turning.css?v=public-v11-13-fourth-turning" rel="stylesheet"/>
+<link rel="stylesheet" href="design-foundation.css">
+<script src="appearance.js"></script>
+<script src="symbol-registry.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -3470,6 +3464,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     "<path d='M-7-8C-2-4-2 4-7 8M7-8C2-4 2 4 7 8M-9 0H9'/>"];
   function zodiacInline(i,cls,color){return '<svg class="'+(cls||'zodiac-icon')+'" viewBox="-12 -12 24 24" aria-hidden="true" style="color:'+(color||'#d9dee7')+'" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">'+ZODIAC_MARKS[i]+'</svg>';}
   function zodiacGroup(i,x,y,size,color,opacity){var sc=(size||14)/24;return '<g transform="translate('+Number(x).toFixed(2)+' '+Number(y).toFixed(2)+') scale('+sc.toFixed(4)+')" color="'+(color||'#d9dee7')+'" opacity="'+(opacity==null?1:opacity)+'" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">'+ZODIAC_MARKS[i]+'</g>';}
+  // Shared visual registry keeps names and glyphs aligned with the existing models.
   function signOf(lon){var ll=rev(lon),k=Math.floor(ll/30);return{name:TROP[k],cz:TROP_CZ[k],deg:ll-k*30};}
   function fmtDeg(deg){var dd=Math.floor(deg),mm=Math.round((deg-dd)*60);if(mm===60){mm=0;dd+=1;}return dd+"°"+(mm<10?"0":"")+mm+"′";}
   function csCount(value,forms){var n=Math.abs(Number(value)),whole=Math.floor(n),decimal=Math.abs(n-whole)>1e-9,text=decimal?new Intl.NumberFormat("cs-CZ",{maximumFractionDigits:1}).format(n):String(whole),form;if(decimal)form=forms[3]||forms[2];else if(whole===1)form=forms[0];else if(whole>=2&&whole<=4)form=forms[1];else form=forms[2];return text+" "+form;}
@@ -3514,6 +3509,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   function aspects(data){var out=[];for(var i=0;i<data.length;i++)for(var j=i+1;j<data.length;j++){var d=Math.abs(data[i].wheel-data[j].wheel);if(d>180)d=360-d;var best=null;for(var k=0;k<ASPDEF.length;k++){var orb=Math.abs(d-ASPDEF[k][1]);if(orb<=ASPDEF[k][2]&&(!best||orb<best.orb))best={a:data[i],b:data[j],name:ASPDEF[k][0],sym:ASPDEF[k][3],harm:ASPDEF[k][4],orb:orb};}if(best)out.push(best);}out.sort(function(x,y){return x.orb-y.orb;});return out;}
 
   var BODIES=[{id:"sun",name:"Slunce",sym:"☉",ac:"#f8c56b"},{id:"moon",name:"Měsíc",sym:"☽",ac:"#d8e5ff"},{id:"mercury",name:"Merkur",sym:"☿",ac:"#8fd8ff"},{id:"venus",name:"Venuše",sym:"♀",ac:"#f4a8c7"},{id:"mars",name:"Mars",sym:"♂",ac:"#ff806e"},{id:"jupiter",name:"Jupiter",sym:"♃",ac:"#f0a36c"},{id:"saturn",name:"Saturn",sym:"♄",ac:"#c8b68b"},{id:"uranus",name:"Uran",sym:"♅",ac:"#75dfd4"},{id:"neptune",name:"Neptun",sym:"♆",ac:"#7aa7ff"},{id:"pluto",name:"Pluto",sym:"♇",ac:"#b49cff"}];
+  BODIES.forEach(function(body){var symbol=OrlojSymbols.get("body."+body.id);if(symbol){body.name=symbol.name.cs;body.sym=symbol.symbol;}});
   var WL=["Be","Bý","Bl","Ra","Le","Pa","Vá","Št","St","Ko","Vo","Ry"];
   function evAccent(e){if(e.kind==="elongation")return e.glyph==="♀"?"#f4a8c7":"#8fd8ff";var m={"solar-eclipse":"#f8c56b","lunar-eclipse":"#d8e5ff","season":"#9fd6a8"};return m[e.kind]||"#d8e5ff";}
 
@@ -4526,7 +4522,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     WORLD_CALENDARS.forEach(function(item){var d=worldCalData(WORLD_CAL_DATE,item),title=worldCalField(item,"title"),match=d.day&&d.month&&d.day===d.month,isOpen=state.worldCalSelected===item.id;if(match)matches.push(title+" "+d.day+"/"+d.month);html+='<article class="card worldcal-card'+(isOpen?' active':'')+'" style="--cal-accent:'+item.accent+'"><div class="worldcal-card-head"><div><div class="worldcal-card-title">'+title+'</div><div class="worldcal-card-family">'+worldCalField(item,"family")+'</div></div><div class="worldcal-card-symbol">'+item.symbol+'</div></div><div class="worldcal-numeric">'+d.numeric+'</div><div class="worldcal-long">'+d.long+'</div>'+(d.native&&d.native!==d.long?'<div class="worldcal-native" dir="auto" lang="'+(item.nativeLocale||"")+'">'+d.native+'</div>':'')+(match?'<div class="worldcal-match">'+(APP_LANG==="en"?"matching day and month":"shoda dne a měsíce")+' · '+d.day+'/'+d.month+'</div>':'')+'<p class="worldcal-desc">'+worldCalField(item,"desc")+'</p><button class="worldcal-open" aria-expanded="'+(isOpen?"true":"false")+'" data-worldcal-open="'+item.id+'" type="button">'+worldCalUi(isOpen?"close":"open")+'</button></article>'+(isOpen?worldCalStudy(item,d):'');});
     grid.innerHTML=html;
     var res=document.getElementById("worldcal-resonance");if(res)res.innerHTML=matches.length?'<span class="worldcal-res-chip"><i></i>'+(APP_LANG==="en"?"Numerical match: ":"Číselná shoda: ")+matches.join(" · ")+'</span>':"";
-    Array.prototype.forEach.call(grid.querySelectorAll("[data-worldcal-open]"),function(btn){btn.addEventListener("click",function(){var id=btn.getAttribute("data-worldcal-open"),willOpen=state.worldCalSelected!==id;state.worldCalSelected=willOpen?id:null;renderWorldCalendars();if(willOpen)setTimeout(function(){var study=document.getElementById("worldcal-study");if(study)study.scrollIntoView({behavior:"smooth",block:"nearest"});},0);});});
+    Array.prototype.forEach.call(grid.querySelectorAll("[data-worldcal-open]"),function(btn){btn.addEventListener("click",function(){var id=btn.getAttribute("data-worldcal-open"),willOpen=state.worldCalSelected!==id;state.worldCalSelected=willOpen?id:null;renderWorldCalendars();if(willOpen)setTimeout(function(){var study=document.getElementById("worldcal-study");if(study)study.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"});},0);});});
   }
   function initWorldCalendars(){
     var input=document.getElementById("worldcal-date"),prev=document.getElementById("worldcal-prev"),next=document.getElementById("worldcal-next"),today=document.getElementById("worldcal-today");if(!input)return;
@@ -4672,7 +4668,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     container.innerHTML=items.map(function(item,i){var open=state.nowSignalOpen===i;return '<article class="now-signal'+(open?' is-open':'')+'" style="--now-accent:'+item.color+'"><button class="now-signal-button" data-now-signal="'+i+'" type="button" aria-expanded="'+(open?'true':'false')+'"><span class="now-signal-top"><span class="now-signal-name"><i class="now-signal-glyph">'+item.glyph+'</i>'+item.title+'</span><span class="now-signal-state">'+item.state+'</span></span><b>'+item.copy+'</b><p>'+item.fact+'</p><span class="now-signal-more">'+(APP_LANG==="en"?(open?'Hide layers ↑':'Fact · tradition · question ↓'):(open?'Skrýt vrstvy ↑':'Fakt · tradice · otázka ↓'))+'</span></button>'+(open?'<div class="now-signal-detail">'+horizonStreamDetail(item,APP_LANG==="en")+(item.event?'<button class="now-signal-horizon" data-now-horizon="'+item.event.at+'" type="button">'+(APP_LANG==="en"?'View this threshold in Horizon →':'Zobrazit tento práh v Horizontu →')+'</button>':'')+'</div>':'')+'</article>';}).join("");
     Array.prototype.forEach.call(container.querySelectorAll("[data-now-signal]"),function(button){button.addEventListener("click",function(){var i=parseInt(button.getAttribute("data-now-signal"),10);state.nowSignalOpen=state.nowSignalOpen===i?-1:i;renderNowInstrument(now,data,ph,moon);});});
     Array.prototype.forEach.call(container.querySelectorAll("[data-now-horizon]"),function(button){button.addEventListener("click",function(){focusHorizonMoment(parseFloat(button.getAttribute("data-now-horizon")));activateTab("horizont",true);});});
-    Array.prototype.forEach.call(document.querySelectorAll("[data-now-open-depth]"),function(depthButton){depthButton.onclick=function(){var depth=document.getElementById("today-day-layers");if(depth){depth.open=true;setTimeout(function(){depth.scrollIntoView({behavior:"smooth",block:"start"});},0);}};});
+    Array.prototype.forEach.call(document.querySelectorAll("[data-now-open-depth]"),function(depthButton){depthButton.onclick=function(){var depth=document.getElementById("today-day-layers");if(depth){depth.open=true;setTimeout(function(){depth.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},0);}};});
   }
   function renderTodayOverview(){
     var root=document.getElementById("panel-today");if(!root)return;
@@ -4841,11 +4837,11 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     if(centerDetail&&gateDetail)centerDetail.insertAdjacentHTML("afterend",gateDetail);
     var graphGrid=root.querySelector(".hd-graph-grid");
     if(graphGrid)graphGrid.insertAdjacentHTML("afterend",explorerMarkup);
-    Array.prototype.forEach.call(root.querySelectorAll("[data-hd-step]"),function(btn){btn.addEventListener("click",function(){if(btn.disabled)return;state.hdStep=Number(btn.getAttribute("data-hd-step"))||1;renderHumanDesign();var panel=document.getElementById("hd-step-panel");if(panel&&btn.closest(".hd-step-nav"))panel.scrollIntoView({behavior:"smooth",block:"start"});});});
+    Array.prototype.forEach.call(root.querySelectorAll("[data-hd-step]"),function(btn){btn.addEventListener("click",function(){if(btn.disabled)return;state.hdStep=Number(btn.getAttribute("data-hd-step"))||1;renderHumanDesign();var panel=document.getElementById("hd-step-panel");if(panel&&btn.closest(".hd-step-nav"))panel.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});});});
     Array.prototype.forEach.call(root.querySelectorAll("[data-hd-edit-profile]"),function(btn){btn.addEventListener("click",function(){openPublicProfileSetup(false);});});
     Array.prototype.forEach.call(root.querySelectorAll("[data-hd-center]"),function(el){if(el.getAttribute("data-hd-center")===state.hdCenter)el.classList.add("selected");var open=function(){state.hdCenter=el.getAttribute("data-hd-center");renderHumanDesign();};el.addEventListener("click",open);el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});});
     Array.prototype.forEach.call(root.querySelectorAll("[data-hd-channel]"),function(el){if(el.getAttribute("data-hd-channel")===state.hdChannel)el.classList.add("selected");var open=function(){state.hdChannel=el.getAttribute("data-hd-channel");renderHumanDesign();};el.addEventListener("click",open);if(el.getAttribute("role")==="button")el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});});
-    Array.prototype.forEach.call(root.querySelectorAll("[data-hd-gate]"),function(el){var gate=Number(el.getAttribute("data-hd-gate")),jump=!!el.closest(".hd-activation-list");if(gate===state.hdGate)el.classList.add("selected");el.addEventListener("click",function(){if(!chart.gateMap||!chart.gateMap[gate])return;state.hdGate=gate;renderHumanDesign();if(jump)setTimeout(function(){var detail=document.getElementById("hd-gate-detail");if(detail)detail.scrollIntoView({behavior:"smooth",block:"start"});},20);});});
+    Array.prototype.forEach.call(root.querySelectorAll("[data-hd-gate]"),function(el){var gate=Number(el.getAttribute("data-hd-gate")),jump=!!el.closest(".hd-activation-list");if(gate===state.hdGate)el.classList.add("selected");el.addEventListener("click",function(){if(!chart.gateMap||!chart.gateMap[gate])return;state.hdGate=gate;renderHumanDesign();if(jump)setTimeout(function(){var detail=document.getElementById("hd-gate-detail");if(detail)detail.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},20);});});
     var slider=document.getElementById("hd-time-slider");if(slider){slider.addEventListener("input",function(){state.hdTimeOffset=Number(slider.value)||0;var value=document.getElementById("hd-time-value"),label=document.getElementById("hd-time-offset"),v=state.hdTimeOffset;if(value)value.textContent=hdLocalStamp(P.birth.utc+v*60000,P.timezone);if(label)label.textContent=v===0?"zadaný čas":(v>0?"+":"")+v+" min";});slider.addEventListener("change",function(){state.hdTimeOffset=Number(slider.value)||0;renderHumanDesign();});}
     var reset=root.querySelector("[data-hd-reset-time]");if(reset)reset.addEventListener("click",function(){state.hdTimeOffset=0;renderHumanDesign();});
   }
@@ -4868,8 +4864,8 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     if(scrollTop!==false)try{window.scrollTo({top:0,behavior:"instant"});}catch(e){window.scrollTo(0,0);}
   }
   Array.prototype.forEach.call(document.querySelectorAll("#tabs button"),function(btn){btn.addEventListener("click",function(){activateTab(btn.getAttribute("data-tab"),true,null);});});
-  Array.prototype.forEach.call(document.querySelectorAll("[data-open-tab]"),function(btn){btn.addEventListener("click",function(){var tab=btn.getAttribute("data-open-tab"),anchor=btn.getAttribute("data-open-anchor"),hub=btn.getAttribute("data-open-hub")||null;activateTab(tab,true,hub);if(anchor)setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},90);});});
-  Array.prototype.forEach.call(document.querySelectorAll("[data-schema-tab]"),function(btn){btn.addEventListener("click",function(){var tab=btn.getAttribute("data-schema-tab"),anchor=btn.getAttribute("data-schema-anchor");activateTab(tab,true,defaultHubForTab(tab));if(anchor)setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},90);});});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-open-tab]"),function(btn){btn.addEventListener("click",function(){var tab=btn.getAttribute("data-open-tab"),anchor=btn.getAttribute("data-open-anchor"),hub=btn.getAttribute("data-open-hub")||null;activateTab(tab,true,hub);if(anchor)setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},90);});});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-schema-tab]"),function(btn){btn.addEventListener("click",function(){var tab=btn.getAttribute("data-schema-tab"),anchor=btn.getAttribute("data-schema-anchor");activateTab(tab,true,defaultHubForTab(tab));if(anchor)setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},90);});});
   Array.prototype.forEach.call(document.querySelectorAll(".num-section-nav a"),function(link){link.addEventListener("click",function(){Array.prototype.forEach.call(document.querySelectorAll(".num-section-nav a"),function(a){a.classList.toggle("on",a===link);});});});
   function openHermitStudy(){window.location.href="tarot.html";}
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-open-hermit]");if(b){e.preventDefault();openHermitStudy();}});
@@ -4940,7 +4936,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     C.innerHTML=h;
     Array.prototype.forEach.call(C.querySelectorAll('.czrow'),function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-cz');state.czOpen=(String(state.czOpen)===k?null:k);renderChineseLibrary();});});
   }
-  function scrollToStudy(id){setTimeout(function(){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},70);}
+  function scrollToStudy(id){setTimeout(function(){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},70);}
   function openChineseStudy(index){
     if(index<0||index>=CZ_SIGN_DEEP.length)return;
     state.czOpen=index;
@@ -6682,7 +6678,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     Array.prototype.forEach.call(C.querySelectorAll(".pprow"),function(b){b.addEventListener("click",function(ev){ev.stopPropagation();var pi=parseInt(b.getAttribute("data-pi"),10);state.plPathOpen=(state.plPathOpen===pi)?-1:pi;state.plMoreOpen=true;renderPlanety();});});
     Array.prototype.forEach.call(C.querySelectorAll("[data-planet-jump]"),function(b){b.addEventListener("click",function(){scrollToStudy(b.getAttribute("data-planet-jump"));});});
     Array.prototype.forEach.call(C.querySelectorAll("[data-related-sign]"),function(b){b.addEventListener("click",function(){openSignGroups("western",parseInt(b.getAttribute("data-related-sign"),10));});});
-    Array.prototype.forEach.call(C.querySelectorAll("[data-related-number]"),function(b){b.addEventListener("click",function(){var key=b.getAttribute("data-related-number");state.numOpen=key;activateTab("numero",false);renderNumberLibrary();setTimeout(function(){var el=document.querySelector('.numitem[data-number="'+key+'"]');if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},70);});});
+    Array.prototype.forEach.call(C.querySelectorAll("[data-related-number]"),function(b){b.addEventListener("click",function(){var key=b.getAttribute("data-related-number");state.numOpen=key;activateTab("numero",false);renderNumberLibrary();setTimeout(function(){var el=document.querySelector('.numitem[data-number="'+key+'"]');if(el)el.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},70);});});
     Array.prototype.forEach.call(C.querySelectorAll(".planet-more"),function(d){d.addEventListener("toggle",function(){state.plMoreOpen=d.open;});});
     Array.prototype.forEach.call(C.querySelectorAll(".evrow"),function(b){b.addEventListener("click",function(){var id=b.getAttribute("data-id");state.plOpen=(state.plOpen===id)?null:id;state.plPathOpen=-1;state.plMoreOpen=false;renderPlanety();});});bindSaturnGallery(C);}
 
@@ -6796,7 +6792,7 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
   };
   var pendingRoom=null;
   function roomSeenKey(key){return "orloj-threshold-seen-"+key;}
-  function goToRoom(key){var r=ORLOJ_ROOM_DATA[key];if(!r)return;activateTab(r.tab,true);if(r.anchor)setTimeout(function(){var el=document.getElementById(r.anchor);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},120);}
+  function goToRoom(key){var r=ORLOJ_ROOM_DATA[key];if(!r)return;activateTab(r.tab,true);if(r.anchor)setTimeout(function(){var el=document.getElementById(r.anchor);if(el)el.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},120);}
   function closeThreshold(){var m=document.getElementById("threshold-modal");if(!m)return;m.hidden=true;m.setAttribute("aria-hidden","true");document.body.classList.remove("threshold-open");pendingRoom=null;}
   function openRoomThreshold(key){var r=ORLOJ_ROOM_DATA[key];if(!r)return;try{if(sessionStorage.getItem(roomSeenKey(key))==="1"){goToRoom(key);return;}}catch(e){}pendingRoom=key;var m=document.getElementById("threshold-modal");if(!m){goToRoom(key);return;}document.getElementById("threshold-glyph").textContent=r.glyph;document.getElementById("threshold-room-title").textContent=r.title;document.getElementById("threshold-quote").textContent="„"+r.quote+"“";document.getElementById("threshold-source").textContent=r.source;document.getElementById("threshold-note").textContent=r.note;document.getElementById("threshold-enter").textContent="Vstoupit · "+r.title;m.hidden=false;m.setAttribute("aria-hidden","false");document.body.classList.add("threshold-open");setTimeout(function(){document.getElementById("threshold-enter").focus();},30);}
   function initInstitutionalUI(){
@@ -6805,11 +6801,8 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     var enter=document.getElementById("threshold-enter");if(enter)enter.addEventListener("click",function(){var key=pendingRoom;if(!key)return;try{sessionStorage.setItem(roomSeenKey(key),"1");}catch(e){}closeThreshold();goToRoom(key);});
   }
 
-  var THEME_ORDER=["system","light","dark"];
-  function resolvedTheme(pref){return pref==="system"?(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):pref;}
-  function themeMetaColor(theme){return theme==="light"?"#eee5d7":"#0a0d13";}
-  function applyThemePreference(pref,save){if(THEME_ORDER.indexOf(pref)<0)pref="system";var theme=resolvedTheme(pref);document.documentElement.setAttribute("data-theme-preference",pref);document.documentElement.setAttribute("data-theme",theme);if(save!==false)try{localStorage.setItem("orloj-theme",pref);}catch(e){}var labels={system:"Auto",light:"Ateliér",dark:"Nocturne"},icons={system:"◐",light:"☼",dark:"☾"};var lb=document.getElementById("theme-toggle-label"),ic=document.getElementById("theme-toggle-icon"),btn=document.getElementById("theme-toggle");if(lb)lb.textContent=labels[pref];if(ic)ic.textContent=icons[pref];if(btn){btn.setAttribute("aria-label","Vzhled: "+labels[pref]+". Klepnutím změnit.");btn.title="Vzhled: "+labels[pref];}var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute("content",themeMetaColor(theme));skyTint();}
-  function initAppearanceUI(){var pref="system";try{pref=localStorage.getItem("orloj-theme")||"system";}catch(e){}applyThemePreference(pref,false);var btn=document.getElementById("theme-toggle");if(btn)btn.addEventListener("click",function(){var current=document.documentElement.getAttribute("data-theme-preference")||"system",idx=THEME_ORDER.indexOf(current);applyThemePreference(THEME_ORDER[(idx+1)%THEME_ORDER.length],true);});if(window.matchMedia){var mq=window.matchMedia("(prefers-color-scheme: light)");var onChange=function(){if((document.documentElement.getAttribute("data-theme-preference")||"system")==="system")applyThemePreference("system",false);};if(mq.addEventListener)mq.addEventListener("change",onChange);else if(mq.addListener)mq.addListener(onChange);}}
+  function initAppearanceUI(){window.OrlojAppearance.mount();}
+
 
   var exhibitTimer=null;
   function updateExhibit(){var now=new Date(),d=document.getElementById("exhibit-date"),c=document.getElementById("exhibit-clock"),s=document.getElementById("exhibit-sky-note");if(d)d.textContent=now.toLocaleDateString("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"});if(c)c.textContent=now.toLocaleTimeString("cs-CZ",{hour:"2-digit",minute:"2-digit"});var moon=document.getElementById("today-moon-value"),sub=document.getElementById("today-moon-sub");if(s&&moon)s.textContent=(moon.textContent||"Dnešní obloha")+(sub&&sub.textContent?" · "+sub.textContent:"");}
@@ -6884,6 +6877,18 @@ if ("serviceWorker" in navigator) {
       console.warn("Orloj update failed", err);
     }
   });
+}
+</script>
+<script>
+if(new URLSearchParams(location.search).has('design-preview')){
+  var preview=document.createElement('main');preview.id='design-preview';preview.className='wrap';
+  preview.innerHTML='<nav class="of-preview-nav" aria-label="Ověření designu"><a href="#preview-time">Osobní čas</a><a href="#num-calendar-card">Kalendář čísel</a><a href="tarot.html">Reader · Poustevník ↗</a><a href="index.html">Celá aplikace ↗</a></nav>';
+  var original=document.querySelector('body > .wrap');
+  var head=document.querySelector('.head');preview.prepend(head);
+  var time=document.querySelector('.now-instrument');time.id='preview-time';preview.append(time);
+  preview.append(document.getElementById('num-calendar-card'));
+  preview.append(document.getElementById('tarot-hermit-study'));
+  original.hidden=true;document.body.prepend(preview);
 }
 </script>
 </body>
