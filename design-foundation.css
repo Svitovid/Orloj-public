@@ -1,0 +1,65 @@
+/* Shared visual tokens; compatibility aliases are applied by appearance.js. */
+:root{--of-space-1:.5rem;--of-space-2:1rem;--of-space-3:1.5rem;--of-space-4:2rem;--of-radius:.9rem;--of-weight:400;--of-bold:650;--of-small:.875em;--of-title:1.6em;--of-font:system-ui,sans-serif;--of-reader-font:Georgia,serif;--of-size:1rem;--of-atmosphere:.2}
+html[data-design-foundation] body{background:var(--of-bg);color:var(--of-text);font-family:var(--of-font);font-size:var(--of-size);font-weight:var(--of-weight)}
+html[data-design-foundation] body::before,html[data-design-foundation] body::after{opacity:var(--of-atmosphere)}
+html[data-design-foundation] :is(button,input,select,textarea){font-family:var(--of-font)}
+html[data-design-foundation] :focus-visible{outline:3px solid var(--of-focus)!important;outline-offset:4px;box-shadow:0 0 0 3px var(--of-bg)!important}
+html[data-design-foundation] :is(.head,.tabs,.observer-bar,.public-profile-bar,.context-rail,.num-section-nav){color:var(--of-text);background:var(--of-bg);border-color:color-mix(in srgb,var(--of-border) 25%,transparent)}
+html[data-design-foundation] :is(.head,.tabs,.observer-bar,.public-profile-bar,.context-rail,.num-section-nav) :is(button,a){color:var(--of-text);background:var(--of-surface);font-size:var(--of-size);text-shadow:none}
+html[data-design-foundation] :is(.tabs button.on,.num-section-nav a.on){color:var(--of-on-accent);background:var(--of-accent)}
+/* First integrated surfaces: live personal time, number calendar and existing Reader. */
+html[data-design-foundation] :is(.now-instrument,#num-calendar-card,#tarot-hermit-study,.of-reader main){color:var(--of-text);background:var(--of-surface);border:1px solid color-mix(in srgb,var(--of-border) 22%,transparent);border-radius:var(--of-radius);font-size:var(--of-size);box-shadow:none}
+html[data-design-foundation] :is(.now-instrument,#num-calendar-card,#tarot-hermit-study,.of-reader main) :is(p,span,b,strong,small,i,h1,h2,h3,h4,a,button,div,label,summary,blockquote,cite){color:var(--of-text)!important;text-shadow:none}
+html[data-design-foundation] :is(.now-instrument,#num-calendar-card,#tarot-hermit-study,.of-reader main) :is(p,small,label,summary,button,a){font-size:1em;line-height:1.6}
+html[data-design-foundation] :is(.now-factline,.now-kicker-row,.now-essentials span,.numcal-dow,.numcal-legend,.numcal-context,.hermit-kicker,.hermit-chips){font-size:var(--of-small)}
+html[data-design-foundation] :is(.now-instrument,#num-calendar-card,#tarot-hermit-study,.of-reader main) :is(button,select,.numcal-cell,.numcal-detail,.numcal-detail-item,.detail-card,.mode-panel,.hero,.study,.arcana-card,.reader,.detail-tabs,.mode-tabs){background:var(--of-raised)!important;border-color:color-mix(in srgb,var(--of-border) 30%,transparent)!important;box-shadow:none}
+html[data-design-foundation] :is(.numcal-cell.selected,.numcal-cell.today){outline:2px solid var(--of-accent);outline-offset:-3px}
+html[data-design-foundation] .numcal-cell.today .numcal-date{text-decoration:underline;text-underline-offset:.3em}
+html[data-design-foundation] .numcal-cell{min-height:7rem;padding:.6rem;overflow:visible}
+html[data-design-foundation] .numcal-grid{grid-template-columns:repeat(7,minmax(6.5em,1fr));gap:.5rem}
+html[data-design-foundation] #num-cal-body{overflow-x:auto;padding:4px}
+html[data-design-foundation] .numcal-num strong{font-size:1.35em}
+html[data-design-foundation] .numcal-pair{flex-wrap:wrap;gap:.6em}
+html[data-design-foundation] .numcal-compound{font-size:.875em}
+html[data-design-foundation] .numcal-num.personal{border-left:2px solid var(--of-personal);padding-left:.35em}
+html[data-design-foundation] .numcal-num.universal{border-left:2px dashed var(--of-universal);padding-left:.35em}
+html[data-design-foundation] .numcal-legend i{background:var(--of-text)!important}
+html[data-design-foundation] :is(.now-clock,#now-clock,.now-day-number-values,.numcal-grid,#exhibit-clock,.of-specimen){font-variant-numeric:tabular-nums lining-nums}
+html[data-design-foundation] #now-clock{display:inline-block;min-width:8ch}
+html[data-design-foundation] :is(#tarot-hermit-study,.of-reader main) :is(p,blockquote,.detail-copy){font-family:var(--of-reader-font);font-size:1.125em;line-height:1.75}
+html[data-design-foundation] .of-reader .shell{max-width:1200px}
+html[data-design-foundation] .of-reader :is(.topbar,.study-head,.detail-side,.mode-panel,.detail-card){background:var(--of-surface)!important}
+html[data-design-foundation] .of-reader :is(.hero h1,.detail-card h2){font-family:var(--of-reader-font)}
+html[data-design-foundation] :is(.of-open,.of-dialog button){min-height:44px;padding:.55rem 1rem;border:1px solid color-mix(in srgb,var(--of-border) 35%,transparent);border-radius:.6rem;background:var(--of-surface);color:var(--of-text);cursor:pointer;font-size:1em}
+.of-open{margin:.5rem}
+.of-dialog{width:min(640px,calc(100vw - 24px));max-height:90dvh;overflow:auto;padding:var(--of-space-3);background:var(--of-surface);color:var(--of-text);border:1px solid var(--of-border);border-radius:var(--of-radius);font:var(--of-weight) var(--of-size)/1.5 var(--of-font)}
+.of-dialog::backdrop{background:rgb(0 0 0 / .45);backdrop-filter:blur(3px)}
+.of-dialog header,.of-dialog footer{display:flex;gap:var(--of-space-1);align-items:center;justify-content:space-between;flex-wrap:wrap}.of-dialog header h2{font-size:var(--of-title);margin:.25rem 0}.of-dialog small{font-size:.75em;letter-spacing:.13em}.of-dialog p{margin:.75rem 0 1.25rem}.of-fields{display:grid;grid-template-columns:1fr 1fr;gap:var(--of-space-2)}
+.of-fields label{display:flex;flex-direction:column;gap:.4em;font-weight:var(--of-bold)}.of-fields select{width:100%;min-height:44px;padding:.5rem;color:var(--of-text);background:var(--of-bg);border:1px solid var(--of-border);border-radius:.4rem;font-size:1em}.of-fields input[type=color]{width:100%;height:44px;background:var(--of-bg);border:1px solid var(--of-border);border-radius:.4rem}.of-fields input[type=range]{width:100%;accent-color:var(--of-accent);min-height:28px}.of-fields .of-check{flex-direction:row;align-items:center}.of-check input{width:22px;height:22px;accent-color:var(--of-accent)}.of-wide{grid-column:1/-1}.of-specimen{padding:var(--of-space-2);background:var(--of-bg);border-radius:var(--of-radius);margin:var(--of-space-3) 0;display:grid;gap:.5rem;overflow-wrap:anywhere}.of-specimen p{font-family:var(--of-reader-font);margin:0;font-size:1.15em}.of-specimen span{font-family:var(--of-font),"Segoe UI Symbol","Apple Symbols",sans-serif}.of-dialog #of-contrast{font-size:.9em;margin:.5rem 0}.of-dialog details{margin:1rem 0}.of-import{display:block;margin-top:1rem}.of-import input{display:block;max-width:100%;font-size:1em}.of-dialog footer{margin-top:1.5rem}.of-dialog button:disabled{opacity:.55;cursor:not-allowed}.of-dialog .of-accent{background:var(--of-accent)!important;color:var(--of-on-accent)!important}.of-dialog output{font-weight:400}.of-dialog footer span{flex:1}
+.of-preview-nav{padding:1.5rem 0;display:flex;flex-wrap:wrap;gap:1rem}.of-preview-nav a{color:var(--of-text);font-size:var(--of-size)}
+@media(max-width:600px){.of-dialog{padding:1rem}.of-fields{gap:.8rem}.of-dialog header h2{font-size:1.35em}html[data-design-foundation] .now-instrument{padding:1.2rem}html[data-design-foundation] .of-reader .study-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html[data-design-foundation]{scroll-behavior:auto}html[data-design-foundation] *,html[data-design-foundation] *::before,html[data-design-foundation] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+html[data-design-foundation] .of-dialog .of-accent{color:var(--of-on-accent)!important}
+/* Instrument geometry and phase paths stay untouched; only paint follows tokens. */
+html[data-design-foundation] .now-orbit > svg > circle,html[data-design-foundation] .now-orbit > svg > line{stroke:var(--of-border);stroke-opacity:.35}
+html[data-design-foundation] .now-orbit > svg > g:not(.now-orbit-node){color:var(--of-text);opacity:1}
+html[data-design-foundation] .now-orbit .now-orbit-node circle{fill:var(--of-bg);stroke:var(--of-text);filter:none}
+html[data-design-foundation] .now-orbit .now-orbit-node text{fill:var(--of-text)}
+html[data-design-foundation] .now-instrument:before{opacity:var(--of-atmosphere);background:radial-gradient(circle at top right,var(--of-accent),transparent 65%)}
+html[data-design-foundation] .now-instrument h2{font-size:clamp(2rem,2.4em,4rem)}
+html[data-design-foundation] .now-live:before{background:var(--of-accent);box-shadow:none}
+html[data-design-foundation] .of-reader :is(.hero-note,.visual-side,.modebar,.lens-area,.source-card,.motif-row,.gesture-note,.detail-mark,.study-meta span,.toast){background:var(--of-surface)!important;box-shadow:none;border-color:color-mix(in srgb,var(--of-border) 25%,transparent)}
+html[data-design-foundation] .of-reader :is(.brand,.hero-note span,.progress,.study-meta span,.gesture-note,.palette-title,.section-label,.detail-id,.detail-mark,.footer){font-size:.875em;line-height:1.5}
+html[data-design-foundation] .of-reader .arcana-grid{grid-template-columns:repeat(auto-fit,minmax(7em,1fr))}
+html[data-design-foundation] .of-reader .arcana-card :is(.name,.num){font-size:1em;white-space:normal;overflow:visible;text-overflow:clip}
+html[data-design-foundation] .of-reader :is(.topbar,.study-head,.study-actions,.modebar){flex-wrap:wrap}
+html[data-design-foundation] .of-reader .modebar{grid-template-columns:repeat(auto-fit,minmax(6em,1fr))}
+html[data-design-foundation] .of-reader :is(.kicker,.palette-caption){font:var(--of-bold) .875em/1.5 var(--of-font)!important}
+html[data-design-foundation] .of-reader :is(button.on,button[aria-pressed=true]){outline:2px solid var(--of-accent);outline-offset:-3px}
+.of-symbols span{display:inline-block;margin:.5em 1em .5em 0}.of-symbols b{font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif}
+html[data-design-foundation] .numcal-date{font-size:.875em;line-height:1.4}
+html[data-design-foundation] .numcal-num{font-size:1em;gap:.15em}
+html[data-design-foundation] .numcal-num i{font-size:.75em;line-height:1.4}
+html[data-design-foundation] #num-calendar-card h2{font-size:1.4em}
+html[data-design-foundation] #num-calendar-card h3{font-size:1.1em}
