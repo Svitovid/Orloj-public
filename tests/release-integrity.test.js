@@ -26,8 +26,8 @@ test("release identifiers are consistently v11.13", () => {
   assert.match(timeline, /name="orloj-build" content="public-v11-13"/);
   assert.match(life, /name="orloj-build" content="public-v11-13"/);
   assert.match(index, /Orloj · Public v11\.13 · Cesta časem/);
-  assert.match(index, /sw\.js\?v=public-v11-13-fourth-turning/);
-  assert.match(worker, /var CACHE = "orloj-public-v11-13-design-foundation-1"/);
+  assert.match(index, /sw\.js\?v=public-v11-13-obraz-1/);
+  assert.match(worker, /var CACHE = "orloj-public-v11-13-obraz-1"/);
   assert.doesNotMatch(index + vedic + maya + day + timeline + life + worker, /public-v11-1[012]|orloj-public-v11-1[012]|v11\.1[012]/);
 });
 
@@ -72,6 +72,7 @@ test("every precached local asset exists", () => {
   assert.ok(assets.includes("./day.html"));
   assert.ok(assets.includes("./day-profile.js"));
   assert.ok(assets.includes("./day-profile.css"));
+  for(const asset of ["day-reader.css","precession.html","precession.css","precession.js","precession-core.js","precession-data.js","assets/earth-blue-marble-1024.jpg"]) assert.ok(assets.includes("./"+asset),asset);
   assert.ok(assets.includes("./timeline.html"));
   assert.ok(assets.includes("./timeline.js"));
   assert.ok(assets.includes("./timeline.css"));

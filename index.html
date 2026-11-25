@@ -3420,7 +3420,10 @@ html[data-theme="light"] .observer-copy strong{color:var(--text)}html[data-theme
     applyLanguage(APP_LANG,false,false);
     var btn=document.getElementById("language-toggle");if(btn)btn.addEventListener("click",function(){applyLanguage(APP_LANG==="cs"?"en":"cs",true,true);});
   }
-  function dayNumber(date){var Y=date.getUTCFullYear(),M=date.getUTCMonth()+1,D=date.getUTCDate();var ut=date.getUTCHours()+date.getUTCMinutes()/60+date.getUTCSeconds()/3600;return 367*Y-Math.floor((7*(Y+Math.floor((M+9)/12)))/4)+Math.floor((275*M)/9)+D-730530+ut/24;}
+  function dayNumber(date){
+    // Preserve the orbital-elements epoch: 0 = 1999-12-31 00:00 UTC (JD 2451543.5).
+    return (date.getTime()-Date.UTC(1999,11,31))/864e5;
+  }
   function kepler(M,e){M=rev(M);var E=M+toDeg(e)*sin(M)*(1+e*cos(M));if(e>0.05){for(var i=0;i<12;i++){var dE=(E-toDeg(e)*sin(E)-M)/(1-e*cos(E));E-=dE;if(Math.abs(dE)<1e-7)break;}}return E;}
   function sunState(d){var w=282.9404+4.70935e-5*d,e=0.016709-1.151e-9*d,M=356.047+0.9856002585*d;var E=kepler(M,e);var xv=cos(E)-e,yv=Math.sqrt(1-e*e)*sin(E);var v=toDeg(Math.atan2(yv,xv)),r=Math.sqrt(xv*xv+yv*yv);var lon=rev(v+w);return{lon:lon,r:r,x:r*cos(lon),y:r*sin(lon),M:M,w:w};}
   function fromEl(N,i,w,a,e,M){var E=kepler(M,e);var xv=a*(cos(E)-e),yv=a*Math.sqrt(1-e*e)*sin(E);var v=toDeg(Math.atan2(yv,xv)),r=Math.sqrt(xv*xv+yv*yv);var xh=r*(cos(N)*cos(v+w)-sin(N)*sin(v+w)*cos(i)),yh=r*(sin(N)*cos(v+w)+cos(N)*sin(v+w)*cos(i)),zh=r*(sin(v+w)*sin(i));return{lon:rev(toDeg(Math.atan2(yh,xh))),lat:toDeg(Math.atan2(zh,Math.sqrt(xh*xh+yh*yh))),r:r};}
@@ -6869,7 +6872,7 @@ if ("serviceWorker" in navigator) {
         refreshing = true;
         window.location.reload();
       });
-      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-fourth-turning", {
+      var registration = await navigator.serviceWorker.register("./sw.js?v=public-v11-13-obraz-1", {
         updateViaCache: "none"
       });
       await registration.update();
@@ -6882,7 +6885,7 @@ if ("serviceWorker" in navigator) {
 <script>
 if(new URLSearchParams(location.search).has('design-preview')){
   var preview=document.createElement('main');preview.id='design-preview';preview.className='wrap';
-  preview.innerHTML='<nav class="of-preview-nav" aria-label="Ověření designu"><a href="#preview-time">Osobní čas</a><a href="#num-calendar-card">Kalendář čísel</a><a href="tarot.html">Reader · Poustevník ↗</a><a href="index.html">Celá aplikace ↗</a></nav>';
+  preview.innerHTML='<nav class="of-preview-nav" aria-label="Ověření designu"><a href="#preview-time">Osobní čas</a><a href="#num-calendar-card">Kalendář čísel</a><a href="tarot.html">Reader · Poustevník ↗</a><a href="day.html">Profil dne ↗</a><a href="precession.html">Precese ↗</a><a href="index.html">Celá aplikace ↗</a></nav>';
   var original=document.querySelector('body > .wrap');
   var head=document.querySelector('.head');preview.prepend(head);
   var time=document.querySelector('.now-instrument');time.id='preview-time';preview.append(time);
