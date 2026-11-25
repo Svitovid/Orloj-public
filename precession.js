@@ -118,4 +118,3 @@
     root.dataset.ready='true';
     root.orlojState=()=>({year:S.year,mode:S.mode,region:region(sample(S.year)),crossing:boundary(),obliquity:sample(S.year).obl,playing:S.playing});
   })();
-  
