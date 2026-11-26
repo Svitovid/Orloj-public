@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111820">
+  <meta name="orloj-build" content="public-v11-13">
+  <title>Precese · Orloj</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./assets/orloj-app-icon.svg">
+  <link rel="apple-touch-icon" href="./assets/orloj-home-180.png">
+  <link rel="stylesheet" href="./design-foundation.css">
+  <link rel="stylesheet" href="./precession.css">
+  <script src="./appearance.js"></script>
+</head>
+<body class="precession-page">
+  <a class="op-skip" href="#op-time">Přejít na ovládání času</a>
+  <main class="op-shell">
+    <nav class="op-nav" aria-label="Obrazy Orloje">
+      <a href="./index.html?view=now" class="op-home">← Orloj</a>
+      <a href="./day.html">Profil dne</a>
+      <span aria-current="page">Precese</span>
+      <span class="op-nav-space"></span>
+      <button id="op-fullscreen" type="button" hidden>Celá obrazovka</button>
+      <button id="theme-toggle" class="of-open" type="button">Vzhled</button>
+    </nav>
+    <section id="orloj-precession" aria-labelledby="op-title">
+  <header class="op-head">
+    <div><div class="op-brand">OBRAZ OBLOHY</div><h1 id="op-title">Precese</h1></div>
+    <div class="op-badge"><span class="op-dot"></span><span id="op-region">—</span></div>
+  </header>
+  <div class="op-toolbar">
+    <div class="op-switch" role="group" aria-label="Definice hranic">
+      <button type="button"  data-model="iau" aria-pressed="true">Souhvězdí IAU</button>
+      <button type="button"  data-model="equal" aria-pressed="false">30° sektory · model</button>
+    </div>
+    <div class="op-switch" role="group" aria-label="Pohled na model">
+      <button type="button"  data-view="space" aria-pressed="true">Prostor</button>
+      <button type="button"  data-view="top" aria-pressed="false">Shora</button>
+    </div>
+  </div>
+  <div class="op-scene">
+    <canvas id="op-canvas" role="img" aria-label="Prostorový model Země, rovníku, ekliptiky a posunu jarního bodu. Tažením lze změnit směr pohledu; alternativou jsou tlačítka Prostor a Shora.">Model precese Země. K ovládání roku slouží posuvník pod modelem.</canvas>
+    <div class="op-instrument"><div class="op-year" id="op-year">—</div><div class="op-era" id="op-year-era">n. l. · jarní bod</div></div>
+    <div class="op-angle">Sklon osy <strong id="op-obliquity">—</strong></div>
+  </div>
+  <div class="op-legend" aria-label="Legenda modelu">
+    <span class="op-key"><span class="op-stroke" style="--key-color:var(--o-gold)"></span>Jarní bod · ekliptika</span>
+    <span class="op-key"><span class="op-stroke" style="--key-color:var(--o-blue)"></span>Osa · rovník</span>
+    <span class="op-key"><span class="op-stroke" style="--key-color:var(--o-purple)"></span>Dráha pólu</span>
+  </div>
+  <div class="op-controls">
+    <div class="op-control-top">
+      <div class="op-actions">
+        <button type="button" class="op-play" id="op-play" aria-pressed="false" aria-label="Přehrát pohyb precese">Přehrát</button>
+        <button type="button"  id="op-now">Nyní</button>
+      </div>
+      <div class="op-switch" role="group" aria-label="Rozsah času">
+        <button type="button"  data-range="detail" aria-pressed="true">Detail</button>
+        <button type="button"  data-range="cycle" aria-pressed="false">26 000 let</button>
+      </div>
+    </div>
+    <label for="op-time" class="op-accessible">Rok modelu</label>
+    <input type="range" id="op-time" min="1600" max="3200" step="1" value="2026" aria-valuetext="Rok modelu">
+    <div class="op-range-labels"><span id="op-range-min">1600</span><span id="op-rate">40 let / s při přehrávání</span><span id="op-range-max">3200</span></div>
+    <div class="op-crossing">
+      <div class="op-crossing-value"><span id="op-boundary-label">Ryby → Vodnář · hranice IAU</span><strong id="op-crossing-year">—</strong></div>
+      <button type="button"  id="op-jump">K hranici</button>
+    </div>
+    <div id="op-shift-wrap" class="op-shift" hidden>
+      <div class="op-shift-label"><label for="op-shift">Posun hranic · kotva Spica = 180°</label><output id="op-shift-value" for="op-shift">0,0°</output></div>
+      <input type="range" id="op-shift" min="-5" max="5" value="0" step="0.1" aria-label="Posun hranic rovných sektorů ve stupních">
+    </div>
+    <div id="op-live" class="op-accessible" aria-live="polite"></div>
+  </div>
+  <details class="op-method">
+    <summary >Metoda a zdroje</summary>
+    <dl>
+      <dt>Pohyb</dt><dd>Střední precese · Vondrák–Capitaine–Wallace 2011/2012 · ERFA/SOFA</dd>
+      <dt>IAU</dt><dd>Průsečík ekliptiky daného roku s hranicemi souhvězdí; Roman 1987, B1875</dd>
+      <dt>30° sektory · model</dt><dd>Ilustrační hvězdná kotva Spica = 180°; volitelný posun. Není označována za standardní Lahiri.</dd>
+      <dt>Význam roku</dt><dd>Překročení zvolené hranice jarním bodem; neurčuje všeobecně přijatý začátek astrologické éry.</dd>
+      <dt>Čas</dt><dd>Juliánská epocha; rok 0 odpovídá 1 př. n. l. Časový krok posuvníku je jeden juliánský rok. Tlačítko Nyní se řídí časem zařízení.</dd>
+      <dt>Zobrazení</dt><dd>Data v krocích 20 let, mezi nimi interpolace; hranice IAU přibližné při změně průsečíků. Úhly podle modelu; velikosti a vzdálenosti ilustrační. Nutace vynechána. Hvězdy fixovány na J2000; osvětlení a natočení povrchu Země ilustrační.</dd>
+    </dl>
+    <div class="op-credit"><a href="https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx" target="_blank" rel="noopener">Hranice IAU</a> · <a href="https://github.com/liberfa/erfa/blob/master/src/ltpequ.c" target="_blank" rel="noopener">Precesní model</a><br>Země: <a href="https://svs.gsfc.nasa.gov/2915/" target="_blank" rel="noopener">NASA/GSFC Scientific Visualization Studio; Reto Stöckli</a>.<br>Hvězdy: <a href="https://github.com/astronexus/HYG-Database" target="_blank" rel="noopener">David Nash / HYG v3.8</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>; výběr a úprava dat pro Orloj.</div>
+  </details>
+
+    </section>
+    <p id="op-status" role="status">Načítání modelu…</p>
+    <noscript><p>K ovládání modelu zapni JavaScript. Model zobrazuje střední precesi; hranice souhvězdí IAU neurčují jednotný začátek astrologické éry.</p></noscript>
+  </main>
+  <script src="./symbol-registry.js"></script>
+  <script src="./precession-data.js"></script>
+  <script src="./precession-core.js"></script>
+  <script src="./precession.js"></script>
+</body>
+</html>

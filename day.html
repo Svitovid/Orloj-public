@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="cs">
+<html lang="cs" class="day-reader">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -12,22 +12,25 @@
   <link href="assets/orloj-app-icon.svg?v=public-v11-13-home-icon" rel="icon" type="image/svg+xml"/>
   <link href="assets/orloj-home-180.png?v=public-v11-13-home-icon" rel="apple-touch-icon" sizes="180x180"/>
   <link rel="stylesheet" href="day-profile.css?v=public-v11-13-mobile-reading">
-  <script>
-  (function(){try{var p=localStorage.getItem("orloj-theme")||"system",t=p==="system"?(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):p;document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();
-  </script>
+  <link rel="stylesheet" href="design-foundation.css">
+  <link rel="stylesheet" href="day-reader.css">
+  <script src="appearance.js"></script>
 </head>
 <body>
+<a class="day-skip" href="#day-title">Přejít k přehledu dne</a>
 <main class="day-shell" id="day-app">
   <header class="day-topbar">
-    <div class="day-toplinks"><a class="day-back" id="day-back" href="./?view=now">← Zpět do Orloje</a></div>
-    <span class="day-build" id="day-build">Profil dne · v11.13</span>
+    <nav class="day-toplinks" aria-label="Orloj"><a class="day-back" id="day-back" href="./?view=now">← Orloj</a><a class="day-precession-link" href="precession.html">Precese</a></nav>
+    <button class="of-open" id="theme-toggle" type="button" aria-label="Nastavení vzhledu" aria-haspopup="dialog">◐ Vzhled</button>
   </header>
 
+  <div class="day-overview">
   <section class="day-hero" aria-label="Volba dne">
+    <div class="day-overview-head"><p class="day-kicker">Profil dne</p><div class="day-actions"><button id="day-today" type="button">Dnes</button><button id="day-share" type="button">Sdílet den</button></div></div>
     <div class="day-date-controls" aria-label="Volba dne">
       <button id="day-prev" type="button" aria-label="Předchozí den">‹</button>
       <div class="day-date-picker">
-        <h1 id="day-title"><time id="day-selected-date" aria-live="polite" aria-atomic="true"><span id="day-weekday">Profil dne</span><span id="day-date-label">—</span></time></h1>
+        <h1 id="day-title" tabindex="-1"><time id="day-selected-date" aria-live="polite" aria-atomic="true"><span id="day-weekday">Profil dne</span><span id="day-date-label">—</span></time></h1>
         <svg class="day-calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><path d="M8 3v5m8-5v5M4 11h16"/></svg>
         <input id="day-date" type="date" required aria-label="Vybrat datum" title="Vybrat datum">
       </div>
@@ -40,22 +43,20 @@
       <div class="day-moon-disc" id="day-moon-disc"></div>
       <div><h2 id="day-moon-title">—</h2><p id="day-moon-copy">—</p></div>
     </article>
-    <article class="day-summary-tile"><span>Slunce</span><b id="day-sun-value">—</b></article>
-    <article class="day-summary-tile rhythm"><span>Rok</span><b id="day-year-day">—</b><small id="day-year-week">—</small></article>
-    <article class="day-summary-tile ruler"><span>Vládce dne</span><b><i id="day-ruler-glyph" aria-hidden="true">—</i> <span id="day-ruler-value">—</span></b></article>
     <article class="day-summary-tile number"><span id="day-number-label">Osobní den</span><b id="day-number-value">—</b></article>
+    <article class="day-summary-tile"><span>Slunce</span><b id="day-sun-value">—</b></article>
+    <article class="day-summary-tile ruler"><span>Vládce dne</span><b><i id="day-ruler-glyph" aria-hidden="true">—</i> <span id="day-ruler-value">—</span></b></article>
+    <article class="day-summary-tile rhythm"><span>V roce</span><b id="day-year-day">—</b><small id="day-year-week">—</small></article>
   </section>
+  </div>
 
+  <div class="day-dayflow">
   <section class="day-section day-sky-section" aria-labelledby="day-sky-title">
     <div class="day-section-head">
-      <div><h2 id="day-sky-title">Mapa dne</h2></div>
+      <div><h2 id="day-sky-title">Mapa místního poledne</h2></div>
       <span id="day-noon-label">Mapa pro 12:00</span>
     </div>
-    <div class="day-sky-grid">
-      <article class="day-card day-wheel-card"><div class="day-wheel" id="day-wheel"></div></article>
-      <article class="day-card"><div class="day-card-kicker">Planety</div><div class="day-planets" id="day-planets"></div></article>
-      <article class="day-card"><div class="day-card-kicker">Hlavní aspekty</div><div class="day-aspects" id="day-aspects"></div></article>
-    </div>
+    <div class="day-wheel-card"><div class="day-wheel" id="day-wheel"></div></div>
   </section>
 
   <section class="day-section" aria-labelledby="day-events-title">
@@ -64,40 +65,37 @@
     </div>
     <div class="day-events" id="day-events"></div>
   </section>
+  </div>
 
-  <section class="day-section" aria-labelledby="day-personal-title">
-    <div class="day-section-head">
-      <div><h2 id="day-personal-title">Osobní tranzity</h2></div>
+  <details class="day-reading-detail" id="day-detail">
+    <summary><h2>Planety a aspekty</h2><span class="day-detail-caption">Místní poledne</span></summary>
+    <div class="day-detail-grid">
+      <article class="day-card"><h3 class="day-card-kicker">Planety</h3><div class="day-planets" id="day-planets"></div></article>
+      <article class="day-card"><h3 class="day-card-kicker">Hlavní aspekty</h3><div class="day-aspects" id="day-aspects"></div></article>
+    </div>
+  </details>
+
+  <details class="day-reading-detail" aria-labelledby="day-personal-title">
+    <summary>
+      <h2 id="day-personal-title">Osobní tranzity</h2>
       <span id="day-personal-meta">Načítám místní profil…</span>
-    </div>
+    </summary>
     <div class="day-personal" id="day-personal"></div>
-  </section>
+  </details>
 
-  <section class="day-section" aria-labelledby="day-number-title">
-    <div class="day-section-head">
-      <div><h2 id="day-number-title">Číselný rytmus</h2></div>
-    </div>
+  <details class="day-reading-detail" aria-labelledby="day-number-title">
+    <summary><h2 id="day-number-title">Číselný rytmus</h2></summary>
     <div class="day-number-grid">
       <article class="day-number-card personal" id="day-personal-number"></article>
     </div>
-  </section>
+  </details>
 
-  <section class="day-section" aria-labelledby="day-calendars-title">
-    <div class="day-section-head">
-      <div><h2 id="day-calendars-title">Kalendáře</h2></div>
-    </div>
+  <details class="day-reading-detail" aria-labelledby="day-calendars-title">
+    <summary><h2 id="day-calendars-title">Kalendáře</h2></summary>
     <div class="day-calendars" id="day-calendars"></div>
-  </section>
+  </details>
 
-  <section class="day-tradition-door" aria-labelledby="day-vedic-title">
-    <div><h2 id="day-vedic-title">Džjótiš</h2><p>Siderická obloha, nakšatry a pančánga.</p></div>
-    <a class="day-button" id="day-vedic-link" href="vedic.html?view=sky">Otevřít védskou observatoř →</a>
-  </section>
-
-  <section class="day-tradition-door day-maya-door" aria-labelledby="day-maya-title">
-    <div><h2 id="day-maya-title">Mayské soukolí</h2><p>Tzolk’in, Haab a Dlouhý počet.</p></div>
-    <a class="day-button" id="day-maya-link" href="maya.html?view=gear">Otevřít mayské kalendárium →</a>
-  </section>
+  <nav class="day-traditions" aria-label="Další tradice"><a class="day-button" id="day-vedic-link" href="vedic.html?view=sky"><span id="day-vedic-title">Džjótiš</span> →</a><a class="day-button" id="day-maya-link" href="maya.html?view=gear"><span id="day-maya-title">Mayské soukolí</span> →</a></nav>
 
   <details class="day-method-card">
     <summary>O výpočtu a tradicích</summary>
@@ -111,9 +109,11 @@
     <div class="day-sources"><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener noreferrer">Astronomy Engine · výpočtové jádro ↗</a><span>Kalendáře · Intl/ICU</span><span>Profil narození · pouze localStorage</span></div>
   </details>
 
-  <footer class="day-footer"><nav class="day-footer-links" aria-label="Další cesty"><a class="day-river-link" id="day-river-link" href="timeline.html">Časová řeka</a><a class="day-river-link" id="day-life-link" href="life.html">Životní kronika →</a></nav><div class="day-footer-actions"><button id="day-today" type="button">Dnes</button><button id="day-share" type="button">Sdílet den</button></div><b>Orloj · Profil dne v11.13</b> · Pansophia Institute</footer>
+  <footer class="day-footer"><nav class="day-footer-links" aria-label="Další cesty"><a class="day-river-link" id="day-river-link" href="timeline.html">Časová řeka</a><a class="day-river-link" id="day-life-link" href="life.html">Životní kronika →</a></nav><span class="day-build" id="day-build">Profil dne · v11.13</span> · Pansophia Institute</footer>
 </main>
 <script src="astronomy-engine.min.js?v=public-v11-13"></script>
 <script src="day-profile.js?v=public-v11-13-mobile-reading"></script>
+<script src="symbol-registry.js"></script>
+<script>OrlojAppearance.mount();</script>
 </body>
 </html>

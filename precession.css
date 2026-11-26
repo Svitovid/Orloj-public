@@ -1,0 +1,84 @@
+/* A self-contained Obraz, using the existing appearance contract. */
+:root { --of-bg:#111820; --of-surface:#1b2530; --of-text:#edf0f2; --of-accent:#b8cbd8; --of-on-accent:#111820; --of-border:#edf0f2; --of-focus:#edf0f2; }
+* { box-sizing:border-box; }
+body.precession-page { margin:0; background:var(--of-bg); color:var(--of-text); font:400 var(--of-size,1rem)/1.5 var(--of-font,system-ui,sans-serif); }
+.op-shell { width:min(1440px,100%); margin:auto; padding:1em 2em 2em; }
+.op-nav { display:flex; align-items:center; gap:1.2em; flex-wrap:wrap; padding:0 0 1em; font-size:.9375em; }
+.op-nav a { color:var(--of-text); text-decoration:none; text-underline-offset:.3em; }
+.op-nav a:hover { text-decoration:underline; }
+.op-nav [aria-current] { color:var(--of-text); font-weight:650; border-bottom:2px solid var(--of-accent); padding:.65em 0; }
+.op-home { font-weight:650; }
+.op-nav-space { flex:1; }
+.op-nav button { font:inherit; color:var(--of-text); background:var(--of-surface); border:1px solid color-mix(in srgb,var(--of-text) 25%,transparent); min-height:44px; border-radius:.65em; padding:.6em .9em; cursor:pointer; }
+.op-nav .of-open { margin:0; }
+.op-skip { position:absolute; left:1em; top:-5em; z-index:5; padding:.75em 1em; color:var(--of-text); background:var(--of-bg); }
+.op-skip:focus { top:1em; }
+#orloj-precession { --o-bg:var(--of-bg); --o-surface:var(--of-surface); --o-text:var(--of-text); --o-muted:var(--of-text); --o-line:color-mix(in srgb,var(--of-text) 23%,transparent); --o-blue:#78b8ff; --o-gold:#ffda8f; --o-purple:#b0a0ff; --o-teal:#70dbc3; --o-faint:#5e7792; --o-active:color-mix(in srgb,var(--of-accent) 16%,var(--of-surface)); color:var(--o-text); background:var(--o-bg); border:1px solid var(--o-line); border-radius:1.2em; overflow:hidden; isolation:isolate; }
+html[data-theme="light"] #orloj-precession { --o-blue:#195a9b; --o-gold:#865013; --o-purple:#6841a5; --o-teal:#156b58; --o-faint:#59697b; }
+#orloj-precession .op-head { display:flex; justify-content:space-between; align-items:center; gap:1em; padding:1.3em 1.7em 1em; }
+#orloj-precession .op-brand { font-size:.8em; letter-spacing:.1em; font-weight:650; margin-bottom:.2em; }
+#orloj-precession h1 { font:650 clamp(1.75em,3vw,2.4em)/1.15 var(--of-font); letter-spacing:-.035em; margin:0; }
+#orloj-precession .op-badge { display:flex; align-items:center; gap:.7em; font-weight:600; white-space:nowrap; padding:.5em .8em; border:1px solid var(--o-line); border-radius:2em; }
+#orloj-precession .op-dot { width:.5em; height:.5em; border-radius:50%; background:var(--o-gold); }
+#orloj-precession .op-toolbar { padding:0 1.7em; display:flex; justify-content:space-between; gap:.6em; flex-wrap:wrap; align-items:center; }
+#orloj-precession .op-switch { display:flex; gap:.3em; flex-wrap:wrap; }
+#orloj-precession button { font:550 .9375em/1.3 var(--of-font); color:var(--o-text); background:transparent; border:1px solid transparent; border-radius:.6em; min-height:44px; padding:.6em .85em; touch-action:manipulation; cursor:pointer; }
+#orloj-precession button:hover { background:var(--o-surface); }
+#orloj-precession button[aria-pressed="true"] { background:var(--o-active); border-color:var(--o-line); box-shadow:inset 0 -2px var(--of-accent); }
+#orloj-precession :is(button,input,summary):focus-visible { outline:3px solid var(--of-focus); outline-offset:3px; }
+#orloj-precession .op-scene { position:relative; height:clamp(360px,50vh,650px); min-height:23em; overflow:hidden; touch-action:pan-y; }
+#orloj-precession .op-scene::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 50% 50%,var(--of-accent),transparent 67%); opacity:calc(var(--of-atmosphere,.2) * .25); }
+#orloj-precession canvas { position:relative; display:block; width:100%; height:100%; cursor:grab; touch-action:pan-y; }
+#orloj-precession canvas.is-dragging { cursor:grabbing; }
+#orloj-precession .op-instrument { position:absolute; left:1.7em; top:1em; pointer-events:none; }
+#orloj-precession .op-year { font-size:2.25em; line-height:1.1; font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:-.04em; }
+#orloj-precession .op-era { font-size:.875em; margin-top:.35em; }
+#orloj-precession .op-angle { position:absolute; right:1.7em; bottom:.8em; font-size:.9375em; pointer-events:none; }
+#orloj-precession .op-angle strong { font-weight:650; font-variant-numeric:tabular-nums; }
+#orloj-precession .op-legend { padding:.4em 1.7em 1em; display:flex; gap:.6em 1.5em; flex-wrap:wrap; font-size:.875em; }
+#orloj-precession .op-key { display:inline-flex; align-items:center; gap:.6em; }
+#orloj-precession .op-stroke { display:inline-block; width:1.5em; height:4px; border-radius:2px; background:var(--key-color); }
+#orloj-precession .op-controls { padding:1.1em 1.7em; border-top:1px solid var(--o-line); background:var(--o-surface); }
+#orloj-precession .op-control-top { display:flex; align-items:center; justify-content:space-between; gap:.7em; margin-bottom:.6em; flex-wrap:wrap; }
+#orloj-precession .op-actions { display:flex; gap:.4em; align-items:center; flex-wrap:wrap; }
+#orloj-precession .op-play { background:var(--of-accent); color:var(--of-on-accent); min-width:8em; }
+#orloj-precession .op-play:hover { background:var(--of-accent); color:var(--of-on-accent); text-decoration:underline; }
+#orloj-precession .op-play[aria-pressed="true"] { background:var(--of-accent); color:var(--of-on-accent); }
+#orloj-precession input[type="range"] { accent-color:var(--of-accent); width:100%; height:36px; margin:0; cursor:ew-resize; display:block; }
+#orloj-precession .op-range-labels { display:flex; justify-content:space-between; gap:1em; font-size:.8125em; font-variant-numeric:tabular-nums; margin-top:.25em; }
+#orloj-precession .op-crossing { display:flex; align-items:center; gap:1em; justify-content:space-between; flex-wrap:wrap; margin-top:.8em; }
+#orloj-precession .op-crossing-value { font-size:1.0625em; font-weight:600; }
+#orloj-precession .op-crossing-value span { font-size:.875em; font-weight:400; margin-right:.8em; }
+#orloj-precession #op-jump { border-color:var(--o-line); }
+#orloj-precession .op-shift { margin-top:1em; padding-top:.8em; border-top:1px solid var(--o-line); }
+#orloj-precession .op-shift-label { display:flex; align-items:center; justify-content:space-between; font-size:.875em; gap:1em; }
+#orloj-precession .op-shift output { font-variant-numeric:tabular-nums; }
+[hidden] { display:none!important; }
+#orloj-precession .op-method { padding:0 1.7em 1em; background:var(--o-surface); font-size:.875em; }
+#orloj-precession .op-method summary { min-height:44px; display:list-item; width:fit-content; padding:.7em 0; cursor:pointer; }
+#orloj-precession .op-method dl { display:grid; grid-template-columns:8em 1fr; gap:.6em 1em; margin:1em 0; }
+#orloj-precession .op-method dt { font-weight:650; }
+#orloj-precession .op-method dd { margin:0; }
+#orloj-precession .op-method a { color:var(--o-text); text-decoration:underline; text-underline-offset:3px; }
+#orloj-precession .op-credit { line-height:1.7; }
+#orloj-precession .op-accessible { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+#op-status { margin:1em 0; }
+@media(max-width:650px) {
+  .op-shell { padding:.8em; }
+  .op-nav { gap:.5em 1em; }
+  .op-nav-space { display:none; }
+  #orloj-precession .op-head { padding:1em; flex-wrap:wrap; }
+  #orloj-precession .op-toolbar { padding:0 .6em; gap:.4em; }
+  #orloj-precession .op-scene { height:350px; min-height:22em; }
+  #orloj-precession .op-instrument { left:1em; top:.8em; }
+  #orloj-precession .op-year { font-size:1.9em; }
+  #orloj-precession .op-legend { padding:.4em 1em 1em; }
+  #orloj-precession .op-controls { padding:1em; }
+  #orloj-precession .op-method { padding:0 1em 1em; }
+  #orloj-precession .op-angle { right:1em; bottom:.6em; }
+  #orloj-precession .op-crossing-value span { display:block; margin-bottom:.25em; }
+  #orloj-precession .op-range-labels { flex-wrap:wrap; }
+  #orloj-precession #op-rate { flex:1; text-align:center; }
+  #orloj-precession .op-method dl { grid-template-columns:1fr; gap:.3em; }
+  #orloj-precession .op-method dd { margin:0 0 .7em; }
+}
