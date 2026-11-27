@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="cs" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080d14">
+  <meta name="description" content="Trojrozměrná observatoř Orloje. Země, Luna a světlo Slunce v čase.">
+  <title>Orloj · Observatoř 3D</title>
+  <link rel="stylesheet" href="observatory-3d.css">
+</head>
+<body>
+  <main id="observatory" class="observatory" aria-label="3D observatoř Orloje">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Zpět do Orloje"><span class="brand-mark" aria-hidden="true">◉</span> ORLOJ <span class="brand-note">osobní observatoř času</span></a>
+      <div class="section-name"><span class="tiny-dot"></span> OBSERVATOŘ <span class="version">3D</span></div>
+      <div class="top-actions">
+        <button id="theme" class="icon-button" aria-label="Přepnout světlý a tmavý vzhled" title="Vzhled">◐</button>
+        <button id="fullscreen" class="icon-button" aria-label="Celá obrazovka" title="Celá obrazovka">⛶</button>
+        <button id="info" class="icon-button" aria-label="O modelu" title="O modelu">i</button>
+      </div>
+    </header>
+
+    <section class="viewport" aria-label="Prostor modelu">
+      <div id="scene" aria-label="Interaktivní trojrozměrný model Země a Měsíce. Tažením otáčejte, kolečkem přibližujte." role="img"></div>
+      <div class="scene-heading">
+        <p class="eyebrow">SVĚTLO · POHYB · ČAS</p>
+        <h1 id="scene-title">Země a Luna</h1>
+        <p id="scene-caption">Jeden okamžik. Dvě perspektivy.</p>
+      </div>
+      <nav class="views" aria-label="Pohled na model">
+        <button data-view="system" aria-pressed="true"><span>◎</span> Soustava</button>
+        <button data-view="earth" aria-pressed="false"><span>⊕</span> Země</button>
+        <button data-view="moon" aria-pressed="false"><span>☾</span> Luna</button>
+      </nav>
+      <aside class="readout" aria-label="Aktuální data Měsíce">
+        <span class="readout-kicker">LUNA V TOMTO OKAMŽIKU</span>
+        <h2 id="phase-name">Načítám oblohu…</h2>
+        <div class="reading"><span>Osvětleno ze Země</span><strong id="illumination">—</strong></div>
+        <div class="reading"><span>Vzdálenost od Země</span><strong id="moon-distance">—</strong></div>
+        <div class="reading"><span>Slunce ve zvěrokruhu</span><strong id="sun-sign">—</strong></div>
+      </aside>
+
+      <div id="earth-label" hidden class="body-label"><span class="label-dot earth-dot"></span>ZEMĚ</div>
+      <div id="moon-label" hidden class="body-label"><span class="label-dot moon-dot"></span>LUNA</div>
+      <div id="sun-label" hidden class="body-label sun-label"><span class="label-dot sun-dot"></span>SMĚR KE SLUNCI</div>
+
+      <div id="loading" class="loading"><span class="loader"></span><span>Připravuji observatoř</span></div>
+      <div id="error" class="error-message" role="alert" hidden></div>
+      <div id="hint" class="scene-hint"><span>↔</span> tažením otočit <span class="hint-sep">·</span> kolečkem přiblížit</div>
+      <div class="zoom-controls" aria-label="Ovládání kamery">
+        <button id="zoom-in" class="icon-button" aria-label="Přiblížit">+</button>
+        <button id="zoom-out" class="icon-button" aria-label="Oddálit">−</button>
+        <button id="reset-view" class="icon-button" aria-label="Výchozí pohled" title="Výchozí pohled">↺</button>
+      </div>
+      <div class="layers" aria-label="Vrstvy modelu">
+        <label><input id="layer-orbit" type="checkbox" checked><span>Dráha Luny</span></label>
+        <label><input id="layer-ecliptic" type="checkbox" checked><span>Ekliptika</span></label>
+        <label><input id="layer-axis" type="checkbox"><span>Zemská osa</span></label>
+        <label><input id="layer-zodiac" type="checkbox"><span>Zvěrokruh</span></label>
+      </div>
+      <p class="scale-note" id="scale-note">Vzdálenosti zkrácené · Slunce znázorněné směrem světla</p>
+    </section>
+
+    <section class="time-deck" aria-label="Ovládání času">
+      <div class="time-top">
+        <div class="date-area">
+          <span class="eyebrow">POZOROVANÝ OKAMŽIK <span id="clock-mode" class="clock-mode">TEĎ</span></span>
+          <label class="date-control"><input id="datetime" type="datetime-local" min="1900-01-01T00:00" max="2100-12-31T23:59" aria-label="Datum a čas modelu v UTC"><span>UTC</span></label>
+        </div>
+        <div class="transport">
+          <button id="prev-day" class="step-button" aria-label="O den zpět" title="O den zpět">−1d</button>
+          <button id="play" class="play-button" aria-label="Spustit plynutí času" aria-pressed="false"><span id="play-symbol">▶</span></button>
+          <button id="next-day" class="step-button" aria-label="O den vpřed" title="O den vpřed">+1d</button>
+          <label class="speed-label"><span class="sr-only">Rychlost času</span><select id="speed"><option value="3600">1 hodina / s</option><option value="21600" selected>6 hodin / s</option><option value="86400">1 den / s</option><option value="604800">7 dní / s</option></select></label>
+          <button id="now" class="now-button">Teď <span>↗</span></button>
+        </div>
+        <div class="phase-jumps" aria-label="Přejít na příští fázi Měsíce">
+          <button data-phase="0" title="Příští nov"><span>●</span> Nov</button>
+          <button data-phase="90" title="Příští první čtvrť"><span>◐</span> Čtvrť</button>
+          <button data-phase="180" title="Příští úplněk"><span>○</span> Úplněk</button>
+        </div>
+      </div>
+      <div class="scrub-row"><span id="range-start">−15 dní</span><input id="time-range" type="range" min="-15" max="15" step="0.005" value="0" aria-label="Posun času v rozsahu třiceti dní"><span id="range-end">+15 dní</span></div>
+      <footer class="deck-footer"><span><i class="data-dot"></i> POLOHY PRO ZVOLENÝ ČAS</span><span id="next-phase">Astronomy Engine · NASA</span><button id="scale-toggle" aria-pressed="false">Skutečný odstup Země–Měsíc <span>↗</span></button></footer>
+    </section>
+    <div id="announcement" class="sr-only" aria-live="polite"></div>
+
+    <dialog id="about" aria-labelledby="about-title">
+      <button id="close-about" class="close-dialog icon-button" aria-label="Zavřít">×</button>
+      <span class="eyebrow">ORLOJ · OBSERVATOŘ 3D</span>
+      <h2 id="about-title">Stejná obloha, nový pohled.</h2>
+      <p>Model zobrazuje polohy Země, Měsíce a směr slunečního světla pro zvolený okamžik. Čas ovládá oběh Měsíce, rotaci Země i osvětlení. Podíl osvětlení v pravém sloupci je vždy počítán při pohledu ze Země.</p>
+      <h3>Co vidíte</h3>
+      <p>Ve výchozím pohledu je dráha Měsíce zkrácená pro přehlednost. Poměr velikostí Země a Měsíce je zachovaný; přepínač ve spodní liště zobrazí také jejich skutečný poměr vzdálenosti. Slunce je směrová značka, nikoli těleso v měřítku. Vybráním Luny se kamera nastaví na pohled od Země; otáčením pak zkoumáte Měsíc z jiných stran.</p>
+      <p>Dráha ukazuje vzorek příštího siderického měsíce. Ekliptika je rovina zemského oběhu. Zvěrokruh označuje dvanáct tropických úseků po 30°, nikoli hranice souhvězdí. Hvězdné pozadí je dekorativní. Povrchová rotace Luny je zjednodušená; librace ani vzájemné stíny při zatměních nejsou součástí této verze.</p>
+      <h3>Prameny a výpočet</h3>
+      <ul>
+        <li><a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noopener">Astronomy Engine · Don Cross</a> — stejná verze jako v Orloji. Souřadnice, rotace Země, lunární fáze a osvětlení. Rozsah modelu 1900–2100.</li>
+        <li><a href="https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-map/" target="_blank" rel="noopener">NASA Blue Marble</a> — mapová textura Země, nikoli živá oblačnost.</li>
+        <li><a href="https://svs.gsfc.nasa.gov/4720/" target="_blank" rel="noopener">NASA CGI Moon Kit · LRO</a> — barevná mapa a výšková data Měsíce.</li>
+        <li><a href="https://threejs.org/" target="_blank" rel="noopener">Three.js r160</a> — prostorové vykreslování, licence MIT.</li>
+      </ul>
+      <p class="about-small">Ovládání: tažení otáčí kamerou, kolečko nebo gesto dvěma prsty přibližuje. Tlačítka + a − fungují také z klávesnice. Datum a čas jsou uvedené v UTC. Zobrazení je určeno k prostorovému studiu, nikoli k určování místní viditelnosti zatmění.</p>
+    </dialog>
+  </main>
+  <script src="vendor/three-r160.min.js"></script>
+  <script src="astronomy-engine.min.js"></script>
+  <script src="observatory-data.js"></script>
+  <script src="observatory-3d.js"></script>
+</body>
+</html>
